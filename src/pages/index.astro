@@ -1,25 +1,34 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
 import MoralCode from '../components/MoralCode.astro';
 import FranceJudoNews from '../components/FranceJudoNews.astro';
-import { club, schedules, galleryImages } from '../data/club.ts';
-import aboutJudoka from '../assets/images/about-judoka.jpg';
+import { club, schedules, clubPhotos, judoUniversePhotos } from '../data/club.ts';
+import { images } from '../data/images.ts';
+
+const actualites = (await getCollection('actualites')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
 <MainLayout title="JCOV - Judo Club Olympique de Vigneux">
 
   <Hero />
 
-  <section id="about" class="about-section relative pt-10 pb-20 sm:pt-12 md:pt-14 md:pb-24 bg-white border-b border-gray-100">
+  <Stats />
+
+  <section id="about" class="about-section relative pt-20 pb-20 sm:pt-24 md:pb-24 bg-white border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div class="about__content fade-in-up">
-          <span class="text-jcov font-semibold text-sm uppercase tracking-[0.2em] mb-4 block">
-            À propos
-          </span>
+          <span class="section-eyebrow mb-4">À propos</span>
 
-          <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-6 tracking-tight leading-tight">
+          <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-6 mt-4 tracking-tight leading-tight">
             Le Judo, une école de vie
           </h2>
 
@@ -42,39 +51,80 @@ import aboutJudoka from '../assets/images/about-judoka.jpg';
           </a>
         </div>
 
-        <div class="about__image fade-in-up fade-in-up--delay-1">
-          <div class="relative image-frame aspect-[4/3] lg:aspect-auto lg:h-[420px]">
-            <img
-              src="/images/judophoto.png"
-              alt="Judoka du JCOV en action sur le tatami"
-              class="w-full h-full object-cover object-center"
-              loading="lazy"
+        <div class="about__collage fade-in-up fade-in-up--delay-1">
+          <div class="about__collage-main image-frame">
+            <Image
+              src={images.photodegroupe}
+              alt="Les judokas du JCOV réunis sur le tatami du Dojo Marc Alexandre"
+              width={900}
+              height={675}
+              fit="cover"
+              position="bottom"
+              class="w-full h-full object-cover"
             />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" aria-hidden="true"></div>
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-jcov" aria-hidden="true"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" aria-hidden="true"></div>
+            <span class="about__collage-tag">Le club à l'entraînement</span>
+          </div>
+          <div class="about__collage-secondary image-frame">
+            <Image
+              src={images.judophoto}
+              alt="Projection de judo en pleine action"
+              width={480}
+              height={480}
+              class="w-full h-full object-cover object-center"
+            />
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="gallery" class="py-20 bg-gray-50 border-b border-gray-100 fade-in-up">
+  <section id="gallery" class="py-20 bg-gray-50 border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center tracking-tight">Galerie du club</h2>
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Galerie</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">Le club en images</h2>
+      </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 gallery-grid">
-        {galleryImages.map((image) => (
-          <div class="card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-            <div class="image-frame aspect-[4/3]">
-              <img
-                src={image.src}
-                alt={image.alt}
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        {clubPhotos.map((photo, i) => (
+          <div class={`card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 fade-in-up fade-in-up--delay-${i + 1}`}>
+            <div class="image-frame aspect-[16/10]">
+              <Image
+                src={images[photo.key as keyof typeof images]}
+                alt={photo.alt}
+                width={900}
+                height={563}
                 class="gallery-card w-full h-full object-cover"
-                loading="lazy"
               />
             </div>
           </div>
         ))}
+        <div class="gallery-more-note fade-in-up fade-in-up--delay-2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <circle cx="8.5" cy="10" r="1.5" />
+            <path d="M21 15l-5-5-9 9" />
+          </svg>
+          <p>D'autres photos du club et de nos judokas arrivent bientôt !</p>
+        </div>
+      </div>
+
+      <div class="gallery-universe">
+        <p class="gallery-universe__label">L'univers du judo — photos d'illustration, compétitions internationales</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {judoUniversePhotos.map((photo, i) => (
+            <div class={`gallery-universe__item fade-in-up fade-in-up--delay-${i + 1}`}>
+              <Image
+                src={images[photo.key as keyof typeof images]}
+                alt={photo.alt}
+                width={400}
+                height={400}
+                class="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div class="mt-10 text-center">
@@ -91,13 +141,12 @@ import aboutJudoka from '../assets/images/about-judoka.jpg';
     </div>
   </section>
 
-  <!-- Actualités & Résultats -->
+  <!-- Actualités du club -->
   <section class="actualites-section bg-white border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- En-tête de la section -->
-      <div class="text-center mb-12">
-        <p class="text-jcov font-semibold text-sm uppercase tracking-[0.2em] mb-3">Actualités du club</p>
-        <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-4 tracking-tight leading-tight">
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Actualités du club</span>
+        <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mt-4 mb-4 tracking-tight leading-tight">
           Les dernières performances du JCOV
         </h2>
         <p class="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -105,77 +154,57 @@ import aboutJudoka from '../assets/images/about-judoka.jpg';
         </p>
       </div>
 
-      <!-- Grille des articles -->
       <div class="actualites-grid">
-        <!-- Article 1 : Ceintures Noires -->
-        <div class="actualites-card fade-in-up">
-          <div class="actualites-card__image">
-            <img
-              src="/images/actualites-ceinture-noire.png"
-              alt="Deux nouvelles ceintures noires au JCOV"
-              class="actualites-card__photo actualites-card__photo--focus-top"
-              loading="lazy"
-            />
-            <span class="actualites-card__badge">Ceinture Noire</span>
-          </div>
-          <div class="actualites-card__content">
-            <h3 class="actualites-card__title">Deux nouvelles ceintures noires au JCOV</h3>
-            <p class="actualites-card__text">
-              Félicitations à Jonas et Jegor qui deviennent tous deux ceinture noire.<br><br>
-              Cette réussite récompense de nombreuses années de travail, de persévérance et d'engagement sur les tatamis.<br><br>
-              Bravo les gars !
-            </p>
-          </div>
-        </div>
-
-        <!-- Article 2 : Reagan -->
-        <div class="actualites-card fade-in-up fade-in-up--delay-1">
-          <div class="actualites-card__image">
-            <img
-              src="/images/actualites-reagan.png"
-              alt="Championnat de France Minimes : Reagan à l'honneur"
-              loading="lazy"
-            />
-            <span class="actualites-card__badge">Résultat</span>
-          </div>
-          <div class="actualites-card__content">
-            <h3 class="actualites-card__title">Championnat de France Minimes : Reagan à l'honneur</h3>
-            <p class="actualites-card__text">
-              Aujourd'hui avaient lieu les Championnats de France Minimes.<br><br>
-              Reagan LAPOINTE se classe à une remarquable 5ᵉ place en +73 kg.<br><br>
-              Cette performance est d'autant plus impressionnante qu'il revenait d'une blessure en début de saison et que certains de ses adversaires dépassaient parfois les 100 kg.<br><br>
-              Félicitations à lui pour son parcours et sa détermination.<br><br>
-              Bravo Reagan ! Bravo JCOV !
-            </p>
-          </div>
-        </div>
+        {actualites.map((entry, i) => (
+          <article class={`actualites-card fade-in-up fade-in-up--delay-${i + 1}`}>
+            <div class="actualites-card__image">
+              <Image
+                src={entry.data.image}
+                alt={entry.data.imageAlt}
+                width={640}
+                height={480}
+                class="actualites-card__photo"
+              />
+              <span class="actualites-card__badge">{entry.data.badge}</span>
+            </div>
+            <div class="actualites-card__content">
+              <p class="actualites-card__date">{dateFormatter.format(entry.data.date)}</p>
+              <h3 class="actualites-card__title">{entry.data.title}</h3>
+              <div class="actualites-card__text" set:html={entry.rendered?.html} />
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   </section>
 
   <section id="classes" class="py-20 bg-white border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center tracking-tight fade-in-up">
-        Horaires d'Entraînement
-      </h2>
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Planning</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
+          Horaires d'entraînement
+        </h2>
+      </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {schedules.map((schedule, i) => (
-          <div class={`card p-8 rounded-xl transition-all duration-300 fade-in-up fade-in-up--delay-${i + 1}`}>
-            <div class="text-jcov font-bold text-lg mb-4 uppercase tracking-wide">
+          <div class={`schedule-card fade-in-up fade-in-up--delay-${i + 1}`}>
+            <div class="schedule-card__day">
               {schedule.day}
             </div>
-            <div class="text-gray-900 text-2xl mb-2">{schedule.time}</div>
-            <div class="text-gray-600 text-sm">{schedule.group}</div>
+            <div class="schedule-card__time">{schedule.time}</div>
+            <div class="schedule-card__group">{schedule.group}</div>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <section id="contact" class="py-20 bg-jcov/5">
+  <section id="contact" class="py-20 contact-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight fade-in-up">
+      <span class="section-eyebrow justify-center mb-3 fade-in-up">Nous rejoindre</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 mt-4 tracking-tight fade-in-up">
         Rejoignez-nous
       </h2>
 
@@ -184,7 +213,7 @@ import aboutJudoka from '../assets/images/about-judoka.jpg';
         Une séance d'essai est possible tout au long de l'année.
       </p>
 
-      <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl max-w-md mx-auto fade-in-up fade-in-up--delay-2">
+      <div class="contact-card fade-in-up fade-in-up--delay-2">
         <div class="space-y-4">
           <div class="flex items-center text-gray-700">
             <svg class="w-5 h-5 mr-3 text-jcov shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -219,7 +248,6 @@ import aboutJudoka from '../assets/images/about-judoka.jpg';
     </div>
   </section>
 
-  <!-- Déplacer Code Moral et Actualités à la fin de la page, avant le footer -->
   <MoralCode />
 
   <FranceJudoNews />

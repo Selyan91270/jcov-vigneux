@@ -1,6 +1,8 @@
 ---
 // Footer simple avec informations de contact
 // Pied de page minimaliste et élégant
+import { Image } from 'astro:assets';
+import { images } from '../data/images.ts';
 ---
 
 <footer class="jcov-footer">
@@ -8,7 +10,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
       <div class="flex flex-col items-start">
-        <img src="/logo-jcov.png" alt="Logo du Judo Club Olympique de Vigneux" class="h-24 w-auto mb-3" />
+        <Image src={images.logo} alt="Logo du Judo Club Olympique de Vigneux" class="h-24 w-auto mb-3" width={288} height={192} />
         <h3 class="jcov-footer__title">
           Judo Club Olympique de Vigneux
         </h3>
@@ -47,8 +49,13 @@
 
     <div class="jcov-footer__bottom">
       <p>
-        &copy; JCOV - Judo Club Olympique de Vigneux. Tous droits réservés.
+        &copy; {new Date().getFullYear()} JCOV - Judo Club Olympique de Vigneux. Tous droits réservés.
       </p>
+      <nav class="jcov-footer__legal" aria-label="Informations légales">
+        <a href="/mentions-legales">Mentions légales</a>
+        <span aria-hidden="true">·</span>
+        <a href="/confidentialite">Confidentialité</a>
+      </nav>
     </div>
   </div>
 </footer>
@@ -144,6 +151,10 @@
     margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
   }
 
   .jcov-footer__bottom p {
@@ -152,6 +163,24 @@
     font-size: 0.72rem;
     letter-spacing: 0.08em;
     color: rgba(239, 247, 255, 0.9);
+  }
+
+  .jcov-footer__legal {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    color: rgba(239, 247, 255, 0.75);
+  }
+
+  .jcov-footer__legal a {
+    color: rgba(239, 247, 255, 0.85);
+    text-decoration: none;
+  }
+
+  .jcov-footer__legal a:hover {
+    color: #ffffff;
+    text-decoration: underline;
   }
 
   @media (max-width: 640px) {

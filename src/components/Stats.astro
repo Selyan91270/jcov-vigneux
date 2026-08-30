@@ -1,0 +1,121 @@
+---
+import { stats } from '../data/club.ts';
+---
+
+<section class="stats-band" aria-label="Le club en chiffres">
+  <div class="stats-band__pattern tatami-pattern" aria-hidden="true"></div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div class="stats-band__grid">
+      {stats.map((stat, i) => (
+        <div class={`stats-band__item fade-in-up fade-in-up--delay-${i + 1}`}>
+          <span class="stats-band__value" data-stat-value={stat.value}>{stat.value}</span>
+          <span class="stats-band__label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const counters = document.querySelectorAll<HTMLElement>('[data-stat-value]');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function animateCount(el: HTMLElement) {
+    const raw = el.dataset.statValue ?? '';
+    const match = raw.match(/^(\d+)(.*)$/);
+
+    if (!match || prefersReducedMotion) return;
+
+    const target = parseInt(match[1], 10);
+    const suffix = match[2];
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now: number) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = `${Math.round(target * eased)}${suffix}`;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          animateCount(entry.target as HTMLElement);
+          observer.unobserve(entry.target);
+        }
+      }
+    },
+    { threshold: 0.5 }
+  );
+
+  counters.forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  .stats-band {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(115deg, var(--brand-900) 0%, var(--brand-800) 45%, var(--brand-700) 100%);
+    padding: 3rem 0;
+  }
+
+  .stats-band__pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.6), transparent);
+  }
+
+  .stats-band__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .stats-band__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .stats-band__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-left: none;
+  }
+
+  @media (min-width: 640px) {
+    .stats-band__item:not(:first-child) {
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
+    }
+  }
+
+  .stats-band__value {
+    font-family: var(--ff-head);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    background: linear-gradient(90deg, #ffffff, var(--brand-sky));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .stats-band__label {
+    color: var(--text-on-dark);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+</style>

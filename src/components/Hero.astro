@@ -1,30 +1,37 @@
 ---
+import { Image } from 'astro:assets';
 import { club } from '../data/club.ts';
+import { images } from '../data/images.ts';
 ---
 
 <section class="hero relative w-full overflow-hidden" aria-labelledby="hero-title">
   <div class="hero__media absolute inset-0 overflow-hidden">
-    <img
-      src="/images/photoencart.png"
-      alt="Photo du club JCOV avec judokas en action"
+    <Image
+      src={images.heroJudo}
+      alt="Deux judokas se saluant sur le tatami, symbole du respect au cœur du judo"
       class="hero__image absolute inset-0 w-full h-full object-cover object-center"
+      widths={[640, 1024, 1600, 1920]}
+      sizes="100vw"
+      quality={80}
       fetchpriority="high"
-      width="1920"
-      height="1080"
+      loading="eager"
     />
     <div class="hero__overlay absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+    <div class="hero__glow" aria-hidden="true"></div>
   </div>
 
   <div class="hero__layout relative z-10">
     <div class="hero__content">
       <div class="hero__text">
-        <img
+        <p class="hero__kicker">Judo Club Olympique de Vigneux</p>
+
+        <Image
           id="hero-title"
           class="hero__logo"
-          src="/logo-jcov.png"
+          src={images.logo}
           alt="JCOV Vigneux"
-          width="420"
-          height="280"
+          width={420}
+          height={280}
         />
 
         <p class="hero__subtitle">Club de Judo depuis {club.foundedYear}</p>
@@ -39,5 +46,64 @@ import { club } from '../data/club.ts';
         </div>
       </div>
     </div>
+
+    <a href="#about" class="hero__scroll-cue" aria-label="Découvrir la suite">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 5v14M5 12l7 7 7-7" />
+      </svg>
+    </a>
   </div>
 </section>
+
+<style>
+  .hero__kicker {
+    color: var(--brand-sky);
+    font-family: var(--ff-head);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin-bottom: 1.1rem;
+  }
+
+  .hero__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(60% 55% at 15% 100%, rgba(25, 169, 245, 0.35), transparent 70%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  .hero__scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.75rem;
+    transform: translateX(-50%);
+    display: none;
+    color: rgba(255, 255, 255, 0.85);
+    width: 2.25rem;
+    height: 2.25rem;
+    animation: hero-bounce 2.2s ease-in-out infinite;
+  }
+
+  .hero__scroll-cue:hover {
+    color: #ffffff;
+  }
+
+  @media (min-width: 640px) {
+    .hero__scroll-cue {
+      display: flex;
+    }
+  }
+
+  @keyframes hero-bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 8px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__scroll-cue {
+      animation: none;
+    }
+  }
+</style>

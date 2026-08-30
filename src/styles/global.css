@@ -1,10 +1,11 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700&display=swap');
+
+/* Polices chargées via <link> dans MainLayout.astro (plus performant qu'un @import CSS) */
 
 @theme {
-  --color-jcov: #0066cc;
-  --color-jcov-dark: #0056b3;
-  --color-jcov-light: #3385d6;
+  --color-jcov: #0B72AD;
+  --color-jcov-dark: #085580;
+  --color-jcov-light: #19A9F5;
 }
 
 :root {
@@ -12,13 +13,14 @@
   --ff-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --ff-head: 'Poppins', var(--ff-sans);
 
-  /* Brand palette (primary blue-focused) */
-  --brand-900: #031D38; /* left deep */
+  /* Brand palette — dérivée du bleu réel du logo JCOV (#19A9F5) */
+  --brand-900: #031D38; /* profond, fonds sombres */
   --brand-800: #063B5C;
-  --brand-700: #0B5F87; /* requested secondary */
+  --brand-700: #0B5F87; /* texte/CTA sur fond clair, contraste AA */
   --brand-600: #0E6E9F;
-  --brand-accent: #19A9F5; /* interactive accent */
-  --brand-sky: #49B1E1; /* light accent */
+  --brand-accent: #19A9F5; /* bleu ciel du logo — accents, dégradés */
+  --brand-sky: #5FC2F8; /* variante claire de l'accent */
+  --brand-ice: #EAF7FF; /* fond bleu très clair, sections alternées */
 
   /* Neutral / text */
   --text-default: #0f172a;
@@ -48,7 +50,7 @@
 
 /* Base document styles using the new design tokens */
 html, body {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -130,7 +132,9 @@ html {
 .hero__overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.35);
+  background:
+    linear-gradient(115deg, rgba(3, 29, 56, 0.88) 0%, rgba(6, 59, 92, 0.6) 42%, rgba(3, 29, 56, 0.35) 68%, rgba(3, 29, 56, 0.65) 100%),
+    linear-gradient(0deg, rgba(3, 29, 56, 0.55), transparent 45%);
   pointer-events: none;
 }
 
@@ -244,180 +248,6 @@ html {
   }
 }
 
-.code-moral-section {
-  display: none !important;
-}
-
-.code-moral-section {
-  position: relative;
-  overflow: hidden;
-  background-color: #FAFAF7;
-  padding-top: 6.5rem;
-  padding-bottom: 5.5rem;
-}
-
-.code-moral-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 12% 12%, rgba(0, 87, 184, 0.07), transparent 18%),
-    radial-gradient(circle at 88% 16%, rgba(0, 87, 184, 0.06), transparent 20%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0.95) 1px, transparent 1px, transparent 24px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 250, 247, 0.99));
-  pointer-events: none;
-}
-
-.code-moral-section::after {
-  content: '';
-  position: absolute;
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  border: 1px solid rgba(0, 87, 184, 0.16);
-  top: 3rem;
-  right: 3rem;
-  opacity: 0.28;
-  pointer-events: none;
-}
-
-.code-moral-decor {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 50% 20%, rgba(0, 87, 184, 0.08), transparent 18%);
-  filter: blur(2px);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-.code-moral-calligraphy {
-  position: absolute;
-  top: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: clamp(8rem, 12vw, 14rem);
-  line-height: 0.95;
-  color: rgba(15, 23, 42, 0.06);
-  z-index: 0;
-  white-space: nowrap;
-}
-
-.code-moral-hanko {
-  z-index: 1;
-  opacity: 0.28;
-}
-
-.code-moral-grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 2rem;
-  padding-bottom: 3rem;
-}
-
-@media (min-width: 768px) {
-  .code-moral-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .code-moral-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.moral-card {
-  position: relative;
-  z-index: 1;
-  background-color: #ffffff;
-  border-radius: 1rem;
-  border-top: 5px solid var(--brand-700);
-  box-shadow: var(--shadow-md);
-  padding: 2rem;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  min-height: 22rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  border: 1px solid rgba(3,29,56,0.06);
-}
-
-.moral-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 38px 110px rgba(3,29,56,0.16);
-}
-
-.moral-card-icon {
-  inline-size: 4.5rem;
-  block-size: 4.5rem;
-  border-radius: 1.5rem;
-  background-color: rgba(11,95,135,0.08);
-  color: var(--brand-700);
-  display: grid;
-  place-items: center;
-  transition: transform 0.35s ease, background-color 0.35s ease;
-}
-
-.moral-card:hover .moral-card-icon {
-  transform: translateY(-4px) scale(1.1);
-  background-color: rgba(0, 87, 184, 0.18);
-}
-
-.moral-card-icon svg {
-  width: 2.4rem;
-  height: 2.4rem;
-}
-
-.moral-card h3 {
-  margin: 0;
-  color: var(--text-default);
-  font-size: 1.25rem;
-  font-weight: 800;
-}
-
-.moral-card-subtitle {
-  margin: 0;
-  color: var(--brand-700);
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.code-moral-quote {
-  color: #475569;
-  font-style: italic;
-  max-width: 36rem;
-  margin-top: 1rem;
-}
-
-.moral-card p:last-child {
-  margin-top: auto;
-  color: #475569;
-  line-height: 1.9;
-}
-
-@media (max-width: 640px) {
-  .code-moral-section {
-    padding-top: 3.5rem;
-    padding-bottom: 4rem;
-  }
-
-  .code-moral-calligraphy {
-    font-size: 7rem;
-    top: 0.5rem;
-  }
-
-  .code-moral-section::after {
-    width: 300px;
-    height: 300px;
-    top: 2rem;
-    right: 1rem;
-  }
-}
-
 .hero__btn {
   align-items: center;
   border-radius: 0.625rem;
@@ -481,44 +311,70 @@ html {
   }
 }
 
-/* ── Page animations ── */
-.fade-in-up {
-  animation: fade-in-up 0.75s ease-out both;
+/* ── Page animations (déclenchées au scroll via IntersectionObserver, voir MainLayout) ──
+   Par défaut le contenu est visible (sans JS / crawlers). Seul un navigateur avec JS actif
+   (classe .js-reveal posée immédiatement sur <html>) masque puis révèle au scroll. */
+.js-reveal .fade-in-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
 }
 
-.fade-in-up--delay-1 {
-  animation-delay: 0.12s;
+.js-reveal .fade-in-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.fade-in-up--delay-2 {
-  animation-delay: 0.24s;
-}
-
-.fade-in-up--delay-3 {
-  animation-delay: 0.36s;
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.fade-in-up--delay-1 { --reveal-delay: 0.1s; }
+.fade-in-up--delay-2 { --reveal-delay: 0.2s; }
+.fade-in-up--delay-3 { --reveal-delay: 0.3s; }
+.fade-in-up--delay-4 { --reveal-delay: 0.4s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__text,
-  .fade-in-up {
+  .hero__text {
     animation: none;
+  }
+
+  .fade-in-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .hero__btn--primary:hover,
   .hero__btn--secondary:hover {
     transform: none;
   }
+}
+
+/* ── Motif tatami discret (clin d'œil au dojo) ── */
+.tatami-pattern {
+  background-image:
+    linear-gradient(rgba(11, 114, 173, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 114, 173, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand-700);
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.section-eyebrow::before {
+  content: '';
+  width: 1.5rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
 }
 
 @media (max-width: 640px) {
@@ -629,5 +485,198 @@ html {
 
 .gallery-card:hover {
   transform: scale(1.01);
+}
+
+/* ── About collage ── */
+.about__collage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  gap: 1.25rem;
+  align-items: end;
+}
+
+.about__collage-main,
+.about__collage-secondary {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.about__collage-main {
+  aspect-ratio: 4 / 3;
+  grid-column: 1 / -1;
+}
+
+.about__collage-secondary {
+  aspect-ratio: 1 / 1;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .about__collage {
+    grid-template-columns: 1.4fr 1fr;
+  }
+
+  .about__collage-main {
+    grid-column: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .about__collage-secondary {
+    display: block;
+    align-self: end;
+  }
+}
+
+.about__collage-tag {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  color: #fff;
+  font-family: var(--ff-head);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── Galerie ── */
+.gallery-more-note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+  border: 1.5px dashed rgba(11, 114, 173, 0.28);
+  background: var(--brand-ice);
+  color: var(--brand-700);
+  min-height: 12rem;
+}
+
+.gallery-more-note svg {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0.8;
+}
+
+.gallery-more-note p {
+  font-size: 0.9rem;
+  font-weight: 600;
+  max-width: 16rem;
+}
+
+.gallery-universe {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(3, 29, 56, 0.14);
+}
+
+.gallery-universe__label {
+  margin-bottom: 1rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.gallery-universe__item {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  opacity: 0.92;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.gallery-universe__item:hover {
+  transform: translateY(-3px);
+  opacity: 1;
+}
+
+.gallery-universe__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Horaires ── */
+.schedule-card {
+  position: relative;
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 2.25rem 2rem;
+  border: 1px solid rgba(3, 29, 56, 0.08);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+}
+
+.schedule-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.schedule-card__day {
+  color: var(--brand-700);
+  font-family: var(--ff-head);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.schedule-card__time {
+  color: #0f172a;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.schedule-card__group {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* ── Contact ── */
+.contact-section {
+  position: relative;
+  background: linear-gradient(180deg, var(--brand-ice) 0%, #ffffff 100%);
+}
+
+.contact-card {
+  position: relative;
+  background: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(3, 29, 56, 0.08);
+  box-shadow: var(--shadow-lg);
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+/* ── Actus date ── */
+.actualites-card__date {
+  color: var(--brand-700);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
 }
 

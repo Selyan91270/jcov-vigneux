@@ -31,8 +31,17 @@ export const stats = [
   { value: 'Encadrement', label: 'Diplômé' },
 ] as const;
 
-export const galleryImages = [
-  { src: '/images/gallery-1.jpg', alt: 'Galerie photo 1' },
-  { src: '/images/gallery-2.jpg', alt: 'Galerie photo 2' },
-  { src: '/images/gallery-3.jpg', alt: 'Galerie photo 3' },
+// Photos authentiques du club (judokas, entraînements, événements du JCOV).
+// À enrichir au fil du temps avec de vraies photos du club.
+export const clubPhotos = [
+  { key: 'photodegroupe', alt: 'Photo de groupe des judokas du JCOV sur le tatami' },
+] as const;
+
+// Photos d'illustration (compétitions internationales, ambiance du judo).
+// Ce ne sont pas des photos du club — utilisées en attendant davantage de photos maison.
+export const judoUniversePhotos = [
+  { key: 'gallery1', alt: 'Champion olympique de judo, bras levé en signe de victoire' },
+  { key: 'gallery2', alt: 'Combat de judo, saisie au judogi lors d\'une compétition' },
+  { key: 'gallery3', alt: 'Projection de judo lors d\'une compétition internationale' },
+  { key: 'aboutJudoka', alt: 'Projection de judo en noir et blanc' },
 ] as const;

@@ -1,23 +1,28 @@
 ---
+import { Image } from 'astro:assets';
 import { navLinks } from '../data/club.ts';
+import { images } from '../data/images.ts';
 
 const linkClass = 'navbar__link text-sm uppercase';
 ---
 
-<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+<nav class="navbar sticky top-0 z-50">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
 
       <a href="/" class="flex items-center hover:opacity-90 transition-opacity">
-        <img src="/logo-jcov.png" alt="Logo du Judo Club Olympique de Vigneux" class="h-12 md:h-14 w-auto" />
+        <Image src={images.logo} alt="Logo du Judo Club Olympique de Vigneux" class="h-12 md:h-14 w-auto" width={168} height={112} />
       </a>
 
-      <div class="hidden md:flex space-x-8">
+      <div class="hidden md:flex items-center space-x-8">
         {navLinks.map((link) => (
           <a href={link.href} class={linkClass}>
             {link.label}
           </a>
         ))}
+        <a href="https://aspttnancy.monclub.app/login" target="_blank" rel="noopener noreferrer" class="navbar__cta">
+          Rejoindre
+        </a>
       </div>
 
       <button
@@ -41,6 +46,9 @@ const linkClass = 'navbar__link text-sm uppercase';
             {link.label}
           </a>
         ))}
+        <a href="https://aspttnancy.monclub.app/login" target="_blank" rel="noopener noreferrer" class="navbar__cta navbar__cta--mobile">
+          Rejoindre le club
+        </a>
       </div>
     </div>
   </div>
@@ -64,10 +72,29 @@ const linkClass = 'navbar__link text-sm uppercase';
       button?.setAttribute('aria-label', 'Ouvrir le menu');
     });
   });
+
+  const navbar = document.querySelector('.navbar');
+  const onScroll = () => navbar?.classList.toggle('navbar--scrolled', window.scrollY > 12);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 </script>
 
 <style>
+  .navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(11, 114, 173, 0.1);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+
+  .navbar--scrolled {
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 30px rgba(3, 29, 56, 0.08);
+  }
+
   .navbar__link {
+    position: relative;
     color: #0f172a;
     font-family: var(--ff-head);
     font-size: 0.875rem;
@@ -78,14 +105,57 @@ const linkClass = 'navbar__link text-sm uppercase';
     transition: color 250ms ease, transform 250ms ease;
   }
 
+  .navbar__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -6px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+    transition: right 250ms ease;
+  }
+
   .navbar__link:hover,
   .navbar__link:focus-visible {
-    color: var(--brand-600);
+    color: var(--brand-700);
+  }
+
+  .navbar__link:hover::after,
+  .navbar__link:focus-visible::after {
+    right: 0;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .navbar__link:hover {
       transform: translateY(-1px);
     }
+  }
+
+  .navbar__cta {
+    display: inline-flex;
+    align-items: center;
+    color: #fff;
+    background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+    font-family: var(--ff-head);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.15rem;
+    border-radius: 9999px;
+    box-shadow: 0 8px 20px rgba(11, 114, 173, 0.28);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .navbar__cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(11, 114, 173, 0.35);
+  }
+
+  .navbar__cta--mobile {
+    justify-content: center;
+    margin-top: 0.5rem;
   }
 </style>
