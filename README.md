@@ -43,6 +43,7 @@ Créer un fichier `.md` dans `src/content/actualites/`, par exemple `src/content
 title: "Titre de l'actualité"
 date: 2026-09-01
 badge: "Résultat"
+badgeColor: "blue" # "gold" pour une distinction (ex. passage de ceinture noire)
 image: "./mon-image.png"
 imageAlt: "Description de l'image pour l'accessibilité"
 ---
@@ -50,7 +51,7 @@ imageAlt: "Description de l'image pour l'accessibilité"
 Le texte de l'actualité, en Markdown.
 ```
 
-Placer l'image (`mon-image.png`) dans le même dossier. L'actualité apparaît automatiquement sur la page d'accueil, triée par date décroissante — aucune autre modification de code n'est nécessaire.
+Placer l'image (`mon-image.png`) dans le même dossier. L'actualité apparaît automatiquement sur la page d'accueil, triée par date décroissante — aucune autre modification de code n'est nécessaire. Le champ `badgeColor` est facultatif (par défaut `blue`).
 
 ## Modifier les horaires, la galerie ou les coordonnées
 

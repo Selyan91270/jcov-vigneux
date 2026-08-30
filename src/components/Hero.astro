@@ -18,6 +18,7 @@ import { images } from '../data/images.ts';
     />
     <div class="hero__overlay absolute inset-0 pointer-events-none" aria-hidden="true"></div>
     <div class="hero__glow" aria-hidden="true"></div>
+    <div class="grain-overlay" aria-hidden="true"></div>
   </div>
 
   <div class="hero__layout relative z-10">
@@ -56,6 +57,22 @@ import { images } from '../data/images.ts';
 </section>
 
 <style>
+  .hero__image {
+    animation: hero-ken-burns 16s ease-out forwards;
+    transform-origin: 60% 40%;
+  }
+
+  @keyframes hero-ken-burns {
+    from { transform: scale(1.12); }
+    to { transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__image {
+      animation: none;
+    }
+  }
+
   .hero__kicker {
     color: var(--brand-sky);
     font-family: var(--ff-head);

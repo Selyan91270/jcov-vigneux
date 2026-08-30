@@ -2,6 +2,7 @@
 title: "Deux nouvelles ceintures noires au JCOV"
 date: 2026-03-15
 badge: "Ceinture noire"
+badgeColor: "gold"
 image: "./ceintures-noires.png"
 imageAlt: "Deux nouvelles ceintures noires au JCOV"
 ---

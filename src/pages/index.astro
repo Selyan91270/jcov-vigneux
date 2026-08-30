@@ -165,7 +165,7 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
                 height={480}
                 class="actualites-card__photo"
               />
-              <span class="actualites-card__badge">{entry.data.badge}</span>
+              <span class={`actualites-card__badge ${entry.data.badgeColor === 'gold' ? 'badge-gold' : ''}`}>{entry.data.badge}</span>
             </div>
             <div class="actualites-card__content">
               <p class="actualites-card__date">{dateFormatter.format(entry.data.date)}</p>

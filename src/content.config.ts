@@ -9,6 +9,7 @@ const actualites = defineCollection({
       title: z.string(),
       date: z.coerce.date(),
       badge: z.string(),
+      badgeColor: z.enum(['blue', 'gold']).default('blue'),
       image: image(),
       imageAlt: z.string(),
     }),

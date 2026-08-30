@@ -11,7 +11,7 @@
 :root {
   /* Typography */
   --ff-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --ff-head: 'Poppins', var(--ff-sans);
+  --ff-head: 'Oswald', 'Inter', var(--ff-sans);
 
   /* Brand palette — dérivée du bleu réel du logo JCOV (#19A9F5) */
   --brand-900: #031D38; /* profond, fonds sombres */
@@ -21,6 +21,20 @@
   --brand-accent: #19A9F5; /* bleu ciel du logo — accents, dégradés */
   --brand-sky: #5FC2F8; /* variante claire de l'accent */
   --brand-ice: #EAF7FF; /* fond bleu très clair, sections alternées */
+
+  /* Accent chaud — clin d'œil à la ceinture noire, utilisé avec parcimonie */
+  --gold: #D9A441;
+  --gold-light: #F0C878;
+  --gold-dark: #8A6A22;
+
+  /* Progression des ceintures de judo — utilisée uniquement pour le liseré de signature */
+  --belt-white: #F5F5F0;
+  --belt-yellow: #F2C230;
+  --belt-orange: #E8823A;
+  --belt-green: #3C9D5C;
+  --belt-blue: #2E7FC9;
+  --belt-brown: #6B4A2E;
+  --belt-black: #1A1A1A;
 
   /* Neutral / text */
   --text-default: #0f172a;
@@ -133,8 +147,8 @@ html {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(115deg, rgba(3, 29, 56, 0.88) 0%, rgba(6, 59, 92, 0.6) 42%, rgba(3, 29, 56, 0.35) 68%, rgba(3, 29, 56, 0.65) 100%),
-    linear-gradient(0deg, rgba(3, 29, 56, 0.55), transparent 45%);
+    linear-gradient(115deg, rgba(3, 29, 56, 0.82) 0%, rgba(6, 59, 92, 0.5) 42%, rgba(3, 29, 56, 0.28) 68%, rgba(3, 29, 56, 0.58) 100%),
+    linear-gradient(0deg, rgba(3, 29, 56, 0.48), transparent 45%);
   pointer-events: none;
 }
 
@@ -382,6 +396,42 @@ html {
     min-height: auto;
     padding-bottom: 2.5rem;
   }
+}
+
+/* ── Liseré "progression des ceintures" — signature visuelle du club ──
+   Fin dégradé reprenant l'ordre réel des grades de judo (blanc → noir).
+   Utilisé avec parcimonie : sous la navbar et au-dessus du footer. */
+.belt-stripe {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--belt-white) 0%, var(--belt-white) 14.28%,
+    var(--belt-yellow) 14.28%, var(--belt-yellow) 28.56%,
+    var(--belt-orange) 28.56%, var(--belt-orange) 42.84%,
+    var(--belt-green) 42.84%, var(--belt-green) 57.12%,
+    var(--belt-blue) 57.12%, var(--belt-blue) 71.4%,
+    var(--belt-brown) 71.4%, var(--belt-brown) 85.68%,
+    var(--belt-black) 85.68%, var(--belt-black) 100%
+  );
+  opacity: 0.9;
+}
+
+/* ── Grain subtil sur fonds sombres (rendu plus premium, pas d'image externe) ── */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Badge doré (ceinture noire, distinctions) ── */
+.badge-gold {
+  background: linear-gradient(120deg, var(--gold-dark), var(--gold) 55%, var(--gold-light)) !important;
+  color: #241a08 !important;
+  border-color: rgba(138, 106, 34, 0.35) !important;
 }
 
 .actualites-section {
