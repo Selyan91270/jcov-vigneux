@@ -1,0 +1,227 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+import MoralCode from '../components/MoralCode.astro';
+import FranceJudoNews from '../components/FranceJudoNews.astro';
+import { club, schedules, galleryImages } from '../data/club.ts';
+import aboutJudoka from '../assets/images/about-judoka.jpg';
+---
+
+<MainLayout title="JCOV - Judo Club Olympique de Vigneux">
+
+  <Hero />
+
+  <section id="about" class="about-section relative pt-10 pb-20 sm:pt-12 md:pt-14 md:pb-24 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="about__content fade-in-up">
+          <span class="text-jcov font-semibold text-sm uppercase tracking-[0.2em] mb-4 block">
+            À propos
+          </span>
+
+          <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-6 tracking-tight leading-tight">
+            Le Judo, une école de vie
+          </h2>
+
+          <p class="text-gray-600 text-lg leading-relaxed mb-6">
+            Le Judo Club Olympique de Vigneux transmet les valeurs fondamentales du judo : respect, courage, maîtrise de soi et entraide. Chaque séance est une occasion de grandir, sur le tatami et au quotidien.
+          </p>
+
+          <p class="text-gray-600 text-lg leading-relaxed mb-8">
+            Depuis {club.foundedYear}, le club accueille enfants, adolescents et adultes dans une ambiance conviviale et familiale. Du loisir à la compétition, chacun trouve sa place et progresse à son rythme, encadré par des entraîneurs diplômés passionnés.
+          </p>
+
+          <a
+            href="#contact"
+            class="inline-flex items-center gap-2 text-jcov font-semibold text-sm uppercase tracking-wider hover:text-jcov-dark transition-colors group"
+          >
+            Rejoindre le club
+            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="about__image fade-in-up fade-in-up--delay-1">
+          <div class="relative image-frame aspect-[4/3] lg:aspect-auto lg:h-[420px]">
+            <img
+              src="/images/judophoto.png"
+              alt="Judoka du JCOV en action sur le tatami"
+              class="w-full h-full object-cover object-center"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" aria-hidden="true"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-jcov" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="py-20 bg-gray-50 border-b border-gray-100 fade-in-up">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center tracking-tight">Galerie du club</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 gallery-grid">
+        {galleryImages.map((image) => (
+          <div class="card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+            <div class="image-frame aspect-[4/3]">
+              <img
+                src={image.src}
+                alt={image.alt}
+                class="gallery-card w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 text-center">
+        <a
+          href="/galerie"
+          class="inline-flex items-center gap-2 rounded-xl bg-jcov px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-white shadow-md shadow-jcov/25 transition hover:bg-jcov-dark hover:shadow-lg"
+        >
+          Voir toutes les photos
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Actualités & Résultats -->
+  <section class="actualites-section bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- En-tête de la section -->
+      <div class="text-center mb-12">
+        <p class="text-jcov font-semibold text-sm uppercase tracking-[0.2em] mb-3">Actualités du club</p>
+        <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-4 tracking-tight leading-tight">
+          Les dernières performances du JCOV
+        </h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+          Découvrez les résultats, événements et réussites de nos judokas.
+        </p>
+      </div>
+
+      <!-- Grille des articles -->
+      <div class="actualites-grid">
+        <!-- Article 1 : Ceintures Noires -->
+        <div class="actualites-card fade-in-up">
+          <div class="actualites-card__image">
+            <img
+              src="/images/actualites-ceinture-noire.png"
+              alt="Deux nouvelles ceintures noires au JCOV"
+              class="actualites-card__photo actualites-card__photo--focus-top"
+              loading="lazy"
+            />
+            <span class="actualites-card__badge">Ceinture Noire</span>
+          </div>
+          <div class="actualites-card__content">
+            <h3 class="actualites-card__title">Deux nouvelles ceintures noires au JCOV</h3>
+            <p class="actualites-card__text">
+              Félicitations à Jonas et Jegor qui deviennent tous deux ceinture noire.<br><br>
+              Cette réussite récompense de nombreuses années de travail, de persévérance et d'engagement sur les tatamis.<br><br>
+              Bravo les gars !
+            </p>
+          </div>
+        </div>
+
+        <!-- Article 2 : Reagan -->
+        <div class="actualites-card fade-in-up fade-in-up--delay-1">
+          <div class="actualites-card__image">
+            <img
+              src="/images/actualites-reagan.png"
+              alt="Championnat de France Minimes : Reagan à l'honneur"
+              loading="lazy"
+            />
+            <span class="actualites-card__badge">Résultat</span>
+          </div>
+          <div class="actualites-card__content">
+            <h3 class="actualites-card__title">Championnat de France Minimes : Reagan à l'honneur</h3>
+            <p class="actualites-card__text">
+              Aujourd'hui avaient lieu les Championnats de France Minimes.<br><br>
+              Reagan LAPOINTE se classe à une remarquable 5ᵉ place en +73 kg.<br><br>
+              Cette performance est d'autant plus impressionnante qu'il revenait d'une blessure en début de saison et que certains de ses adversaires dépassaient parfois les 100 kg.<br><br>
+              Félicitations à lui pour son parcours et sa détermination.<br><br>
+              Bravo Reagan ! Bravo JCOV !
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="classes" class="py-20 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center tracking-tight fade-in-up">
+        Horaires d'Entraînement
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {schedules.map((schedule, i) => (
+          <div class={`card p-8 rounded-xl transition-all duration-300 fade-in-up fade-in-up--delay-${i + 1}`}>
+            <div class="text-jcov font-bold text-lg mb-4 uppercase tracking-wide">
+              {schedule.day}
+            </div>
+            <div class="text-gray-900 text-2xl mb-2">{schedule.time}</div>
+            <div class="text-gray-600 text-sm">{schedule.group}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="py-20 bg-jcov/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 tracking-tight fade-in-up">
+        Rejoignez-nous
+      </h2>
+
+      <p class="text-gray-600 text-lg mb-12 max-w-2xl mx-auto fade-in-up fade-in-up--delay-1">
+        Venez découvrir le judo au sein du JCOV.<br>
+        Une séance d'essai est possible tout au long de l'année.
+      </p>
+
+      <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-lg transition-all duration-300 hover:shadow-xl max-w-md mx-auto fade-in-up fade-in-up--delay-2">
+        <div class="space-y-4">
+          <div class="flex items-center text-gray-700">
+            <svg class="w-5 h-5 mr-3 text-jcov shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            {club.address.venue}<br>{club.address.street}<br>{club.address.city}
+          </div>
+
+          <div class="flex items-center text-gray-700">
+            <svg class="w-5 h-5 mr-3 text-jcov shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+            {club.phone}
+          </div>
+
+          <div class="flex items-center text-gray-700">
+            <svg class="w-5 h-5 mr-3 text-jcov shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            {club.email}
+          </div>
+        </div>
+
+        <a
+          href={`mailto:${club.email}`}
+          class="inline-block mt-8 bg-jcov text-white font-semibold px-8 py-3 rounded-xl hover:bg-jcov-dark transition-colors tracking-wide uppercase text-sm shadow-md shadow-jcov/25 hover:shadow-lg hover:shadow-jcov/30"
+        >
+          Nous contacter
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Déplacer Code Moral et Actualités à la fin de la page, avant le footer -->
+  <MoralCode />
+
+  <FranceJudoNews />
+
+</MainLayout>

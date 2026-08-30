@@ -1,0 +1,43 @@
+---
+import { club } from '../data/club.ts';
+---
+
+<section class="hero relative w-full overflow-hidden" aria-labelledby="hero-title">
+  <div class="hero__media absolute inset-0 overflow-hidden">
+    <img
+      src="/images/photoencart.png"
+      alt="Photo du club JCOV avec judokas en action"
+      class="hero__image absolute inset-0 w-full h-full object-cover object-center"
+      fetchpriority="high"
+      width="1920"
+      height="1080"
+    />
+    <div class="hero__overlay absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero__layout relative z-10">
+    <div class="hero__content">
+      <div class="hero__text">
+        <img
+          id="hero-title"
+          class="hero__logo"
+          src="/logo-jcov.png"
+          alt="JCOV Vigneux"
+          width="420"
+          height="280"
+        />
+
+        <p class="hero__subtitle">Club de Judo depuis {club.foundedYear}</p>
+
+        <p class="hero__description">
+          Excellence, respect et dépassement de soi. Rejoignez une communauté passionnée par l'art martial et la progression personnelle.
+        </p>
+
+        <div class="hero__actions">
+          <a href="https://aspttnancy.monclub.app/login" target="_blank" rel="noopener noreferrer" class="hero__btn hero__btn--primary">Rejoindre le club</a>
+          <a href="#classes" class="hero__btn hero__btn--secondary">Voir les horaires</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
