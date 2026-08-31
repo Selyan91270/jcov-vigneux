@@ -402,7 +402,7 @@ html {
    Fin dégradé reprenant l'ordre réel des grades de judo (blanc → noir).
    Utilisé avec parcimonie : sous la navbar et au-dessus du footer. */
 .belt-stripe {
-  height: 4px;
+  height: 8px;
   width: 100%;
   background: linear-gradient(
     90deg,
@@ -414,7 +414,7 @@ html {
     var(--belt-brown) 71.4%, var(--belt-brown) 85.68%,
     var(--belt-black) 85.68%, var(--belt-black) 100%
   );
-  opacity: 0.9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 /* ── Grain subtil sur fonds sombres (rendu plus premium, pas d'image externe) ── */
