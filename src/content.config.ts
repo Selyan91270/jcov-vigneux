@@ -15,4 +15,17 @@ const actualites = defineCollection({
     }),
 });
 
-export const collections = { actualites };
+const evenements = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/evenements' }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      time: z.string().optional(),
+      location: z.string(),
+      category: z.string(),
+      summary: z.string(),
+    }),
+});
+
+export const collections = { actualites, evenements };

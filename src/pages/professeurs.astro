@@ -1,0 +1,161 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { coaches } from '../data/coaches.ts';
+---
+
+<MainLayout title="Nos professeurs - JCOV">
+  <section class="page-header py-16 sm:py-20 bg-white">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <a href="/" class="mb-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-jcov hover:text-jcov-dark">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" />
+        </svg>
+        Retour à l'accueil
+      </a>
+      <span class="section-eyebrow mb-3">L'équipe encadrante</span>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mt-4">Nos professeurs</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
+        Une équipe de professeurs diplômés d'État, gradés et passionnés, pour accompagner chaque judoka à son rythme.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-20 bg-gray-50 border-t border-gray-100">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="coaches-grid">
+        {coaches.map((coach, i) => (
+          <article class={`coach-card fade-in-up fade-in-up--delay-${(i % 4) + 1}`}>
+            <div class="coach-card__photo">
+              {coach.photo ? (
+                <img src={coach.photo} alt={`${coach.firstName} ${coach.lastName}`} />
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                </svg>
+              )}
+            </div>
+
+            <span class="coach-card__dan badge-gold">{coach.dan}ᵉ Dan</span>
+            <h2 class="coach-card__name">{coach.firstName} {coach.lastName}</h2>
+            <p class="coach-card__role">{coach.role}</p>
+
+            {coach.diplomaUrl ? (
+              <a href={coach.diplomaUrl} target="_blank" rel="noopener noreferrer" class="coach-card__diploma coach-card__diploma--active">
+                Voir le diplôme d'État
+              </a>
+            ) : (
+              <span class="coach-card__diploma">Diplôme d'État — à venir</span>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .coaches-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .coaches-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .coach-card {
+    background: #fff;
+    border: 1px solid rgba(3, 29, 56, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .coach-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .coach-card__photo {
+    width: 6.5rem;
+    height: 6.5rem;
+    margin: 0 auto 1.25rem;
+    border-radius: 999px;
+    background: var(--brand-ice);
+    color: var(--brand-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .coach-card__photo svg {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+
+  .coach-card__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .coach-card__dan {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    margin-bottom: 0.9rem;
+    background: var(--brand-ice);
+    color: var(--brand-700);
+    border: 1px solid rgba(11, 95, 135, 0.12);
+  }
+
+  .coach-card__name {
+    font-family: var(--ff-head);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.3rem;
+  }
+
+  .coach-card__role {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .coach-card__diploma {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #94a3b8;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(3, 29, 56, 0.1);
+    width: 100%;
+  }
+
+  .coach-card__diploma--active {
+    color: var(--brand-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .coach-card__diploma--active:hover {
+    color: var(--brand-accent);
+  }
+</style>

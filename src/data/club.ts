@@ -14,8 +14,10 @@ export const club = {
 export const navLinks = [
   { label: 'Accueil', href: '/' },
   { label: 'Le Club', href: '#about' },
-  { label: 'Galerie', href: '/galerie' },
+  { label: 'Professeurs', href: '/professeurs' },
   { label: 'Horaires', href: '/horaires' },
+  { label: 'Événements', href: '/evenements' },
+  { label: 'Galerie', href: '/galerie' },
   { label: 'Contact', href: '#contact' },
 ] as const;
 
