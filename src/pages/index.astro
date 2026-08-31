@@ -100,7 +100,44 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
     </div>
   </section>
 
-  <section id="gallery" class="py-20 bg-white border-b border-gray-100">
+  <!-- Actualités du club -->
+  <section class="actualites-section bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Actualités du club</span>
+        <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mt-4 mb-4 tracking-tight leading-tight">
+          Les dernières performances du JCOV
+        </h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+          Découvrez les résultats, événements et réussites de nos judokas.
+        </p>
+      </div>
+
+      <div class="actualites-grid">
+        {actualites.map((entry, i) => (
+          <article class={`actualites-card fade-in-up fade-in-up--delay-${i + 1}`}>
+            <div class="actualites-card__image">
+              <Image
+                src={entry.data.image}
+                alt={entry.data.imageAlt}
+                width={640}
+                height={480}
+                class="actualites-card__photo"
+              />
+              <span class={`actualites-card__badge ${entry.data.badgeColor === 'gold' ? 'badge-gold' : ''}`}>{entry.data.badge}</span>
+            </div>
+            <div class="actualites-card__content">
+              <p class="actualites-card__date">{dateFormatter.format(entry.data.date)}</p>
+              <h3 class="actualites-card__title">{entry.data.title}</h3>
+              <div class="actualites-card__text" set:html={entry.rendered?.html} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="py-20 bg-gray-50 border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Galerie</span>
@@ -158,43 +195,6 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
           </svg>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Actualités du club -->
-  <section class="actualites-section bg-white border-b border-gray-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 fade-in-up">
-        <span class="section-eyebrow justify-center mb-3">Actualités du club</span>
-        <h2 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mt-4 mb-4 tracking-tight leading-tight">
-          Les dernières performances du JCOV
-        </h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-          Découvrez les résultats, événements et réussites de nos judokas.
-        </p>
-      </div>
-
-      <div class="actualites-grid">
-        {actualites.map((entry, i) => (
-          <article class={`actualites-card fade-in-up fade-in-up--delay-${i + 1}`}>
-            <div class="actualites-card__image">
-              <Image
-                src={entry.data.image}
-                alt={entry.data.imageAlt}
-                width={640}
-                height={480}
-                class="actualites-card__photo"
-              />
-              <span class={`actualites-card__badge ${entry.data.badgeColor === 'gold' ? 'badge-gold' : ''}`}>{entry.data.badge}</span>
-            </div>
-            <div class="actualites-card__content">
-              <p class="actualites-card__date">{dateFormatter.format(entry.data.date)}</p>
-              <h3 class="actualites-card__title">{entry.data.title}</h3>
-              <div class="actualites-card__text" set:html={entry.rendered?.html} />
-            </div>
-          </article>
-        ))}
       </div>
     </div>
   </section>
