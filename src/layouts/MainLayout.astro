@@ -5,6 +5,8 @@
 // Importation des composants
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import { getImage } from 'astro:assets';
+import { images } from '../data/images.ts';
 
 // Importation des styles globaux (Tailwind)
 import '../styles/global.css';
@@ -15,6 +17,8 @@ interface Props {
 }
 
 const { title = 'JCOV - Judo Club Olympique de Vigneux' } = Astro.props;
+
+const appleTouchIcon = await getImage({ src: images.logo, width: 180, height: 180, format: 'png' });
 ---
 
 <!doctype html>
@@ -25,7 +29,7 @@ const { title = 'JCOV - Judo Club Olympique de Vigneux' } = Astro.props;
     <meta name="description" content="JCOV - Club de judo depuis 1989 à Vigneux-sur-Seine. Respect, discipline et dépassement de soi." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/logo-jcov.png" />
+    <link rel="apple-touch-icon" href={appleTouchIcon.src} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
