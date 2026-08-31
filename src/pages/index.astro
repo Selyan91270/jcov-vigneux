@@ -6,7 +6,7 @@ import Hero from '../components/Hero.astro';
 import Stats from '../components/Stats.astro';
 import MoralCode from '../components/MoralCode.astro';
 import FranceJudoNews from '../components/FranceJudoNews.astro';
-import { club, schedules, clubPhotos, judoUniversePhotos } from '../data/club.ts';
+import { club, clubPhotos, judoUniversePhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 
 const actualites = (await getCollection('actualites')).sort(
@@ -178,26 +178,24 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
     </div>
   </section>
 
-  <section id="classes" class="py-20 bg-white border-b border-gray-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 fade-in-up">
-        <span class="section-eyebrow justify-center mb-3">Planning</span>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
-          Horaires d'entraînement
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {schedules.map((schedule, i) => (
-          <div class={`schedule-card fade-in-up fade-in-up--delay-${i + 1}`}>
-            <div class="schedule-card__day">
-              {schedule.day}
-            </div>
-            <div class="schedule-card__time">{schedule.time}</div>
-            <div class="schedule-card__group">{schedule.group}</div>
-          </div>
-        ))}
-      </div>
+  <section id="classes" class="classes-teaser py-20 bg-white border-b border-gray-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="section-eyebrow justify-center mb-3 fade-in-up">Planning</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight fade-in-up">
+        Un cours pour chaque âge, de 4 ans à adulte
+      </h2>
+      <p class="text-gray-600 text-lg mb-10 max-w-2xl mx-auto fade-in-up fade-in-up--delay-1">
+        Indiquez l'âge du futur judoka et trouvez en quelques secondes ses jours de cours et sa cotisation.
+      </p>
+      <a
+        href="/horaires"
+        class="inline-flex items-center gap-2 rounded-xl bg-jcov px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white shadow-md shadow-jcov/25 transition hover:bg-jcov-dark hover:shadow-lg fade-in-up fade-in-up--delay-2"
+      >
+        Voir les horaires &amp; tarifs
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
+        </svg>
+      </a>
     </div>
   </section>
 

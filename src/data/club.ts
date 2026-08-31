@@ -15,14 +15,8 @@ export const navLinks = [
   { label: 'Accueil', href: '/' },
   { label: 'Le Club', href: '#about' },
   { label: 'Galerie', href: '/galerie' },
-  { label: 'Horaires', href: '#classes' },
+  { label: 'Horaires', href: '/horaires' },
   { label: 'Contact', href: '#contact' },
-] as const;
-
-export const schedules = [
-  { day: 'Lundi', time: '18h30 - 20h30', group: 'Adultes & Avancés' },
-  { day: 'Mercredi', time: '17h30 - 19h30', group: 'Enfants & Débutants' },
-  { day: 'Vendredi', time: '18h00 - 20h00', group: 'Tous niveaux' },
 ] as const;
 
 export const stats = [

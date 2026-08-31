@@ -1,0 +1,697 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { ageGroups, complementaryCourses, pricing, federationFee, practicalNotes, minGroupAge } from '../data/schedule.ts';
+
+const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federationFee });
+---
+
+<MainLayout title="Horaires & Tarifs - JCOV">
+  <section class="page-header py-16 sm:py-20 bg-white">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <a href="/" class="mb-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-jcov hover:text-jcov-dark">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" />
+        </svg>
+        Retour à l'accueil
+      </a>
+      <span class="section-eyebrow mb-3">Pratiquer au JCOV</span>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mt-4">Horaires &amp; tarifs</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
+        Indiquez l'âge du futur judoka pour trouver son cours en quelques secondes — ou parcourez directement le planning complet et les tarifs plus bas.
+      </p>
+    </div>
+  </section>
+
+  <section class="finder-section">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="finder-card fade-in-up">
+        <div class="finder-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 10v8l2 2M18 10v8l-2 2" />
+            <circle cx="8" cy="6" r="2.2" />
+            <circle cx="16" cy="6" r="2.2" />
+            <path d="M8 12h8" />
+          </svg>
+        </div>
+        <h2 class="finder-card__title">Quel âge a le futur judoka&nbsp;?</h2>
+        <p class="finder-card__subtitle">On vous indique tout de suite les jours, les horaires et la cotisation qui correspondent.</p>
+
+        <form id="age-form" class="finder-input-row" novalidate>
+          <label for="age-input" class="sr-only">Âge du futur judoka</label>
+          <input
+            type="number"
+            id="age-input"
+            name="age"
+            min="3"
+            max="99"
+            inputmode="numeric"
+            placeholder="Ex : 7 ans"
+            class="finder-input"
+            required
+          />
+          <button type="submit" class="finder-submit">Voir mon cours</button>
+        </form>
+
+        <div id="experience-question" class="finder-experience hidden">
+          <p class="finder-experience__label">C'est sa première année de judo&nbsp;?</p>
+          <div class="finder-experience__actions">
+            <button type="button" class="finder-chip-btn" data-experience="debutant">Oui, première année</button>
+            <button type="button" class="finder-chip-btn" data-experience="confirme">Non, il/elle a déjà pratiqué</button>
+          </div>
+        </div>
+
+        <div id="finder-too-young" class="finder-note hidden">
+          Nos cours démarrent à partir de {minGroupAge} ans. Pour toute question, <a href="/#contact">contactez le club</a>.
+        </div>
+
+        <div id="finder-result" class="finder-result hidden" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tous-les-horaires" class="py-20 bg-white border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Planning complet</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">Tous les cours de la saison</h2>
+        <p class="mt-4 max-w-2xl mx-auto text-gray-600">Pour comparer d'un coup d'œil, ou si plusieurs enfants de la famille pratiquent.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {ageGroups.map((group, i) => (
+          <div class={`schedule-card fade-in-up fade-in-up--delay-${(i % 3) + 1}`}>
+            <div class="schedule-card__day">{group.ageLabel}</div>
+            <p class="schedule-card__official">{group.officialName}</p>
+            <ul class="schedule-card__sessions">
+              {group.sessions.map((s) => (
+                <li><span>{s.day}</span><strong>{s.time}</strong></li>
+              ))}
+            </ul>
+            <div class="schedule-card__price">{group.price} €<span> / an</span></div>
+          </div>
+        ))}
+      </div>
+
+      <p class="all-schedules__note fade-in-up">
+        Pour les 6-7 ans, deux groupes coexistent selon le niveau (débutant ou confirmé) sur des créneaux différents — le sélecteur ci-dessus vous oriente automatiquement vers le bon.
+      </p>
+
+      <h3 class="complementary-title fade-in-up">Cours complémentaires (ados &amp; adultes, sur inscription séparée)</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {complementaryCourses.map((course, i) => (
+          <div class={`schedule-card fade-in-up fade-in-up--delay-${i + 1}`}>
+            <div class="schedule-card__day">{course.name}</div>
+            <p class="schedule-card__official">{course.note}</p>
+            <ul class="schedule-card__sessions">
+              {course.sessions.map((s) => (
+                <li><span>{s.day}</span><strong>{s.time}</strong></li>
+              ))}
+            </ul>
+            <div class="schedule-card__price">{course.price} €<span> / an</span></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="tarifs" class="py-20 bg-jcov/5 border-t border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Tarifs</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">Cotisations annuelles</h2>
+        <p class="mt-4 max-w-2xl mx-auto text-gray-600">
+          La licence fédérale ({federationFee} €) est déjà comprise dans chaque tarif ci-dessous.
+        </p>
+      </div>
+
+      <div class="pricing-table fade-in-up">
+        {pricing.map((item) => (
+          <div class="pricing-row">
+            <div class="pricing-row__label">
+              <p>{item.label}</p>
+              <span>{item.detail}</span>
+            </div>
+            <div class="pricing-row__price">{item.price} €</div>
+          </div>
+        ))}
+      </div>
+
+      <ul class="practical-notes fade-in-up">
+        {practicalNotes.map((note) => (
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            {note}
+          </li>
+        ))}
+      </ul>
+
+      <div class="text-center mt-12 fade-in-up">
+        <a
+          href="https://aspttnancy.monclub.app/login"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-xl bg-jcov px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white shadow-md shadow-jcov/25 transition hover:bg-jcov-dark hover:shadow-lg"
+        >
+          Rejoindre le club
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="schedule-data" set:html={scheduleData} is:inline />
+
+  <script>
+    type Session = { day: string; time: string };
+    type AgeGroup = {
+      id: string;
+      ageLabel: string;
+      minAge: number;
+      maxAge: number;
+      officialName: string;
+      experience?: 'debutant' | 'confirme';
+      sessions: Session[];
+      price: number;
+    };
+    type ComplementaryCourse = { id: string; name: string; note: string; sessions: Session[]; price: number };
+
+    const dataEl = document.getElementById('schedule-data');
+    const { ageGroups, complementaryCourses, federationFee } = JSON.parse(dataEl?.textContent ?? '{}') as {
+      ageGroups: AgeGroup[];
+      complementaryCourses: ComplementaryCourse[];
+      federationFee: number;
+    };
+
+    const form = document.getElementById('age-form') as HTMLFormElement | null;
+    const input = document.getElementById('age-input') as HTMLInputElement | null;
+    const experienceBox = document.getElementById('experience-question');
+    const resultBox = document.getElementById('finder-result');
+    const tooYoungBox = document.getElementById('finder-too-young');
+
+    let pendingAge: number | null = null;
+
+    function sessionsMarkup(sessions: Session[]) {
+      return `<div class="finder-result__sessions">${sessions
+        .map((s) => `<div class="finder-chip"><span>${s.day}</span><strong>${s.time}</strong></div>`)
+        .join('')}</div>`;
+    }
+
+    function complementaryMarkup() {
+      return `<div class="finder-result__extra">
+        <p class="finder-result__extra-title">En complément, sur inscription séparée&nbsp;:</p>
+        ${complementaryCourses
+          .map(
+            (c) => `<div class="finder-extra-card">
+              <p class="finder-extra-card__name">${c.name}</p>
+              ${sessionsMarkup(c.sessions)}
+              <p class="finder-extra-card__price">${c.price} € / an</p>
+            </div>`
+          )
+          .join('')}
+      </div>`;
+    }
+
+    function showResult(group: AgeGroup) {
+      if (!resultBox) return;
+      experienceBox?.classList.add('hidden');
+      tooYoungBox?.classList.add('hidden');
+      resultBox.classList.remove('hidden');
+      resultBox.innerHTML = `
+        <div class="finder-result__head">
+          <div class="finder-result__age">${group.ageLabel}</div>
+          <p class="finder-result__official">${group.officialName}</p>
+        </div>
+        ${sessionsMarkup(group.sessions)}
+        <div class="finder-result__price">
+          Cotisation annuelle pour ce cours&nbsp;: <strong>${group.price} €</strong>
+          <span>(dont ${federationFee} € de licence fédérale)</span>
+        </div>
+        ${group.id === 'ados-adultes' ? complementaryMarkup() : ''}
+      `;
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function handleAge(age: number) {
+      experienceBox?.classList.add('hidden');
+      resultBox?.classList.add('hidden');
+      tooYoungBox?.classList.add('hidden');
+      if (resultBox) resultBox.innerHTML = '';
+
+      const matches = ageGroups.filter((g) => age >= g.minAge && age <= g.maxAge);
+
+      if (matches.length === 0) {
+        tooYoungBox?.classList.remove('hidden');
+        return;
+      }
+
+      if (matches.length > 1) {
+        pendingAge = age;
+        experienceBox?.classList.remove('hidden');
+        experienceBox?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
+
+      showResult(matches[0]);
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const age = Number.parseInt(input?.value ?? '', 10);
+      if (Number.isNaN(age) || age < 0) return;
+      handleAge(age);
+    });
+
+    experienceBox?.querySelectorAll<HTMLButtonElement>('[data-experience]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (pendingAge === null) return;
+        const group = ageGroups.find(
+          (g) => pendingAge !== null && pendingAge >= g.minAge && pendingAge <= g.maxAge && g.experience === btn.dataset.experience
+        );
+        if (group) showResult(group);
+      });
+    });
+  </script>
+</MainLayout>
+
+<style>
+  .hidden {
+    display: none !important;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Finder ── */
+  .finder-section {
+    position: relative;
+    background: linear-gradient(180deg, var(--brand-ice) 0%, #ffffff 100%);
+    padding-block: 3rem 4rem;
+  }
+
+  .finder-card {
+    position: relative;
+    max-width: 42rem;
+    margin-inline: auto;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(3, 29, 56, 0.08);
+    box-shadow: var(--shadow-lg);
+    padding: 2.75rem 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .finder-card {
+      padding: 3.25rem 3rem;
+    }
+  }
+
+  .finder-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 999px;
+    background: var(--brand-ice);
+    color: var(--brand-700);
+    margin-bottom: 1.25rem;
+  }
+
+  .finder-card__icon svg {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .finder-card__title {
+    font-family: var(--ff-head);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.6rem;
+  }
+
+  .finder-card__subtitle {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 32rem;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+  }
+
+  .finder-input-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 26rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 480px) {
+    .finder-input-row {
+      flex-direction: row;
+    }
+  }
+
+  .finder-input {
+    flex: 1;
+    min-width: 0;
+    border: 1.5px solid rgba(3, 29, 56, 0.15);
+    border-radius: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+    text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .finder-input:focus {
+    outline: none;
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 4px rgba(25, 169, 245, 0.15);
+  }
+
+  .finder-submit {
+    background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .finder-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .finder-experience {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(3, 29, 56, 0.08);
+  }
+
+  .finder-experience__label {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1rem;
+  }
+
+  .finder-experience__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .finder-chip-btn {
+    background: var(--brand-ice);
+    color: var(--brand-700);
+    border: 1px solid rgba(11, 95, 135, 0.15);
+    border-radius: 999px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .finder-chip-btn:hover {
+    background: var(--brand-accent);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .finder-note {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(3, 29, 56, 0.08);
+    color: #64748b;
+  }
+
+  .finder-note a {
+    color: var(--brand-700);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .finder-result {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(3, 29, 56, 0.08);
+    text-align: left;
+  }
+
+  .finder-result :global(.finder-result__head) {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .finder-result :global(.finder-result__age) {
+    display: inline-block;
+    font-family: var(--ff-head);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brand-700);
+  }
+
+  .finder-result :global(.finder-result__official) {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 0.25rem;
+  }
+
+  .finder-result :global(.finder-result__sessions) {
+    display: grid;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .finder-result :global(.finder-chip) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid rgba(3, 29, 56, 0.06);
+    border-radius: 0.65rem;
+    padding: 0.75rem 1.1rem;
+  }
+
+  .finder-result :global(.finder-chip span) {
+    color: #475569;
+    font-weight: 600;
+  }
+
+  .finder-result :global(.finder-chip strong) {
+    color: #0f172a;
+    font-weight: 700;
+  }
+
+  .finder-result :global(.finder-result__price) {
+    background: linear-gradient(120deg, var(--brand-900), var(--brand-700));
+    color: #fff;
+    border-radius: 0.85rem;
+    padding: 1.1rem 1.3rem;
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .finder-result :global(.finder-result__price strong) {
+    font-size: 1.25rem;
+    color: var(--brand-sky);
+  }
+
+  .finder-result :global(.finder-result__price span) {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .finder-result :global(.finder-result__extra) {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed rgba(3, 29, 56, 0.12);
+  }
+
+  .finder-result :global(.finder-result__extra-title) {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .finder-result :global(.finder-extra-card) {
+    background: #f8fafc;
+    border: 1px solid rgba(3, 29, 56, 0.06);
+    border-radius: 0.85rem;
+    padding: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .finder-result :global(.finder-extra-card__name) {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.65rem;
+  }
+
+  .finder-result :global(.finder-extra-card__price) {
+    margin-top: 0.65rem;
+    font-weight: 700;
+    color: var(--brand-700);
+  }
+
+  /* ── Tous les horaires ── */
+  .schedule-card__official {
+    color: #94a3b8;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.1rem;
+  }
+
+  .schedule-card__sessions {
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 1.25rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .schedule-card__sessions li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.92rem;
+  }
+
+  .schedule-card__sessions li span {
+    color: #64748b;
+    font-weight: 600;
+  }
+
+  .schedule-card__sessions li strong {
+    color: #0f172a;
+  }
+
+  .schedule-card__price {
+    font-family: var(--ff-head);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--brand-700);
+  }
+
+  .schedule-card__price span {
+    font-family: var(--ff-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+
+  .all-schedules__note {
+    margin: 2rem 0 3.5rem;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.92rem;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+
+  .complementary-title {
+    font-family: var(--ff-head);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Tarifs ── */
+  .pricing-table {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(3, 29, 56, 0.08);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .pricing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.4rem 1.75rem;
+  }
+
+  .pricing-row + .pricing-row {
+    border-top: 1px solid rgba(3, 29, 56, 0.06);
+  }
+
+  .pricing-row__label p {
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.15rem;
+  }
+
+  .pricing-row__label span {
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .pricing-row__price {
+    font-family: var(--ff-head);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brand-700);
+    white-space: nowrap;
+  }
+
+  .practical-notes {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 34rem;
+    margin-inline: auto;
+    list-style: none;
+    padding: 0;
+  }
+
+  .practical-notes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    color: #334155;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .practical-notes li svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: var(--brand-accent);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+</style>
