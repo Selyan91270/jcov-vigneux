@@ -18,7 +18,10 @@ const monthFormatter = new Intl.DateTimeFormat('fr-FR', { month: 'short' });
 const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
-<MainLayout title="Événements - JCOV">
+<MainLayout
+  title="Événements - JCOV"
+  description="Forums, reprise des cours, stages et compétitions : tous les rendez-vous de la saison du Judo Club Olympique de Vigneux."
+>
   <section class="page-header py-16 sm:py-20 bg-white">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <a href="/" class="mb-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-jcov hover:text-jcov-dark">

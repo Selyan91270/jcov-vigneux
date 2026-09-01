@@ -9,6 +9,7 @@ export const club = {
     street: '1 bis rue du Maréchal Leclerc',
     city: '91270 Vigneux-sur-Seine',
   },
+  facebook: 'https://www.facebook.com/JCOVigneux',
 } as const;
 
 export const navLinks = [

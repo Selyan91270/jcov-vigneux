@@ -6,6 +6,7 @@ import Hero from '../components/Hero.astro';
 import Stats from '../components/Stats.astro';
 import MoralCode from '../components/MoralCode.astro';
 import FranceJudoNews from '../components/FranceJudoNews.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 
@@ -22,7 +23,7 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
 
   <Stats />
 
-  <section id="about" class="about-section relative pt-20 pb-20 sm:pt-24 md:pb-24 bg-white border-b border-gray-100">
+  <section id="about" class="about-section relative pt-20 pb-20 sm:pt-24 md:pb-24 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div class="about__content fade-in-up">
@@ -79,7 +80,9 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
     </div>
   </section>
 
-  <section id="classes" class="classes-teaser py-20 bg-gray-50 border-b border-gray-100">
+  <SectionDivider from="#ffffff" to="#f9fafb" />
+
+  <section id="classes" class="classes-teaser py-20 bg-gray-50">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="section-eyebrow justify-center mb-3 fade-in-up">Planning</span>
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight fade-in-up">
@@ -101,7 +104,9 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
   </section>
 
   <!-- Actualités du club -->
-  <section class="actualites-section bg-white border-b border-gray-100">
+  <SectionDivider from="#f9fafb" to="#f4f7fa" flip />
+
+  <section class="actualites-section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Actualités du club</span>
@@ -137,7 +142,9 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
     </div>
   </section>
 
-  <section id="gallery" class="py-20 bg-gray-50 border-b border-gray-100">
+  <SectionDivider from="#f4f7fa" to="#f9fafb" />
+
+  <section id="gallery" class="py-20 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Galerie</span>

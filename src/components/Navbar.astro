@@ -33,22 +33,32 @@ const linkClass = 'navbar__link text-sm uppercase';
         aria-expanded="false"
         aria-controls="mobile-menu"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
+        <span class="navbar__burger" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
       </button>
     </div>
 
-    <div class="lg:hidden pb-4 hidden" id="mobile-menu">
-      <div class="flex flex-col space-y-2">
-        {navLinks.map((link) => (
-          <a href={link.href} class={`${linkClass} py-2`}>
-            {link.label}
+    <div class="lg:hidden navbar__mobile" id="mobile-menu">
+      <div class="navbar__mobile-inner">
+        <div class="flex flex-col space-y-2 pb-4">
+          {navLinks.map((link, i) => (
+            <a href={link.href} class={`${linkClass} navbar__mobile-link py-2`} style={`--i:${i}`}>
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="https://aspttnancy.monclub.app/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="navbar__cta navbar__cta--mobile navbar__mobile-link"
+            style={`--i:${navLinks.length}`}
+          >
+            Rejoindre le club
           </a>
-        ))}
-        <a href="https://aspttnancy.monclub.app/login" target="_blank" rel="noopener noreferrer" class="navbar__cta navbar__cta--mobile">
-          Rejoindre le club
-        </a>
+        </div>
       </div>
     </div>
   </div>
@@ -59,19 +69,27 @@ const linkClass = 'navbar__link text-sm uppercase';
   const button = document.getElementById('mobile-menu-button');
   const menu = document.getElementById('mobile-menu');
 
+  const setMenu = (isOpen: boolean) => {
+    menu?.classList.toggle('is-open', isOpen);
+    button?.classList.toggle('is-active', isOpen);
+    button?.setAttribute('aria-expanded', String(isOpen));
+    button?.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+  };
+
   button?.addEventListener('click', () => {
-    menu?.classList.toggle('hidden');
-    const isOpen = !menu?.classList.contains('hidden');
-    button.setAttribute('aria-expanded', String(isOpen));
-    button.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
+    setMenu(!menu?.classList.contains('is-open'));
   });
 
   menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      menu.classList.add('hidden');
-      button?.setAttribute('aria-expanded', 'false');
-      button?.setAttribute('aria-label', 'Ouvrir le menu');
-    });
+    link.addEventListener('click', () => setMenu(false));
+  });
+
+  // Fermeture au clavier, réflexe attendu sur un menu déroulant.
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menu?.classList.contains('is-open')) {
+      setMenu(false);
+      button?.focus();
+    }
   });
 
   const navbar = document.querySelector('.navbar');
@@ -157,5 +175,79 @@ const linkClass = 'navbar__link text-sm uppercase';
   .navbar__cta--mobile {
     justify-content: center;
     margin-top: 0.5rem;
+  }
+
+  /* ── Menu mobile animé ── */
+  .navbar__mobile {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 340ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar__mobile.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .navbar__mobile-inner {
+    overflow: hidden;
+    visibility: hidden;
+    transition: visibility 340ms;
+  }
+
+  .navbar__mobile.is-open .navbar__mobile-inner {
+    visibility: visible;
+  }
+
+  /* Les entrées arrivent en cascade une fois le panneau ouvert. */
+  .navbar__mobile-link {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 260ms ease, transform 260ms ease;
+  }
+
+  .navbar__mobile.is-open .navbar__mobile-link {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(90ms + var(--i) * 45ms);
+  }
+
+  /* ── Bouton hamburger qui se transforme en croix ── */
+  .navbar__burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .navbar__burger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease;
+  }
+
+  .is-active .navbar__burger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .is-active .navbar__burger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .is-active .navbar__burger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar__mobile,
+    .navbar__mobile-inner,
+    .navbar__mobile-link,
+    .navbar__burger span {
+      transition: none;
+    }
   }
 </style>

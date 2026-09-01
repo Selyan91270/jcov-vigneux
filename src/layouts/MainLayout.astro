@@ -14,11 +14,21 @@ import '../styles/global.css';
 // Props du layout
 interface Props {
   title?: string;
+  /** Description propre à la page — sert au référencement et à l'aperçu des liens partagés. */
+  description?: string;
 }
 
-const { title = 'JCOV - Judo Club Olympique de Vigneux' } = Astro.props;
+const {
+  title = 'JCOV - Judo Club Olympique de Vigneux',
+  description = 'Club de judo à Vigneux-sur-Seine. Cours enfants et adultes dès 4 ans, encadrés par des professeurs diplômés d\'État. Deux cours d\'essai gratuits.',
+} = Astro.props;
 
 const appleTouchIcon = await getImage({ src: images.logo, width: 180, height: 180, format: 'png' });
+
+// Image d'aperçu pour les partages (Facebook, WhatsApp...) — URL absolue obligatoire.
+const shareImage = await getImage({ src: images.heroJudo, width: 1200, height: 630, format: 'jpg' });
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const shareImageUrl = new URL(shareImage.src, Astro.site);
 ---
 
 <!doctype html>
@@ -26,7 +36,22 @@ const appleTouchIcon = await getImage({ src: images.logo, width: 180, height: 18
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="JCOV - Club de judo depuis 1989 à Vigneux-sur-Seine. Respect, discipline et dépassement de soi." />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Aperçu des liens partagés (Facebook, WhatsApp, Messenger...) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="JCOV - Judo Club Olympique de Vigneux" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={shareImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Deux judokas se saluant sur le tatami du JCOV" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href={appleTouchIcon.src} />
