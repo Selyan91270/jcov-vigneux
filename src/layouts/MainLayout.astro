@@ -23,8 +23,6 @@ const {
   description = 'Club de judo à Vigneux-sur-Seine. Cours enfants et adultes dès 4 ans, encadrés par des professeurs diplômés d\'État. Deux cours d\'essai gratuits.',
 } = Astro.props;
 
-const appleTouchIcon = await getImage({ src: images.logo, width: 180, height: 180, format: 'png' });
-
 // Image d'aperçu pour les partages (Facebook, WhatsApp...) — URL absolue obligatoire.
 const shareImage = await getImage({ src: images.heroJudo, width: 1200, height: 630, format: 'jpg' });
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
@@ -52,9 +50,11 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <meta property="og:image:alt" content="Deux judokas se saluant sur le tatami du JCOV" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <!-- Icônes générées depuis le logo du club (voir README). L'ICO est cité en
+         premier : c'est le format que les navigateurs de bureau retiennent. -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href={appleTouchIcon.src} />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

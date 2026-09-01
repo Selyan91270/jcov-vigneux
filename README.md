@@ -87,6 +87,12 @@ Les événements passés basculent automatiquement dans « Événements passés 
 | Logos partenaires | `src/data/partners.ts` |
 | Photos de la galerie | `src/data/club.ts` + `src/data/images.ts` |
 
+### Icônes du navigateur
+
+`public/favicon.ico`, `public/apple-touch-icon.png` et `public/icon-512.png` sont **générés à partir de `src/assets/images/logo-jcov.png`** : le logo est détouré puis posé sur un carré bleu nuit, pour rester lisible dans un onglet.
+
+Si le logo du club change, régénérez-les avec le script indiqué dans l'historique Git (commit « Remplace le favicon Astro par le logo du club »), plutôt que de les remplacer à la main.
+
 Pour ajouter une image : la déposer dans `src/assets/images/`, l'importer dans `src/data/images.ts`, puis référencer sa clé.
 
 ---
