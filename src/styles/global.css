@@ -423,6 +423,18 @@ html {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
+/* ── Confort tactile ──
+   Les liens en simple ligne de texte ne font qu'une vingtaine de pixels de
+   haut : trop peu pour être visés au pouce. On leur donne 44 px sans changer
+   leur apparence. */
+.back-link,
+.legal-page__back,
+.about__content a[href="#contact"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
 /* Les vignettes cliquables signalent l'agrandissement possible. */
 .gallery-card-wrapper {
   cursor: zoom-in;

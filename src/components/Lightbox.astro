@@ -97,6 +97,25 @@
       if (event.key === 'ArrowLeft') show(index - 1);
       if (event.key === 'ArrowRight') show(index + 1);
     });
+
+    // Balayage horizontal : le geste attendu sur mobile pour changer de photo.
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    lightbox.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+      touchStartY = event.changedTouches[0].screenY;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (event) => {
+      const dx = event.changedTouches[0].screenX - touchStartX;
+      const dy = event.changedTouches[0].screenY - touchStartY;
+      // Seuil de 50 px, et geste plus horizontal que vertical pour ne pas
+      // confondre avec un défilement.
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        show(dx < 0 ? index + 1 : index - 1);
+      }
+    }, { passive: true });
   }
 </script>
 
@@ -199,13 +218,35 @@
 
   @media (max-width: 640px) {
     .lightbox {
-      gap: 0.4rem;
-      padding: 1rem 0.5rem;
+      gap: 0;
+      padding: 1rem 0.75rem;
     }
 
+    /* Les flèches passent par-dessus la photo : dans le flux, elles
+       réduisaient l'image à 256 px de large sur un écran de 375. */
     .lightbox__nav {
-      width: 2.5rem;
-      height: 2.5rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      background: rgba(3, 29, 56, 0.65);
+    }
+
+    .lightbox__nav--prev {
+      left: 0.5rem;
+    }
+
+    .lightbox__nav--next {
+      right: 0.5rem;
+    }
+
+    .lightbox__nav:hover {
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .lightbox__figure {
+      max-width: 100%;
     }
   }
 

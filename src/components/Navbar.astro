@@ -28,7 +28,7 @@ const linkClass = 'navbar__link text-sm uppercase';
       <button
         type="button"
         id="mobile-menu-button"
-        class="lg:hidden text-gray-900 hover:text-jcov transition-colors"
+        class="navbar__burger-btn lg:hidden text-gray-900 hover:text-jcov transition-colors"
         aria-label="Ouvrir le menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -205,10 +205,35 @@ const linkClass = 'navbar__link text-sm uppercase';
     transition: opacity 260ms ease, transform 260ms ease;
   }
 
+  /* Hauteur de doigt sur chaque entrée du menu. */
+  .navbar__mobile .navbar__mobile-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .navbar__mobile .navbar__cta--mobile {
+    justify-content: center;
+    min-height: 48px;
+  }
+
   .navbar__mobile.is-open .navbar__mobile-link {
     opacity: 1;
     transform: translateY(0);
     transition-delay: calc(90ms + var(--i) * 45ms);
+  }
+
+  /* Zone tactile de 44 px minimum autour de l'icône, qui n'en fait que 24 :
+     en dessous, le bouton devient difficile à viser au pouce. La marge
+     négative évite que cet agrandissement décale la mise en page. */
+  .navbar__burger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* ── Bouton hamburger qui se transforme en croix ── */
