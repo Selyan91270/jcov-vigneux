@@ -31,6 +31,7 @@ export const stats = [
 // À enrichir au fil du temps avec de vraies photos du club.
 export const clubPhotos = [
   { key: 'photodegroupe', alt: 'Photo de groupe des judokas du JCOV sur le tatami' },
+  { key: 'groupeSanguinet', alt: 'Photo de groupe des judokas du JCOV au Sanguinet Judo Club' },
 ] as const;
 
 // Photos d'illustration (compétitions internationales, ambiance du judo).

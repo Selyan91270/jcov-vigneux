@@ -2,6 +2,7 @@ import heroJudo from '../assets/images/hero-judo.jpg';
 import judophoto from '../assets/images/judophoto.png';
 import aboutJudoka from '../assets/images/about-judoka.jpg';
 import photodegroupe from '../assets/images/photodegroupe.png';
+import groupeSanguinet from '../assets/images/groupe-sanguinet.jpg';
 import gallery1 from '../assets/images/gallery-1.jpg';
 import gallery2 from '../assets/images/gallery-2.jpg';
 import gallery3 from '../assets/images/gallery-3.jpg';
@@ -12,6 +13,7 @@ export const images = {
   judophoto,
   aboutJudoka,
   photodegroupe,
+  groupeSanguinet,
   gallery1,
   gallery2,
   gallery3,
