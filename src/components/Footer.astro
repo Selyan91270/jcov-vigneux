@@ -21,10 +21,6 @@ import { partners } from '../data/partners.ts';
         <p class="jcov-footer__subtitle">
           Club de judo depuis {club.foundedYear}
         </p>
-        <p class="jcov-footer__affiliation">
-          Club affilié à la
-          <a href="https://www.ffjudo.com" target="_blank" rel="noopener noreferrer">Fédération Française de Judo</a>
-        </p>
       </div>
 
       <div>
@@ -68,13 +64,15 @@ import { partners } from '../data/partners.ts';
     </div>
 
     <div class="jcov-footer__partners">
-      <p class="jcov-footer__partners-label">Avec le soutien de</p>
+      <p class="jcov-footer__partners-label">Partenaires &amp; affiliation</p>
       <ul class="jcov-footer__partners-list">
         {partners.map((partner) => (
           <li>
             <a href={partner.url} target="_blank" rel="noopener noreferrer" aria-label={partner.name}>
               {partner.logo ? (
-                <Image src={partner.logo} alt={partner.name} height={56} class="jcov-footer__partner-logo" />
+                <span class={`jcov-footer__partner-slot jcov-footer__partner-slot--${partner.logoBackdrop ?? 'light'}`}>
+                  <Image src={partner.logo} alt={partner.name} height={44} class="jcov-footer__partner-logo" />
+                </span>
               ) : (
                 <span class="jcov-footer__partner-name">{partner.name}</span>
               )}
@@ -184,25 +182,6 @@ import { partners } from '../data/partners.ts';
     opacity: 1;
   }
 
-  .jcov-footer__affiliation {
-    margin-top: 0.75rem;
-    color: rgba(236, 246, 255, 0.7);
-    font-size: 0.8rem;
-    line-height: 1.6;
-  }
-
-  .jcov-footer__affiliation a {
-    color: var(--brand-sky);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(95, 194, 248, 0.4);
-    transition: color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .jcov-footer__affiliation a:hover {
-    color: #ffffff;
-    border-color: #ffffff;
-  }
-
   .jcov-footer__link {
     color: inherit;
     text-decoration: none;
@@ -283,14 +262,37 @@ import { partners } from '../data/partners.ts';
     transform: translateY(-2px);
   }
 
-  /* Les logos officiels sont posés sur une pastille claire : ils sont conçus
-     pour un fond blanc et resteraient illisibles sur le bleu du footer. */
-  .jcov-footer__partner-logo {
-    height: 3.5rem;
-    width: auto;
-    background: #ffffff;
+  /* Même gabarit pour tous les partenaires, quel que soit le logo : c'est ce
+     qui garde la rangée régulière malgré des proportions différentes. */
+  .jcov-footer__partner-slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.75rem;
+    min-width: 8.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.6rem;
-    padding: 0.5rem 0.75rem;
+    transition: background-color 0.25s ease;
+  }
+
+  /* Logo coloré ou sombre : pastille blanche, sinon illisible sur le bleu. */
+  .jcov-footer__partner-slot--light {
+    background: #ffffff;
+  }
+
+  /* Logo blanc : conçu pour un fond sombre, il reste sur le bleu du footer. */
+  .jcov-footer__partner-slot--dark {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .jcov-footer__partners-list a:hover .jcov-footer__partner-slot--dark {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .jcov-footer__partner-logo {
+    height: 2.75rem;
+    width: auto;
     object-fit: contain;
   }
 
