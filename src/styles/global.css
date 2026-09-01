@@ -131,16 +131,22 @@ html {
   text-align: justify;
 }
 
-/* ── Hero ── */
+/* ── Hero ──
+   Occupe la hauteur d'écran restante sous la navbar (4rem + le liseré),
+   avec repli sur les navigateurs sans unité dynamique (dvh). */
 .hero {
   position: relative;
-  min-height: 78vh;
+  min-height: calc(100vh - 4.5rem);
+  min-height: calc(100dvh - 4.5rem);
+  overflow: hidden;
 }
 
 .hero__media {
   position: absolute;
-  inset: 0;
+  inset: -10% 0;
   overflow: hidden;
+  /* Décalé au scroll par JS (effet parallax). */
+  will-change: transform;
 }
 
 .hero__overlay {
@@ -155,7 +161,8 @@ html {
 .hero__layout {
   display: flex;
   align-items: center;
-  min-height: 78vh;
+  min-height: calc(100vh - 4.5rem);
+  min-height: calc(100dvh - 4.5rem);
   padding: 3.5rem 1.5rem 4rem;
 }
 
@@ -175,13 +182,12 @@ html {
   width: 100%;
   display: flex;
   align-items: center;
-  min-height: 72vh;
 }
 
+/* L'animation d'entrée est portée par chaque enfant (.hero__enter), pas par le bloc. */
 .hero__text {
   width: 100%;
   max-width: 38rem;
-  animation: hero-fade-in 0.8s ease-out both;
 }
 
 .hero__title {
@@ -415,6 +421,51 @@ html {
     var(--belt-black) 85.68%, var(--belt-black) 100%
   );
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Les vignettes cliquables signalent l'agrandissement possible. */
+.gallery-card-wrapper {
+  cursor: zoom-in;
+}
+
+.gallery-card-wrapper img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-card-wrapper:hover img {
+  transform: scale(1.05);
+}
+
+/* ── Progression de lecture ──
+   Reprend le dégradé des ceintures : la page se "gradue" au fil du scroll. */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+  background: transparent;
+}
+
+.read-progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(
+    90deg,
+    var(--belt-white) 0%,
+    var(--belt-yellow) 16%,
+    var(--belt-orange) 32%,
+    var(--belt-green) 48%,
+    var(--belt-blue) 64%,
+    var(--belt-brown) 80%,
+    var(--belt-black) 100%
+  );
+  box-shadow: 0 0 10px rgba(25, 169, 245, 0.5);
 }
 
 /* ── Grain subtil sur fonds sombres (rendu plus premium, pas d'image externe) ── */

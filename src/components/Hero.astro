@@ -24,24 +24,25 @@ import { images } from '../data/images.ts';
   <div class="hero__layout relative z-10">
     <div class="hero__content">
       <div class="hero__text">
-        <p class="hero__kicker">Judo Club Olympique de Vigneux</p>
+        <p class="hero__kicker hero__enter" style="--d:0">Judo Club Olympique de Vigneux</p>
 
         <Image
           id="hero-title"
-          class="hero__logo"
+          class="hero__logo hero__enter"
+          style="--d:1"
           src={images.logo}
           alt="JCOV Vigneux"
           width={420}
           height={280}
         />
 
-        <p class="hero__subtitle">Club de Judo depuis {club.foundedYear}</p>
+        <p class="hero__subtitle hero__enter" style="--d:2">Club de Judo depuis {club.foundedYear}</p>
 
-        <p class="hero__description">
+        <p class="hero__description hero__enter" style="--d:3">
           Excellence, respect et dépassement de soi. Rejoignez une communauté passionnée par l'art martial et la progression personnelle.
         </p>
 
-        <div class="hero__actions">
+        <div class="hero__actions hero__enter" style="--d:4">
           <a href="https://aspttnancy.monclub.app/login" target="_blank" rel="noopener noreferrer" class="hero__btn hero__btn--primary">Rejoindre le club</a>
           <a href="/horaires" class="hero__btn hero__btn--secondary">Voir les horaires</a>
         </div>
@@ -57,6 +58,31 @@ import { images } from '../data/images.ts';
 </section>
 
 <style>
+  /* Entrée en cascade : chaque élément arrive légèrement après le précédent. */
+  .hero__enter {
+    animation: hero-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(0.15s + var(--d) * 0.11s);
+  }
+
+  @keyframes hero-enter {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__enter {
+      animation: none;
+    }
+  }
+
   .hero__image {
     animation: hero-ken-burns 16s ease-out forwards;
     transform-origin: 60% 40%;

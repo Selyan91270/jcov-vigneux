@@ -1,8 +1,23 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import MainLayout from '../layouts/MainLayout.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
+
+// Versions haute définition servies uniquement à la visionneuse plein écran.
+const fullSize = new Map(
+  await Promise.all(
+    clubPhotos.map(async (photo) => {
+      const large = await getImage({
+        src: images[photo.key as keyof typeof images],
+        width: 1600,
+        quality: 82,
+      });
+      return [photo.key, large.src] as const;
+    })
+  )
+);
 ---
 
 <MainLayout
@@ -27,7 +42,14 @@ import { images } from '../data/images.ts';
 
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
         {clubPhotos.map((photo) => (
-          <figure class="gallery-page__item overflow-hidden rounded-xl bg-white shadow-sm">
+          <figure
+            class="gallery-page__item overflow-hidden rounded-xl bg-white shadow-sm"
+            data-lightbox
+            data-lightbox-src={fullSize.get(photo.key)}
+            role="button"
+            tabindex="0"
+            aria-label={`Agrandir la photo : ${photo.alt}`}
+          >
             <div class="aspect-[4/3]">
               <Image
                 src={images[photo.key as keyof typeof images]}
@@ -51,5 +73,28 @@ import { images } from '../data/images.ts';
       </div>
     </div>
   </section>
+
+  <Lightbox />
 </MainLayout>
+
+<style>
+  .gallery-page__item {
+    cursor: zoom-in;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+
+  .gallery-page__item:hover,
+  .gallery-page__item:focus-visible {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .gallery-page__item img {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gallery-page__item:hover img {
+    transform: scale(1.05);
+  }
+</style>
 

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
@@ -7,6 +7,7 @@ import Stats from '../components/Stats.astro';
 import MoralCode from '../components/MoralCode.astro';
 import FranceJudoNews from '../components/FranceJudoNews.astro';
 import SectionDivider from '../components/SectionDivider.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 
@@ -15,6 +16,20 @@ const actualites = (await getCollection('actualites')).sort(
 );
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+// Versions haute définition servies uniquement à la visionneuse plein écran.
+const fullSize = new Map(
+  await Promise.all(
+    clubPhotos.map(async (photo) => {
+      const large = await getImage({
+        src: images[photo.key as keyof typeof images],
+        width: 1600,
+        quality: 82,
+      });
+      return [photo.key, large.src] as const;
+    })
+  )
+);
 ---
 
 <MainLayout title="JCOV - Judo Club Olympique de Vigneux">
@@ -153,7 +168,14 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
         {clubPhotos.map((photo, i) => (
-          <div class={`card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 fade-in-up fade-in-up--delay-${i + 1}`}>
+          <div
+            class={`card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 fade-in-up fade-in-up--delay-${i + 1}`}
+            data-lightbox
+            data-lightbox-src={fullSize.get(photo.key)}
+            role="button"
+            tabindex="0"
+            aria-label={`Agrandir la photo : ${photo.alt}`}
+          >
             <div class="image-frame aspect-[16/10]">
               <Image
                 src={images[photo.key as keyof typeof images]}
@@ -240,4 +262,5 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
     </div>
   </section>
 
+  <Lightbox />
 </MainLayout>

@@ -65,6 +65,9 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
   </head>
 
   <body class="bg-white text-gray-900 antialiased">
+    <!-- Progression de lecture, aux couleurs de la ceinture blanche à noire -->
+    <div class="read-progress" aria-hidden="true"><span id="read-progress-bar"></span></div>
+
     <!-- Navbar -->
     <Navbar />
 
@@ -95,7 +98,52 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
         );
 
         document.querySelectorAll('.fade-in-up').forEach((el) => observer.observe(el));
+
+        // Cascade automatique : les cartes d'une même grille se révèlent l'une
+        // après l'autre, sans avoir à numéroter les délais dans chaque page.
+        document
+          .querySelectorAll('.actualites-grid, .coaches-grid, .events-list, .code-moral-grid')
+          .forEach((grid) => {
+            [...grid.children].forEach((child, i) => {
+              child.classList.add('fade-in-up');
+              (child as HTMLElement).style.setProperty('--reveal-delay', `${i * 0.09}s`);
+              observer.observe(child);
+            });
+          });
       }
+
+      // Progression de lecture + parallax du hero, regroupés dans une seule
+      // boucle rAF pour ne pas multiplier les écouteurs de scroll.
+      const progressBar = document.getElementById('read-progress-bar');
+      const heroMedia = document.querySelector<HTMLElement>('.hero__media');
+      let ticking = false;
+
+      const onFrame = () => {
+        const scrollY = window.scrollY;
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+
+        if (progressBar) {
+          const ratio = scrollable > 0 ? Math.min(scrollY / scrollable, 1) : 0;
+          progressBar.style.transform = `scaleX(${ratio})`;
+        }
+
+        if (heroMedia && !prefersReducedMotion && scrollY < window.innerHeight) {
+          heroMedia.style.transform = `translate3d(0, ${scrollY * 0.28}px, 0)`;
+        }
+
+        ticking = false;
+      };
+
+      const requestFrame = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(onFrame);
+        }
+      };
+
+      requestFrame();
+      window.addEventListener('scroll', requestFrame, { passive: true });
+      window.addEventListener('resize', requestFrame, { passive: true });
     </script>
   </body>
 </html>
