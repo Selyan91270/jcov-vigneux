@@ -1,0 +1,22 @@
+# En-têtes HTTP appliqués par l'hébergeur (Cloudflare Pages, Netlify).
+# Format commun aux deux : ce fichier est copié tel quel dans le site publié.
+
+/*
+  # Empêche l'affichage du site dans une iframe d'un autre domaine (clickjacking).
+  X-Frame-Options: DENY
+  # Empêche le navigateur de deviner un type de fichier différent de celui annoncé.
+  X-Content-Type-Options: nosniff
+  # Ne transmet pas l'URL complète aux sites externes vers lesquels on pointe.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Le site n'utilise ni caméra, ni micro, ni géolocalisation : on les refuse.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  # Force le HTTPS pendant 2 ans, y compris pour les visites suivantes.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  # Politique de sécurité du contenu : le site est statique et n'a besoin que
+  # de ses propres fichiers, plus Google Fonts pour la typographie.
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+
+# Les fichiers générés par Astro portent une empreinte dans leur nom :
+# leur contenu ne change jamais, on peut les mettre en cache très longtemps.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
