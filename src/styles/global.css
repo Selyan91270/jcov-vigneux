@@ -404,6 +404,42 @@ html {
   }
 }
 
+/* ── Hero sur écran portrait ──
+   La photo est une composition horizontale : deux mains qui se rejoignent.
+   En plein cadre sur un écran plus haut que large, `cover` n'en laisse voir
+   qu'une fraction de la largeur — on perd les deux judogis et le sens de
+   l'image. On la cantonne alors à un bandeau haut, à son cadrage naturel,
+   fondu dans le bleu du club qui occupe le reste du hero.
+   Le critère est le format de l'écran, pas sa largeur : une tablette en
+   portrait souffre du même problème qu'un téléphone. */
+@media (max-aspect-ratio: 4 / 5) {
+  .hero {
+    background: linear-gradient(170deg, var(--brand-900) 0%, var(--brand-800) 55%, var(--brand-700) 100%);
+  }
+
+  .hero__media {
+    inset: 0 0 auto 0;
+    height: 46%;
+    /* Le bas de la photo se dissout dans le fond au lieu de s'arrêter net. */
+    -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+  }
+
+  .hero__overlay {
+    background:
+      linear-gradient(180deg, rgba(3, 29, 56, 0.55) 0%, rgba(3, 29, 56, 0.25) 45%, rgba(3, 29, 56, 0.75) 100%);
+  }
+
+  .hero__layout {
+    align-items: flex-end;
+    padding-top: 44%;
+  }
+
+  .hero__glow {
+    opacity: 0.7;
+  }
+}
+
 /* ── Liseré "progression des ceintures" — signature visuelle du club ──
    Fin dégradé reprenant l'ordre réel des grades de judo (blanc → noir).
    Utilisé avec parcimonie : sous la navbar et au-dessus du footer. */

@@ -117,6 +117,9 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
       // boucle rAF pour ne pas multiplier les écouteurs de scroll.
       const progressBar = document.getElementById('read-progress-bar');
       const heroMedia = document.querySelector<HTMLElement>('.hero__media');
+      // Même condition que le hero en bandeau (voir global.css) : sur un écran
+      // portrait, la photo est ancrée en haut et un décalage la détacherait.
+      const portrait = window.matchMedia('(max-aspect-ratio: 4 / 5)');
       let ticking = false;
 
       const onFrame = () => {
@@ -129,7 +132,9 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
         }
 
         if (heroMedia && !prefersReducedMotion && scrollY < window.innerHeight) {
-          heroMedia.style.transform = `translate3d(0, ${scrollY * 0.28}px, 0)`;
+          heroMedia.style.transform = portrait.matches
+            ? ''
+            : `translate3d(0, ${scrollY * 0.28}px, 0)`;
         }
 
         ticking = false;
