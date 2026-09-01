@@ -18,7 +18,11 @@ import { club } from '../data/club.ts';
           Judo Club Olympique de Vigneux
         </h3>
         <p class="jcov-footer__subtitle">
-          Club de judo depuis 1989
+          Club de judo depuis {club.foundedYear}
+        </p>
+        <p class="jcov-footer__affiliation">
+          Club affilié à la
+          <a href="https://www.ffjudo.com" target="_blank" rel="noopener noreferrer">Fédération Française de Judo</a>
         </p>
       </div>
 
@@ -160,6 +164,25 @@ import { club } from '../data/club.ts';
     color: #19A9F5;
     flex-shrink: 0;
     opacity: 1;
+  }
+
+  .jcov-footer__affiliation {
+    margin-top: 0.75rem;
+    color: rgba(236, 246, 255, 0.7);
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .jcov-footer__affiliation a {
+    color: var(--brand-sky);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(95, 194, 248, 0.4);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .jcov-footer__affiliation a:hover {
+    color: #ffffff;
+    border-color: #ffffff;
   }
 
   .jcov-footer__link {

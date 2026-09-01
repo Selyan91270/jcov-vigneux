@@ -1,7 +1,9 @@
+import { coaches } from './coaches.ts';
+
 export const club = {
   name: 'Judo Club Olympique de Vigneux',
   shortName: 'JCOV',
-  foundedYear: 1989,
+  foundedYear: 1968,
   email: 'jcov@free.fr',
   phone: '01 69 03 22 40',
   address: {
@@ -22,10 +24,13 @@ export const navLinks = [
   { label: 'Contact', href: '#contact' },
 ] as const;
 
+// Trois nombres, pour garder le rythme de la bande de chiffres clés.
+// Le nombre de professeurs est dérivé de la liste réelle : il reste juste
+// si l'équipe change.
 export const stats = [
-  { value: `${new Date().getFullYear() - club.foundedYear}+`, label: "Années d'existence" },
+  { value: `${new Date().getFullYear() - club.foundedYear}`, label: "Années d'histoire" },
   { value: '450+', label: 'Licenciés par an' },
-  { value: 'Encadrement', label: 'Diplômé' },
+  { value: `${coaches.length}`, label: 'Professeurs diplômés' },
 ] as const;
 
 // Photos authentiques du club (judokas, entraînements, événements du JCOV).
