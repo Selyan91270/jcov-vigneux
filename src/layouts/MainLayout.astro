@@ -50,10 +50,11 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <meta property="og:image:alt" content="Deux judokas se saluant sur le tatami du JCOV" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Icônes générées depuis le logo du club (voir README). L'ICO est cité en
-         premier : c'est le format que les navigateurs de bureau retiennent. -->
-    <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Icônes générées depuis le logo du club (voir README). Pas de version
+         SVG : le logo est une écriture manuscrite, qu'un tracé vectoriel
+         approximatif trahirait — et le navigateur préférerait ce SVG à l'ICO. -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64" />
+    <link rel="icon" type="image/png" href="/icon-512.png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
