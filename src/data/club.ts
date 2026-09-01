@@ -33,12 +33,3 @@ export const clubPhotos = [
   { key: 'photodegroupe', alt: 'Photo de groupe des judokas du JCOV sur le tatami' },
   { key: 'groupeSanguinet', alt: 'Photo de groupe des judokas du JCOV au Sanguinet Judo Club' },
 ] as const;
-
-// Photos d'illustration (compétitions internationales, ambiance du judo).
-// Ce ne sont pas des photos du club — utilisées en attendant davantage de photos maison.
-export const judoUniversePhotos = [
-  { key: 'gallery1', alt: 'Champion olympique de judo, bras levé en signe de victoire' },
-  { key: 'gallery2', alt: 'Combat de judo, saisie au judogi lors d\'une compétition' },
-  { key: 'gallery3', alt: 'Projection de judo lors d\'une compétition internationale' },
-  { key: 'aboutJudoka', alt: 'Projection de judo en noir et blanc' },
-] as const;

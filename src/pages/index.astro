@@ -6,7 +6,7 @@ import Hero from '../components/Hero.astro';
 import Stats from '../components/Stats.astro';
 import MoralCode from '../components/MoralCode.astro';
 import FranceJudoNews from '../components/FranceJudoNews.astro';
-import { club, clubPhotos, judoUniversePhotos } from '../data/club.ts';
+import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 
 const actualites = (await getCollection('actualites')).sort(
@@ -165,23 +165,6 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 
             <path d="M21 15l-5-5-9 9" />
           </svg>
           <p>D'autres photos du club et de nos judokas arrivent bientôt !</p>
-        </div>
-      </div>
-
-      <div class="gallery-universe">
-        <p class="gallery-universe__label">L'univers du judo — photos d'illustration, compétitions internationales</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {judoUniversePhotos.map((photo, i) => (
-            <div class={`gallery-universe__item fade-in-up fade-in-up--delay-${i + 1}`}>
-              <Image
-                src={images[photo.key as keyof typeof images]}
-                alt={photo.alt}
-                width={400}
-                height={400}
-                class="w-full h-full object-cover"
-              />
-            </div>
-          ))}
         </div>
       </div>
 

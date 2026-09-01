@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import MainLayout from '../layouts/MainLayout.astro';
-import { clubPhotos, judoUniversePhotos } from '../data/club.ts';
+import { clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 ---
 
@@ -22,7 +22,6 @@ import { images } from '../data/images.ts';
         </p>
       </div>
 
-      <h2 class="gallery-page__heading">Le club</h2>
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
         {clubPhotos.map((photo) => (
           <figure class="gallery-page__item overflow-hidden rounded-xl bg-white shadow-sm">
@@ -47,41 +46,7 @@ import { images } from '../data/images.ts';
           <p>D'autres photos du club et de nos judokas arrivent bientôt !</p>
         </div>
       </div>
-
-      <h2 class="gallery-page__heading">L'univers du judo</h2>
-      <p class="gallery-page__sublabel">Photos d'illustration issues de compétitions internationales — pas des photos du club.</p>
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {judoUniversePhotos.map((photo) => (
-          <figure class="gallery-page__item overflow-hidden rounded-xl bg-white shadow-sm">
-            <div class="aspect-[4/3]">
-              <Image
-                src={images[photo.key as keyof typeof images]}
-                alt={photo.alt}
-                width={700}
-                height={525}
-                class="h-full w-full object-cover"
-              />
-            </div>
-            <figcaption class="px-4 py-3 text-sm font-medium text-gray-700">{photo.alt}</figcaption>
-          </figure>
-        ))}
-      </div>
     </div>
   </section>
 </MainLayout>
 
-<style>
-  .gallery-page__heading {
-    margin-bottom: 0.5rem;
-    color: #0f172a;
-    font-family: var(--ff-head);
-    font-size: 1.5rem;
-    font-weight: 800;
-  }
-
-  .gallery-page__sublabel {
-    margin-bottom: 1.5rem;
-    color: #64748b;
-    font-size: 0.9rem;
-  }
-</style>
