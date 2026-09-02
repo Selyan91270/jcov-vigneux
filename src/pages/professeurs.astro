@@ -1,12 +1,14 @@
 ---
 import { url } from '../lib/url.ts';
+import { Image } from 'astro:assets';
 import MainLayout from '../layouts/MainLayout.astro';
 import { coaches } from '../data/coaches.ts';
+import { committee } from '../data/committee.ts';
 ---
 
 <MainLayout
   title="Nos professeurs - JCOV"
-  description="L'équipe encadrante du JCOV : quatre professeurs diplômés d'État et gradés, du 2e au 7e dan, pour accompagner chaque judoka."
+  description="L'équipe du JCOV : quatre professeurs diplômés d'État, du 2e au 7e dan, et le comité de direction de l'association."
 >
   <section class="page-header py-16 sm:py-20 bg-white">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -51,6 +53,39 @@ import { coaches } from '../data/coaches.ts';
             ) : (
               <span class="coach-card__diploma">Diplôme d'État — à venir</span>
             )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-20 bg-white border-t border-gray-100">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <span class="section-eyebrow justify-center mb-3">Le bureau</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
+          Comité de direction
+        </h2>
+      </div>
+
+      {/* Centré plutôt qu'en grille : avec un seul membre, une grille à
+          quatre colonnes laisserait la carte seule à gauche. */}
+      <div class="committee-list">
+        {committee.map((member, i) => (
+          <article class={`coach-card committee-card fade-in-up fade-in-up--delay-${(i % 4) + 1}`}>
+            <div class="coach-card__photo">
+              {member.photo ? (
+                <Image src={member.photo} alt={`${member.firstName} ${member.lastName ?? ''}`.trim()} width={208} height={208} />
+              ) : (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+                </svg>
+              )}
+            </div>
+
+            <h3 class="coach-card__name">{member.firstName} {member.lastName ?? ''}</h3>
+            <p class="coach-card__role committee-card__role">{member.role}</p>
           </article>
         ))}
       </div>
@@ -161,5 +196,26 @@ import { coaches } from '../data/coaches.ts';
 
   .coach-card__diploma--active:hover {
     color: var(--brand-accent);
+  }
+
+  /* ── Comité de direction ──
+     Cartes centrées et de largeur fixe : la liste comptera longtemps peu de
+     membres, et une grille les étirerait ou les laisserait seuls à gauche. */
+  .committee-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.75rem;
+  }
+
+  .committee-card {
+    width: 100%;
+    max-width: 17rem;
+  }
+
+  /* Pas de diplôme sous la fonction : on rattrape la marge que la bordure
+     du bloc diplôme apportait sur les cartes professeurs. */
+  .committee-card__role {
+    margin-bottom: 0;
   }
 </style>
