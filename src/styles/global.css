@@ -820,3 +820,43 @@ html {
   margin-bottom: 0.6rem;
 }
 
+
+/* ── Événements passés ──
+   Ces règles sont globales et non cloisonnées à la page : les entrées
+   créées par le navigateur, quand un événement vient d'être dépassé,
+   ne portent pas le marqueur de cloisonnement d'Astro et ne seraient
+   sinon pas mises en forme. */
+.events-past {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(3, 29, 56, 0.1);
+  }
+
+.events-past__title {
+    font-family: var(--ff-head);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 1.25rem;
+  }
+
+.events-past__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+.events-past__list li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    color: #64748b;
+    font-size: 0.92rem;
+  }
+
+.events-past__list li span {
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: capitalize;
+  }

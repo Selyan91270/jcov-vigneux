@@ -23,7 +23,10 @@ const evenementsAVenir = (await getCollection('evenements'))
   .filter((e) => e.data.date >= now)
   .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 
-const prochainsEvenements = evenementsAVenir.slice(0, 2);
+// Quatre sont rendus mais deux seulement s'affichent : si les premiers sont
+// passés depuis la dernière publication, le navigateur peut prendre les
+// suivants sans laisser la section vide.
+const prochainsEvenements = evenementsAVenir.slice(0, 4);
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -184,9 +187,9 @@ const fullSize = new Map(
             </h2>
           </div>
 
-          <div class="home-events">
+          <div class="home-events" id="home-events">
             {prochainsEvenements.map((event, i) => (
-              <div class={`fade-in-up fade-in-up--delay-${i + 1}`}>
+              <div class={`fade-in-up fade-in-up--delay-${i + 1}`} hidden={i >= 2}>
                 <EventCard event={event} headingLevel={3} />
               </div>
             ))}
@@ -314,6 +317,36 @@ const fullSize = new Map(
 
   <Lightbox />
 </MainLayout>
+
+<script>
+  // Même principe que sur la page Événements : le tri est figé à la
+  // construction, le navigateur le corrige avec la date du jour. Quatre
+  // rendez-vous sont présents dans la page, deux sont montrés.
+  const container = document.getElementById('home-events');
+  const section = document.getElementById('evenements');
+
+  if (container && section) {
+    const now = Date.now();
+    let affiches = 0;
+
+    for (const wrapper of [...container.children] as HTMLElement[]) {
+      const card = wrapper.querySelector<HTMLElement>('[data-event-date]');
+      const date = new Date(card?.dataset.eventDate ?? '').getTime();
+      const aVenir = Number.isFinite(date) && date >= now;
+
+      wrapper.hidden = !aVenir || affiches >= 2;
+      if (!wrapper.hidden) affiches += 1;
+    }
+
+    // Plus aucun rendez-vous : la section entière disparaît, plutôt que
+    // d'afficher un titre sans contenu.
+    if (affiches === 0) {
+      section.hidden = true;
+      section.previousElementSibling?.setAttribute('hidden', '');
+      section.nextElementSibling?.setAttribute('hidden', '');
+    }
+  }
+</script>
 
 <style>
   .home-events {

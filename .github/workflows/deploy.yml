@@ -5,6 +5,12 @@ name: Déploiement sur GitHub Pages
 on:
   push:
     branches: [master, main]
+  # Reconstruction quotidienne : le tri « à venir / passé » des événements est
+  # calculé au moment du build. Le navigateur le corrige déjà à l'affichage,
+  # mais republier chaque nuit garde le HTML servi juste pour les moteurs de
+  # recherche et les visiteurs sans JavaScript. 4 h UTC, hors heure de pointe.
+  schedule:
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 # Droits minimum nécessaires à la publication sur Pages.

@@ -23,7 +23,14 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
 });
 ---
 
-<article class="event-card">
+{/* La date est exposée pour que le navigateur puisse reclasser la carte si
+    le site a été construit avant que l'événement ne soit passé. */}
+<article
+  class="event-card"
+  data-event-date={event.data.date.toISOString()}
+  data-event-title={event.data.title}
+  data-event-label={fullDateFormatter.format(event.data.date)}
+>
   <div class="event-card__date">
     <span class="event-card__day">{dayFormatter.format(event.data.date)}</span>
     <span class="event-card__month">{monthFormatter.format(event.data.date).replace('.', '')}</span>

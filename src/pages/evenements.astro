@@ -40,11 +40,11 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
 
   <section class="py-16 sm:py-20 bg-gray-50 border-t border-gray-100">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      {upcoming.length === 0 && (
-        <p class="events-empty fade-in-up">Aucun événement à venir pour le moment — revenez bientôt !</p>
-      )}
+      <p class="events-empty fade-in-up" id="events-empty" hidden={upcoming.length > 0}>
+        Aucun événement à venir pour le moment — revenez bientôt !
+      </p>
 
-      <div class="events-list">
+      <div class="events-list" id="events-upcoming">
         {upcoming.map((event, i) => (
           <div class={`fade-in-up fade-in-up--delay-${(i % 3) + 1}`}>
             <EventCard event={event} />
@@ -52,22 +52,52 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
         ))}
       </div>
 
-      {past.length > 0 && (
-        <div class="events-past">
-          <h2 class="events-past__title">Événements passés</h2>
-          <ul class="events-past__list">
-            {past.map((event) => (
-              <li>
-                <span>{fullDateFormatter.format(event.data.date)}</span>
-                {event.data.title}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div class="events-past" id="events-past" hidden={past.length === 0}>
+        <h2 class="events-past__title">Événements passés</h2>
+        <ul class="events-past__list" id="events-past-list">
+          {past.map((event) => (
+            <li>
+              <span>{fullDateFormatter.format(event.data.date)}</span>
+              {event.data.title}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
 </MainLayout>
+
+<script>
+  // Le tri « à venir / passé » est figé à la construction du site. Le
+  // navigateur, lui, connaît la date du jour : il rebascule ici les
+  // événements dont la date vient d'être dépassée, sans attendre une
+  // republication.
+  const upcoming = document.getElementById('events-upcoming');
+  const pastSection = document.getElementById('events-past');
+  const pastList = document.getElementById('events-past-list');
+  const empty = document.getElementById('events-empty');
+
+  if (upcoming && pastSection && pastList && empty) {
+    const now = Date.now();
+
+    for (const card of [...upcoming.querySelectorAll<HTMLElement>('[data-event-date]')]) {
+      if (new Date(card.dataset.eventDate ?? '').getTime() >= now) continue;
+
+      const item = document.createElement('li');
+      const date = document.createElement('span');
+      date.textContent = card.dataset.eventLabel ?? '';
+      item.append(date, card.dataset.eventTitle ?? '');
+      // Les plus récents d'abord, comme le tri du rendu initial.
+      pastList.prepend(item);
+
+      // La carte est enveloppée dans le conteneur d'animation.
+      (card.parentElement ?? card).remove();
+    }
+
+    pastSection.hidden = pastList.children.length === 0;
+    empty.hidden = upcoming.children.length > 0;
+  }
+</script>
 
 <style>
   .events-empty {
@@ -80,40 +110,5 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
   .events-list {
     display: grid;
     gap: 1.5rem;
-  }
-
-  .events-past {
-    margin-top: 3.5rem;
-    padding-top: 2.5rem;
-    border-top: 1px solid rgba(3, 29, 56, 0.1);
-  }
-
-  .events-past__title {
-    font-family: var(--ff-head);
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #64748b;
-    margin-bottom: 1.25rem;
-  }
-
-  .events-past__list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 0.6rem;
-  }
-
-  .events-past__list li {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    color: #64748b;
-    font-size: 0.92rem;
-  }
-
-  .events-past__list li span {
-    font-weight: 600;
-    color: #94a3b8;
-    text-transform: capitalize;
   }
 </style>
