@@ -38,9 +38,10 @@ import { club } from '../data/club.ts';
 
         <h2>Propriété intellectuelle</h2>
         <p>
-          L'ensemble des contenus présents sur ce site (textes, logo, mise en page) est la propriété du {club.shortName},
-          sauf mention contraire. Certaines photographies utilisées à titre d'illustration proviennent de sources tierces
-          et sont identifiées comme telles dans la galerie du site.
+          L'ensemble des contenus présents sur ce site (textes, photographies, logo, mise en page) est la propriété du
+          {club.shortName}, sauf mention contraire. Les logos de la Ville de Vigneux-sur-Seine et de la Fédération
+          Française de Judo restent la propriété de leurs détenteurs respectifs et sont affichés au titre du
+          partenariat et de l'affiliation du club.
         </p>
 
         <h2>Lien vers un service tiers</h2>
@@ -57,7 +58,8 @@ import { club } from '../data/club.ts';
 
 <style>
   .legal-page__back {
-    display: inline-flex;
+    display: flex;
+    width: fit-content;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1.5rem;

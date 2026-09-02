@@ -463,11 +463,21 @@ html {
    Les liens en simple ligne de texte ne font qu'une vingtaine de pixels de
    haut : trop peu pour être visés au pouce. On leur donne 44 px sans changer
    leur apparence. */
-.back-link,
-.legal-page__back,
 .about__content a[href="#contact"] {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+}
+
+/* Le lien de retour occupe sa propre ligne : en inline-flex, le libellé de
+   section qui le suit venait se coller à sa droite, donnant une ligne du
+   type « Retour à l'accueil — JCOV ». `fit-content` lui évite de s'étendre
+   sur toute la largeur, ce qui rendrait cliquable une zone vide. */
+.back-link,
+.legal-page__back {
+  display: flex;
+  align-items: center;
+  width: fit-content;
   min-height: 44px;
 }
 
