@@ -22,6 +22,14 @@
   --brand-sky: #5FC2F8; /* variante claire de l'accent */
   --brand-ice: #EAF7FF; /* fond bleu très clair, sections alternées */
 
+  /* Fonds des sections de la page d'accueil. Les séparateurs diagonaux
+     référencent ces mêmes variables : sans source unique, un fond Tailwind
+     (en oklch) et un séparateur (en hexadécimal) ne coïncident pas
+     exactement et laissent une couture visible. */
+  --surface: #ffffff;
+  --surface-alt: #f9fafb;
+  --surface-soft: #f4f7fa;
+
   /* Accent chaud — clin d'œil à la ceinture noire, utilisé avec parcimonie */
   --gold: #D9A441;
   --gold-light: #F0C878;
@@ -543,8 +551,16 @@ html {
   border-color: rgba(138, 106, 34, 0.35) !important;
 }
 
+.surface {
+  background-color: var(--surface);
+}
+
+.surface-alt {
+  background-color: var(--surface-alt);
+}
+
 .actualites-section {
-  background: #f4f7fa;
+  background: var(--surface-soft);
   padding-top: 5rem;
   padding-bottom: 5rem;
 }

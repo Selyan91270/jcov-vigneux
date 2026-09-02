@@ -48,7 +48,7 @@ const fullSize = new Map(
 
   <Stats />
 
-  <section id="about" class="about-section relative pt-20 pb-20 sm:pt-24 md:pb-24 bg-white">
+  <section id="about" class="about-section surface relative pt-20 pb-20 sm:pt-24 md:pb-24">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div class="about__content fade-in-up">
@@ -105,9 +105,9 @@ const fullSize = new Map(
     </div>
   </section>
 
-  <SectionDivider from="#ffffff" to="#f9fafb" />
+  <SectionDivider from="var(--surface)" to="var(--surface-alt)" />
 
-  <section id="classes" class="classes-teaser py-20 bg-gray-50">
+  <section id="classes" class="classes-teaser surface-alt py-20">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="section-eyebrow justify-center mb-3 fade-in-up">Planning</span>
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight fade-in-up">
@@ -128,49 +128,8 @@ const fullSize = new Map(
     </div>
   </section>
 
-  {/* Prochains événements — masqué s'il n'y en a aucun : mieux vaut une
-      section absente qu'une section qui annonce le vide. */}
-  {prochainsEvenements.length > 0 && (
-    <>
-      <SectionDivider from="#f9fafb" to="#ffffff" flip />
-
-      <section id="evenements" class="py-20 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="text-center mb-12 fade-in-up">
-            <span class="section-eyebrow justify-center mb-3">Agenda</span>
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
-              Prochains rendez-vous
-            </h2>
-          </div>
-
-          <div class="home-events">
-            {prochainsEvenements.map((event, i) => (
-              <div class={`fade-in-up fade-in-up--delay-${i + 1}`}>
-                <EventCard event={event} headingLevel={3} />
-              </div>
-            ))}
-          </div>
-
-          {/* Toujours affiché : la page Événements donne aussi accès aux
-              rendez-vous passés, même quand tout l'agenda tient ici. */}
-          <div class="mt-10 text-center fade-in-up">
-            <a href={url('/evenements')} class="home-events__more">
-              Voir tous les événements
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider from="#ffffff" to="#f4f7fa" />
-    </>
-  )}
-
-  {prochainsEvenements.length === 0 && <SectionDivider from="#f9fafb" to="#f4f7fa" flip />}
-
   <!-- Actualités du club -->
+  <SectionDivider from="var(--surface-alt)" to="var(--surface-soft)" flip />
 
   <section class="actualites-section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,9 +167,51 @@ const fullSize = new Map(
     </div>
   </section>
 
-  <SectionDivider from="#f4f7fa" to="#f9fafb" />
+  {/* Prochains événements — masqué s'il n'y en a aucun : mieux vaut une
+      section absente qu'une section qui annonce le vide. Les séparateurs
+      suivent, pour que l'enchaînement des fonds reste correct dans les
+      deux cas. */}
+  {prochainsEvenements.length > 0 && (
+    <>
+      <SectionDivider from="var(--surface-soft)" to="var(--surface)" />
 
-  <section id="gallery" class="py-20 bg-gray-50">
+      <section id="evenements" class="surface py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12 fade-in-up">
+            <span class="section-eyebrow justify-center mb-3">Agenda</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
+              Prochains rendez-vous
+            </h2>
+          </div>
+
+          <div class="home-events">
+            {prochainsEvenements.map((event, i) => (
+              <div class={`fade-in-up fade-in-up--delay-${i + 1}`}>
+                <EventCard event={event} headingLevel={3} />
+              </div>
+            ))}
+          </div>
+
+          {/* Toujours affiché : la page Événements donne aussi accès aux
+              rendez-vous passés, même quand tout l'agenda tient ici. */}
+          <div class="mt-10 text-center fade-in-up">
+            <a href={url('/evenements')} class="home-events__more">
+              Voir tous les événements
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider from="var(--surface)" to="var(--surface-alt)" flip />
+    </>
+  )}
+
+  {prochainsEvenements.length === 0 && <SectionDivider from="var(--surface-soft)" to="var(--surface-alt)" />}
+
+  <section id="gallery" class="surface-alt py-20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Galerie</span>
