@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url.ts';
 import { Image, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
@@ -56,7 +57,7 @@ const fullSize = new Map(
           </p>
 
           <a
-            href="#contact"
+            href={url("#contact")}
             class="inline-flex items-center gap-2 text-jcov font-semibold text-sm uppercase tracking-wider hover:text-jcov-dark transition-colors group"
           >
             Rejoindre le club
@@ -106,7 +107,7 @@ const fullSize = new Map(
         Indiquez l'âge du futur judoka et trouvez en quelques secondes ses jours de cours et sa cotisation.
       </p>
       <a
-        href="/horaires"
+        href={url("/horaires")}
         class="inline-flex items-center gap-2 rounded-xl bg-jcov px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white shadow-md shadow-jcov/25 transition hover:bg-jcov-dark hover:shadow-lg fade-in-up fade-in-up--delay-2"
       >
         Voir les horaires &amp; tarifs
@@ -198,7 +199,7 @@ const fullSize = new Map(
 
       <div class="mt-10 text-center">
         <a
-          href="/galerie"
+          href={url("/galerie")}
           class="inline-flex items-center gap-2 rounded-xl bg-jcov px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-white shadow-md shadow-jcov/25 transition hover:bg-jcov-dark hover:shadow-lg"
         >
           Voir toutes les photos

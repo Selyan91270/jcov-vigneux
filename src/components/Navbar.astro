@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { navLinks } from '../data/club.ts';
 import { images } from '../data/images.ts';
+import { url } from '../lib/url.ts';
 
 const linkClass = 'navbar__link text-sm uppercase';
 ---
@@ -10,13 +11,13 @@ const linkClass = 'navbar__link text-sm uppercase';
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
 
-      <a href="/" class="flex items-center hover:opacity-90 transition-opacity">
+      <a href={url("/")} class="flex items-center hover:opacity-90 transition-opacity">
         <Image src={images.logo} alt="Logo du Judo Club Olympique de Vigneux" class="h-12 md:h-14 w-auto" width={168} height={112} />
       </a>
 
       <div class="hidden lg:flex items-center space-x-6 xl:space-x-8">
         {navLinks.map((link) => (
-          <a href={link.href} class={linkClass}>
+          <a href={url(link.href)} class={linkClass}>
             {link.label}
           </a>
         ))}
@@ -45,7 +46,7 @@ const linkClass = 'navbar__link text-sm uppercase';
       <div class="navbar__mobile-inner">
         <div class="flex flex-col space-y-2 pb-4">
           {navLinks.map((link, i) => (
-            <a href={link.href} class={`${linkClass} navbar__mobile-link py-2`} style={`--i:${i}`}>
+            <a href={url(link.href)} class={`${linkClass} navbar__mobile-link py-2`} style={`--i:${i}`}>
               {link.label}
             </a>
           ))}

@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url.ts';
 import MainLayout from '../layouts/MainLayout.astro';
 import { club } from '../data/club.ts';
 ---
@@ -9,7 +10,7 @@ import { club } from '../data/club.ts';
 >
   <section class="legal-page py-16 sm:py-20">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-      <a href="/" class="legal-page__back">
+      <a href={url("/")} class="legal-page__back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m15 18-6-6 6-6" />
         </svg>

@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import { getImage } from 'astro:assets';
 import { images } from '../data/images.ts';
+import { url } from '../lib/url.ts';
 
 // Importation des styles globaux (Tailwind)
 import '../styles/global.css';
@@ -37,6 +38,17 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
 
+    <!-- Politique de sécurité du contenu, doublée ici en balise meta.
+         public/_headers la fournit sur Netlify et Cloudflare Pages, mais
+         GitHub Pages n'autorise aucun en-tête HTTP personnalisé : sans cette
+         balise, le site y serait publié sans aucune protection.
+         `frame-ancestors` et HSTS ne sont pas gérés en meta — ils restent
+         donc réservés aux hébergeurs qui acceptent les en-têtes. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'"
+    />
+
     <!-- Aperçu des liens partagés (Facebook, WhatsApp, Messenger...) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="JCOV - Judo Club Olympique de Vigneux" />
@@ -53,9 +65,9 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <!-- Icônes générées depuis le logo du club (voir README). Pas de version
          SVG : le logo est une écriture manuscrite, qu'un tracé vectoriel
          approximatif trahirait — et le navigateur préférerait ce SVG à l'ICO. -->
-    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64" />
-    <link rel="icon" type="image/png" href="/icon-512.png" sizes="512x512" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href={url('/favicon.ico')} sizes="16x16 32x32 48x48 64x64" />
+    <link rel="icon" type="image/png" href={url('/icon-512.png')} sizes="512x512" />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

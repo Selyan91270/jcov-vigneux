@@ -10,9 +10,17 @@ import sitemap from '@astrojs/sitemap';
 // ce qui permet aux déploiements de préversion d'utiliser leur propre URL.
 const SITE_URL = process.env.SITE_URL ?? 'https://jcov-vigneux.fr';
 
+// Sous-dossier dans lequel le site est servi. Vaut '/' pour un domaine
+// personnalisé, mais '/nom-du-depot/' sur GitHub Pages quand le dépôt n'est
+// pas un site utilisateur. Renseigné par le workflow de déploiement.
+// GitHub Pages fournit '' pour un site à la racine et '/nom-du-depot' sinon,
+// d'où la normalisation.
+const BASE_PATH = process.env.BASE_PATH?.trim() || '/';
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
+  base: BASE_PATH,
   integrations: [sitemap()],
   build: {
     // Sort les scripts et les styles dans des fichiers externes au lieu de les

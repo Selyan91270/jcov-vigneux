@@ -1,0 +1,59 @@
+name: Déploiement sur GitHub Pages
+
+# Publie le site à chaque envoi sur la branche principale.
+# « Run workflow » permet aussi de relancer une publication à la main.
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+# Droits minimum nécessaires à la publication sur Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule publication à la fois ; les envois rapprochés ne s'écrasent pas
+# en cours de route.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # Installe exactement les versions du package-lock.
+      - run: npm ci
+
+      # Renseigne l'adresse publique et le sous-dossier depuis la
+      # configuration Pages, pour que les liens, le sitemap et les aperçus de
+      # partage soient corrects quel que soit le nom du dépôt.
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      - run: npm run build
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

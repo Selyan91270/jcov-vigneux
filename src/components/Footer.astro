@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url.ts';
 // Footer simple avec informations de contact
 // Pied de page minimaliste et élégant
 import { Image } from 'astro:assets';
@@ -87,9 +88,9 @@ import { partners } from '../data/partners.ts';
         &copy; {new Date().getFullYear()} JCOV - Judo Club Olympique de Vigneux. Tous droits réservés.
       </p>
       <nav class="jcov-footer__legal" aria-label="Informations légales">
-        <a href="/mentions-legales">Mentions légales</a>
+        <a href={url("/mentions-legales")}>Mentions légales</a>
         <span aria-hidden="true">·</span>
-        <a href="/confidentialite">Confidentialité</a>
+        <a href={url("/confidentialite")}>Confidentialité</a>
       </nav>
     </div>
   </div>
