@@ -8,12 +8,22 @@ import Stats from '../components/Stats.astro';
 import MoralCode from '../components/MoralCode.astro';
 import SectionDivider from '../components/SectionDivider.astro';
 import Lightbox from '../components/Lightbox.astro';
+import EventCard from '../components/EventCard.astro';
 import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 
 const actualites = (await getCollection('actualites')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
+
+// Les deux prochains rendez-vous seulement : l'accueil donne un aperçu,
+// la page Événements garde la liste complète.
+const now = new Date();
+const evenementsAVenir = (await getCollection('evenements'))
+  .filter((e) => e.data.date >= now)
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+const prochainsEvenements = evenementsAVenir.slice(0, 2);
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -118,8 +128,49 @@ const fullSize = new Map(
     </div>
   </section>
 
+  {/* Prochains événements — masqué s'il n'y en a aucun : mieux vaut une
+      section absente qu'une section qui annonce le vide. */}
+  {prochainsEvenements.length > 0 && (
+    <>
+      <SectionDivider from="#f9fafb" to="#ffffff" flip />
+
+      <section id="evenements" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12 fade-in-up">
+            <span class="section-eyebrow justify-center mb-3">Agenda</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
+              Prochains rendez-vous
+            </h2>
+          </div>
+
+          <div class="home-events">
+            {prochainsEvenements.map((event, i) => (
+              <div class={`fade-in-up fade-in-up--delay-${i + 1}`}>
+                <EventCard event={event} headingLevel={3} />
+              </div>
+            ))}
+          </div>
+
+          {/* Toujours affiché : la page Événements donne aussi accès aux
+              rendez-vous passés, même quand tout l'agenda tient ici. */}
+          <div class="mt-10 text-center fade-in-up">
+            <a href={url('/evenements')} class="home-events__more">
+              Voir tous les événements
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider from="#ffffff" to="#f4f7fa" />
+    </>
+  )}
+
+  {prochainsEvenements.length === 0 && <SectionDivider from="#f9fafb" to="#f4f7fa" flip />}
+
   <!-- Actualités du club -->
-  <SectionDivider from="#f9fafb" to="#f4f7fa" flip />
 
   <section class="actualites-section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -262,3 +313,35 @@ const fullSize = new Map(
 
   <Lightbox />
 </MainLayout>
+
+<style>
+  .home-events {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .home-events__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 1.5rem;
+    border: 1.5px solid var(--brand-700);
+    border-radius: 0.75rem;
+    color: var(--brand-700);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
+
+  /* Contour plutôt que bouton plein : le rendez-vous compte plus que ce lien,
+     qui ne doit pas concurrencer les appels à l'action de la page. */
+  .home-events__more:hover {
+    background: var(--brand-700);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+</style>
