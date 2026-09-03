@@ -72,7 +72,12 @@ import { partners } from '../data/partners.ts';
             <a href={partner.url} target="_blank" rel="noopener noreferrer" aria-label={partner.name}>
               {partner.logo ? (
                 <span class={`jcov-footer__partner-slot jcov-footer__partner-slot--${partner.logoBackdrop ?? 'light'}`}>
-                  <Image src={partner.logo} alt={partner.name} height={44} class="jcov-footer__partner-logo" />
+                  <Image
+                    src={partner.logo}
+                    alt={partner.name}
+                    height={partner.logoShape === 'square' ? 72 : 48}
+                    class={`jcov-footer__partner-logo jcov-footer__partner-logo--${partner.logoShape ?? 'wide'}`}
+                  />
                 </span>
               ) : (
                 <span class="jcov-footer__partner-name">{partner.name}</span>
@@ -276,7 +281,7 @@ import { partners } from '../data/partners.ts';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 3.75rem;
+    height: 5.5rem;
     min-width: 8.5rem;
     padding: 0.5rem 1rem;
     border-radius: 0.6rem;
@@ -299,9 +304,20 @@ import { partners } from '../data/partners.ts';
   }
 
   .jcov-footer__partner-logo {
-    height: 2.75rem;
     width: auto;
     object-fit: contain;
+  }
+
+  /* Logo en bandeau : la hauteur suffit à l'équilibrer. */
+  .jcov-footer__partner-logo--wide {
+    height: 3rem;
+    max-width: 9.5rem;
+  }
+
+  /* Logo carré : à 3rem il pèserait deux fois moins que ses voisins et son
+     texte deviendrait illisible. On l'aligne sur la surface, pas la hauteur. */
+  .jcov-footer__partner-logo--square {
+    height: 4.5rem;
   }
 
   /* Repli tant qu'aucun fichier de logo n'est fourni. */
