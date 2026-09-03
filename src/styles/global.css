@@ -29,6 +29,9 @@
   --surface: #ffffff;
   --surface-alt: #f9fafb;
   --surface-soft: #f4f7fa;
+  /* Fond des bandeaux photo : la teinte exacte de leurs bords, pour que les
+     séparateurs diagonaux s'y raccordent sans couture. */
+  --surface-deep: #0a2f4d;
 
   /* Accent chaud — clin d'œil à la ceinture noire, utilisé avec parcimonie */
   --gold: #D9A441;
@@ -409,6 +412,18 @@ html {
   height: 2px;
   border-radius: 2px;
   background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+}
+
+/* Sur un bandeau sombre, le bleu du sur-titre se noie. Le bleu ciel ne
+   suffit pas non plus : posé sur une photo de judogis blancs il retombe à
+   3,7:1, sous le seuil AA pour un texte de cette taille. On garde la teinte
+   dans le trait, et le mot lui-même passe au bleu glacier. */
+.section-eyebrow--on-dark {
+  color: var(--brand-ice);
+}
+
+.section-eyebrow--on-dark::before {
+  background: linear-gradient(90deg, var(--brand-sky), rgba(255, 255, 255, 0.7));
 }
 
 @media (max-width: 640px) {
