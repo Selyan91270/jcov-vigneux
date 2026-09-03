@@ -9,6 +9,8 @@
 // c'est indépendant de leur fonction associative.
 
 import type { ImageMetadata } from 'astro';
+import rachidZahzouh from '../assets/images/rachid-zahzouh.jpg';
+import colletteKoeberle from '../assets/images/collette-koeberle.jpg';
 
 export type CommitteeMember = {
   id: string;
@@ -26,11 +28,13 @@ export const committee: CommitteeMember[] = [
     lastName: 'Zahzouh',
     role: "Président de l'association",
     dan: 1,
+    photo: rachidZahzouh,
   },
   {
     id: 'collette-koeberle',
     firstName: 'Collette',
     lastName: 'Koeberle',
     role: 'Trésorière',
+    photo: colletteKoeberle,
   },
 ];
