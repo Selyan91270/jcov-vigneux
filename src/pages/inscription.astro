@@ -1,0 +1,319 @@
+---
+import { url } from '../lib/url.ts';
+import MainLayout from '../layouts/MainLayout.astro';
+import { club } from '../data/club.ts';
+import { inscription } from '../data/inscription.ts';
+import { federationFee, practicalNotes } from '../data/schedule.ts';
+
+const etapes = [
+  {
+    titre: 'Téléchargez la fiche',
+    texte: "La fiche d'inscription tient sur une page. Imprimez-la, puis remplissez-la à la main.",
+  },
+  {
+    titre: 'Ajoutez un certificat médical',
+    texte:
+      "Si vous en avez un, joignez-le à la fiche. Ce n'est pas bloquant pour venir : il peut être apporté ensuite.",
+  },
+  {
+    titre: 'Rapportez le tout au dojo',
+    texte:
+      "Remettez la fiche à un membre du comité de direction, aux horaires des cours. L'inscription est alors enregistrée.",
+  },
+];
+---
+
+<MainLayout
+  title="Inscription - JCOV"
+  description="Comment s'inscrire au Judo Club Olympique de Vigneux : télécharger la fiche, la remplir et la rapporter au dojo, ou tout faire sur place avec le comité de direction."
+>
+  <section class="page-header py-16 sm:py-20 bg-white">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <a href={url('/')} class="back-link mb-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-jcov hover:text-jcov-dark">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" />
+        </svg>
+        Retour à l'accueil
+      </a>
+      <span class="section-eyebrow mb-3">Rejoindre le club</span>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mt-4">Inscription</h1>
+      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
+        L'inscription se fait sur papier, au dojo. Deux façons de s'y prendre : préparer la fiche
+        chez vous, ou tout régler sur place avec le comité de direction.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-20 surface-alt border-t border-gray-100">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="inscription-essai fade-in-up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+        <p>
+          <strong>Deux cours d'essai gratuits</strong> avant toute inscription : venez d'abord
+          essayer, vous verrez ensuite.
+        </p>
+      </div>
+
+      <h2 class="inscription-title fade-in-up">Préparer sa fiche à la maison</h2>
+
+      <ol class="inscription-steps">
+        {etapes.map((etape, i) => (
+          <li class={`inscription-step fade-in-up fade-in-up--delay-${i + 1}`}>
+            <span class="inscription-step__num" aria-hidden="true">{i + 1}</span>
+            <div>
+              <h3 class="inscription-step__title">{etape.titre}</h3>
+              <p class="inscription-step__text">{etape.texte}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="inscription-download fade-in-up">
+        {inscription.ficheUrl ? (
+          <a href={url(inscription.ficheUrl)} download class="inscription-download__btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+            </svg>
+            Télécharger la fiche d'inscription
+          </a>
+          <p class="inscription-download__info">{inscription.ficheInfo}</p>
+        ) : (
+          <p class="inscription-download__info">
+            La fiche est à retirer directement au dojo auprès du comité de direction.
+          </p>
+        )}
+      </div>
+
+      <div class="inscription-alt fade-in-up">
+        <h2 class="inscription-alt__title">Ou tout faire sur place</h2>
+        <p>
+          Pas d'imprimante, ou une question sur le dossier ? Rien n'est obligatoire à préparer
+          à l'avance. Présentez-vous au dojo aux horaires des cours : un membre du comité de
+          direction vous remet la fiche et vous accompagne pour la remplir.
+        </p>
+        <div class="inscription-alt__links">
+          <a href={url('/horaires')} class="inscription-alt__link">Voir les horaires</a>
+          <a href={url('/professeurs')} class="inscription-alt__link">Le comité de direction</a>
+        </div>
+      </div>
+
+      <div class="inscription-infos fade-in-up">
+        <h2 class="inscription-alt__title">Bon à savoir</h2>
+        <ul>
+          {practicalNotes.map((note) => <li>{note}</li>)}
+          <li>La licence fédérale ({federationFee} €) est comprise dans la cotisation annuelle.</li>
+        </ul>
+        <p class="inscription-infos__contact">
+          Une question ? <a href={`tel:${club.phone.replace(/\s/g, '')}`}>{club.phone}</a>
+          ou <a href={`mailto:${club.email}`}>{club.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .inscription-essai {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    background: var(--brand-ice);
+    border: 1px solid rgba(11, 95, 135, 0.15);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 3rem;
+    color: #0f172a;
+  }
+
+  .inscription-essai svg {
+    width: 1.3rem;
+    height: 1.3rem;
+    color: var(--brand-700);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+  }
+
+  .inscription-essai p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .inscription-title,
+  .inscription-alt__title {
+    font-family: var(--ff-head);
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.75rem;
+  }
+
+  .inscription-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .inscription-step {
+    display: flex;
+    gap: 1.25rem;
+    background: #fff;
+    border: 1px solid rgba(3, 29, 56, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+  }
+
+  .inscription-step__num {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    background: linear-gradient(150deg, var(--brand-900), var(--brand-700));
+    color: #fff;
+    font-family: var(--ff-head);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .inscription-step__title {
+    font-family: var(--ff-head);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+  }
+
+  .inscription-step__text {
+    margin: 0;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  .inscription-download {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .inscription-download__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 52px;
+    padding: 0 1.9rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .inscription-download__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .inscription-download__btn svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .inscription-download__info {
+    margin: 0.75rem 0 0;
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .inscription-alt,
+  .inscription-infos {
+    background: #fff;
+    border: 1px solid rgba(3, 29, 56, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .inscription-alt p {
+    margin: 0;
+    color: #475569;
+    line-height: 1.7;
+  }
+
+  .inscription-alt__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .inscription-alt__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--brand-700);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .inscription-alt__link:hover {
+    color: var(--brand-accent);
+    border-color: var(--brand-accent);
+  }
+
+  .inscription-infos ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.6rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  .inscription-infos__contact {
+    margin: 1.5rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(3, 29, 56, 0.08);
+    color: #475569;
+  }
+
+  .inscription-infos__contact a {
+    color: var(--brand-700);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(11, 95, 135, 0.3);
+  }
+
+  .inscription-infos__contact a:hover {
+    color: var(--brand-accent);
+  }
+
+  @media (max-width: 480px) {
+    .inscription-step {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .inscription-alt,
+    .inscription-infos {
+      padding: 1.5rem;
+    }
+  }
+</style>

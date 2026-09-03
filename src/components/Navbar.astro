@@ -21,7 +21,7 @@ const linkClass = 'navbar__link text-sm uppercase';
             {link.label}
           </a>
         ))}
-        <a href="https://aspttnancy.monclub.app/login" target="_blank" rel="noopener noreferrer" class="navbar__cta">
+        <a href={url("/inscription")} class="navbar__cta">
           Rejoindre
         </a>
       </div>
@@ -51,9 +51,7 @@ const linkClass = 'navbar__link text-sm uppercase';
             </a>
           ))}
           <a
-            href="https://aspttnancy.monclub.app/login"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={url("/inscription")}
             class="navbar__cta navbar__cta--mobile navbar__mobile-link"
             style={`--i:${navLinks.length}`}
           >
