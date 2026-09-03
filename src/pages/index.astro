@@ -110,20 +110,11 @@ const fullSize = new Map(
 
   <SectionDivider from="var(--surface)" to="var(--surface-deep)" />
 
-  {/* Bandeau photo : la seule section sombre de la page avant le footer.
+  {/* Bandeau bleu : la seule section sombre de la page avant le footer.
       C'est la respiration au milieu des fonds clairs, et c'est ce qui fait
       ressortir l'appel à l'action le plus important de l'accueil. */}
   <section id="classes" class="classes-teaser py-20">
-    <Image
-      src={images.groupeSanguinet}
-      alt=""
-      width={1600}
-      height={1200}
-      loading="lazy"
-      class="classes-teaser__photo"
-      aria-hidden="true"
-    />
-    <div class="classes-teaser__scrim" aria-hidden="true"></div>
+    <div class="classes-teaser__glow" aria-hidden="true"></div>
     <div class="grain-overlay" aria-hidden="true"></div>
 
     <div class="classes-teaser__content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -362,43 +353,36 @@ const fullSize = new Map(
 
 <style>
   /* ── Bandeau photo ── */
+  /* Dégradé vertical et non diagonal : les séparateurs sont des triangles
+     d'une seule couleur, ils ne peuvent se raccorder qu'à un bord uni. En
+     revenant à `--surface-deep` en haut ET en bas, le bandeau s'éclaircit
+     en son milieu — le contenu est posé dans la lumière — et les deux
+     coutures restent invisibles avec la même variable qu'avant. */
   .classes-teaser {
     position: relative;
     overflow: hidden;
-    /* Le fond porte la couleur exacte des bords du voile : c'est elle que
-       les séparateurs diagonaux prolongent. */
-    background-color: var(--surface-deep);
+    background-image: linear-gradient(
+      180deg,
+      var(--surface-deep) 0%,
+      #0c5480 34%,
+      #0e6b98 52%,
+      #0c5480 70%,
+      var(--surface-deep) 100%
+    );
   }
 
-  .classes-teaser__photo {
+  /* Une nappe du bleu du logo, décentrée : sans elle, un dégradé strictement
+     vertical reste un peu plat sur toute la largeur. */
+  .classes-teaser__glow {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 35%;
-  }
-
-  /* Le voile fait deux choses à la fois : il éteint la photo aux extrémités
-     pour rejoindre la couleur des séparateurs sans couture visible, et il
-     assombrit le centre pour que le texte blanc reste lisible par-dessus des
-     judogis clairs. Sans le second, le contraste tomberait sous le seuil. */
-  .classes-teaser__scrim {
-    position: absolute;
-    inset: 0;
-    background-image:
-      radial-gradient(
-        ellipse 68% 78% at 50% 50%,
-        rgba(3, 24, 45, 0.58),
-        transparent 74%
-      ),
-      linear-gradient(
-        180deg,
-        var(--surface-deep) 0%,
-        rgba(10, 47, 77, 0.64) 26%,
-        rgba(10, 47, 77, 0.62) 74%,
-        var(--surface-deep) 100%
-      );
+    background-image: radial-gradient(
+      ellipse 60% 85% at 30% 40%,
+      /* 0,18 et pas davantage : au-delà, le point le plus clair de la nappe
+         fait passer le sur-titre sous le seuil AA de 4,5:1. */
+      rgba(25, 169, 245, 0.18),
+      transparent 68%
+    );
   }
 
   .classes-teaser__content {
