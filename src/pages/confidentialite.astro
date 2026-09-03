@@ -1,7 +1,7 @@
 ---
 import { url } from '../lib/url.ts';
 import MainLayout from '../layouts/MainLayout.astro';
-import { club } from '../data/club.ts';
+import { club, legal } from '../data/club.ts';
 ---
 
 <MainLayout
@@ -46,10 +46,18 @@ import { club } from '../data/club.ts';
           externes chargées sont des polices de caractères (Google Fonts), sans dépôt de cookie.
         </p>
 
+        <h2>Hébergement</h2>
+        <p>
+          Le site est hébergé par {legal.host.name} ({legal.host.address}). Comme tout hébergeur, il enregistre
+          des données techniques de connexion (adresse IP, date, page demandée) à des fins de sécurité et de
+          bon fonctionnement du service. Le {club.shortName} n'a pas accès à ces journaux et n'en fait aucune
+          exploitation.
+        </p>
+
         <h2>Contact</h2>
         <p>
-          Pour toute question relative à la confidentialité, vous pouvez contacter le club à l'adresse
-          {club.email} ou par téléphone au {club.phone}.
+          Pour toute question relative à la confidentialité, vous pouvez contacter le club
+          à l'adresse {club.email} ou par téléphone au {club.phone}.
         </p>
       </div>
     </div>

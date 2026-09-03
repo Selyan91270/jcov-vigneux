@@ -1,7 +1,7 @@
 ---
 import { url } from '../lib/url.ts';
 import MainLayout from '../layouts/MainLayout.astro';
-import { club } from '../data/club.ts';
+import { club, legal } from '../data/club.ts';
 ---
 
 <MainLayout
@@ -24,24 +24,35 @@ import { club } from '../data/club.ts';
         <h2>Éditeur du site</h2>
         <p>
           {club.name} ({club.shortName})<br>
-          Association loi 1901 <em>[à compléter : numéro RNA / SIRET de l'association]</em><br>
-          {club.address.venue}, {club.address.street}, {club.address.city}<br>
+          {legal.form}<br>
+          Siège social : {legal.headOffice}<br>
           Téléphone : {club.phone}<br>
           E-mail : {club.email}
         </p>
 
+        <h2>Immatriculation</h2>
+        <dl class="legal-page__facts">
+          <div><dt>N° RNA</dt><dd>{legal.rna}</dd></div>
+          <div><dt>SIREN</dt><dd>{legal.siren}</dd></div>
+          <div><dt>SIRET du siège</dt><dd>{legal.siret}</dd></div>
+          <div><dt>Code APE / NAF</dt><dd>{legal.ape} — {legal.apeLabel}</dd></div>
+        </dl>
+
         <h2>Directeur de la publication</h2>
-        <p><em>[à compléter : nom du président ou de la personne responsable de la publication du site]</em></p>
+        <p>{legal.publicationDirector}</p>
 
         <h2>Hébergement</h2>
-        <p><em>[à compléter : nom, adresse et contact de l'hébergeur du site une fois celui-ci mis en ligne]</em></p>
+        <p>
+          Ce site est hébergé par {legal.host.name}, {legal.host.address}.<br>
+          <a href={legal.host.url} target="_blank" rel="noopener noreferrer">{legal.host.url}</a>
+        </p>
 
         <h2>Propriété intellectuelle</h2>
         <p>
-          L'ensemble des contenus présents sur ce site (textes, photographies, logo, mise en page) est la propriété du
-          {club.shortName}, sauf mention contraire. Les logos de la Ville de Vigneux-sur-Seine et de la Fédération
-          Française de Judo restent la propriété de leurs détenteurs respectifs et sont affichés au titre du
-          partenariat et de l'affiliation du club.
+          L'ensemble des contenus présents sur ce site (textes, photographies, logo, mise en page) est la
+          propriété du {club.shortName}, sauf mention contraire. Les logos de la Ville de Vigneux-sur-Seine, du Département de
+          l'Essonne, du Comité de l'Essonne de Judo et de la Fédération Française de Judo restent la propriété de
+          leurs détenteurs respectifs et sont affichés au titre du partenariat et de l'affiliation du club.
         </p>
 
         <h2>Inscriptions</h2>
@@ -106,5 +117,35 @@ import { club } from '../data/club.ts';
 
   .legal-page__content em {
     color: #94a3b8;
+  }
+
+  /* Les numéros d'immatriculation se consultent, ils ne se lisent pas :
+     en liste d'étiquettes plutôt qu'en phrase, on retrouve le SIRET d'un
+     coup d'œil. */
+  .legal-page__facts {
+    margin: 0;
+    display: grid;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .legal-page__facts > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid rgba(3, 29, 56, 0.07);
+  }
+
+  .legal-page__facts dt {
+    flex: 0 0 10rem;
+    color: #0f172a;
+    font-weight: 600;
+  }
+
+  .legal-page__facts dd {
+    margin: 0;
+    color: #475569;
+    /* Un numéro d'immatriculation se relève chiffre par chiffre. */
+    font-variant-numeric: tabular-nums;
   }
 </style>

@@ -7,12 +7,40 @@ export const club = {
   // Coordonnées de l'affiche officielle de la saison 2026-2027.
   email: 'judoclubolympiquevigneux@outlook.com',
   phone: '06 81 30 86 56',
+  // Adresse du lieu de pratique. `building` situe le dojo dans le complexe
+  // municipal : c'est le nom qu'on lit sur place et sur l'affiche du club,
+  // alors que le nom du dojo seul ne suffit pas à le trouver.
   address: {
     venue: 'Dojo Marc Alexandre',
+    building: 'Complexe sportif Georges Brassens',
     street: '1 bis rue du Maréchal Leclerc',
     city: '91270 Vigneux-sur-Seine',
   },
   facebook: 'https://www.facebook.com/JCOVigneux',
+} as const;
+
+// Informations légales obligatoires (LCEN, art. 6-III). Regroupées ici pour
+// que la page « Mentions légales » ne soit qu'une mise en forme.
+//
+// `headOffice` reprend l'adresse telle qu'elle est déclarée au registre des
+// associations : c'est le même lieu que le dojo, mais l'intitulé officiel
+// diffère de celui qu'on affiche au public, et une mention légale doit
+// citer la déclaration.
+export const legal = {
+  rna: 'W912003608',
+  siren: '399 261 387',
+  siret: '399 261 387 00027',
+  ape: '93.12Z',
+  apeLabel: 'Activités de clubs de sports',
+  form: 'Association déclarée (loi du 1er juillet 1901)',
+  headOffice: 'Espace Georges Brassens, rue du Maréchal Leclerc, 91270 Vigneux-sur-Seine',
+  publicationDirector: 'Selyan Abadou',
+  // Le site est un ensemble de fichiers statiques servis par GitHub Pages.
+  host: {
+    name: 'GitHub, Inc.',
+    address: '88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis',
+    url: 'https://github.com',
+  },
 } as const;
 
 export const navLinks = [
