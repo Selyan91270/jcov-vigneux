@@ -4,8 +4,9 @@ export const club = {
   name: 'Judo Club Olympique de Vigneux',
   shortName: 'JCOV',
   foundedYear: 1968,
-  email: 'jcov@free.fr',
-  phone: '01 69 03 22 40',
+  // Coordonnées de l'affiche officielle de la saison 2026-2027.
+  email: 'judoclubolympiquevigneux@outlook.com',
+  phone: '06 81 30 86 56',
   address: {
     venue: 'Dojo Marc Alexandre',
     street: '1 bis rue du Maréchal Leclerc',
