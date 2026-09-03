@@ -5,24 +5,32 @@
 // une, déposer le fichier dans src/assets/images/, l'importer ici et le
 // passer en `photo`.
 //
-// Pas de grade ni de diplôme ici : ce sont des fonctions associatives,
-// pas des qualifications d'enseignement.
+// `dan` est facultatif aussi : certains membres du bureau sont gradés, mais
+// c'est indépendant de leur fonction associative.
 
 import type { ImageMetadata } from 'astro';
 
 export type CommitteeMember = {
   id: string;
   firstName: string;
-  /** Facultatif tant que le nom de famille n'a pas été communiqué. */
-  lastName?: string;
+  lastName: string;
   role: string;
+  dan?: number;
   photo?: ImageMetadata;
 };
 
 export const committee: CommitteeMember[] = [
   {
-    id: 'rachid',
+    id: 'rachid-zahzouh',
     firstName: 'Rachid',
+    lastName: 'Zahzouh',
     role: "Président de l'association",
+    dan: 1,
+  },
+  {
+    id: 'collette-koeberle',
+    firstName: 'Collette',
+    lastName: 'Koeberle',
+    role: 'Trésorière',
   },
 ];
