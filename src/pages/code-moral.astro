@@ -1,0 +1,35 @@
+---
+import { url } from '../lib/url.ts';
+import MainLayout from '../layouts/MainLayout.astro';
+import MoralCode from '../components/MoralCode.astro';
+---
+
+<MainLayout
+  title="Le code moral du judo - JCOV"
+  description="Les huit valeurs du code moral du judo — politesse, courage, sincérité, honneur, modestie, respect, contrôle de soi, amitié — enseignées à chaque judoka du JCOV."
+>
+  {/* La section porte déjà son propre en-tête : y superposer un bandeau de
+      page ferait doublon. Seul le retour à l'accueil est ajouté, comme sur
+      les autres pages intérieures. */}
+  <div class="code-moral-page__nav">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <a href={url("/")} class="back-link inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-jcov hover:text-jcov-dark">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" />
+        </svg>
+        Retour à l'accueil
+      </a>
+    </div>
+  </div>
+
+  <MoralCode headingLevel={1} />
+</MainLayout>
+
+<style>
+  /* Même teinte que la section qui suit : le retour à l'accueil doit se
+     poser sur le papier, pas sur une bande blanche rapportée. */
+  .code-moral-page__nav {
+    background-color: var(--surface-washi);
+    padding-top: 2.5rem;
+  }
+</style>

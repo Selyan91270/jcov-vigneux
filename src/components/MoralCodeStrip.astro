@@ -1,0 +1,181 @@
+---
+// Version compacte du code moral, pour la page d'accueil.
+//
+// La version complète — cartes, descriptions et décor japonais — occupait
+// 3,7 écrans de téléphone pour un contenu identique dans tous les clubs de
+// France. Elle vit maintenant sur sa propre page ; l'accueil garde le
+// signal : les huit valeurs, et un lien pour les comprendre.
+//
+// Le fond reprend `--surface-washi`, la teinte à laquelle le séparateur
+// diagonal qui précède se raccorde.
+
+import { url } from '../lib/url.ts';
+import { moralCodeContent, moralValues } from '../data/moralCode.ts';
+
+const { label, titleBefore, titleHighlight, titleAfter } = moralCodeContent;
+---
+
+<section id="code-moral" class="moral-strip" aria-labelledby="moral-strip-title">
+  <div class="moral-strip__paper" aria-hidden="true"></div>
+
+  <div class="moral-strip__inner max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center fade-in-up">
+      <span class="section-eyebrow justify-center mb-3">{label}</span>
+      <h2 id="moral-strip-title" class="section-title moral-strip__title mt-4">
+        {titleBefore}<span class="moral-strip__title-accent">{titleHighlight}</span>{titleAfter}
+      </h2>
+      <p class="moral-strip__subtitle">
+        Huit valeurs enseignées à chaque judoka, du premier cours à la ceinture noire.
+      </p>
+    </div>
+
+    <ul class="moral-strip__list fade-in-up fade-in-up--delay-1">
+      {moralValues.map((value) => (
+        <li class="moral-strip__item">
+          <span class="moral-strip__kanji" aria-hidden="true">{value.kanji}</span>
+          <span class="moral-strip__name">{value.title}</span>
+          <span class="moral-strip__japanese">{value.japanese}</span>
+        </li>
+      ))}
+    </ul>
+
+    <div class="text-center fade-in-up fade-in-up--delay-2">
+      <a href={url('/code-moral')} class="moral-strip__link">
+        Comprendre le code moral
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .moral-strip {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--surface-washi);
+    padding-block: 4.5rem;
+  }
+
+  /* Trame de papier, seul reste du décor de la version complète : elle suffit
+     à distinguer la section des fonds unis qui l'entourent. */
+  .moral-strip__paper {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 12% 15%, rgba(11, 114, 173, 0.07), transparent 22%),
+      radial-gradient(circle at 88% 85%, rgba(11, 114, 173, 0.05), transparent 24%),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.9) 0 1px,
+        transparent 1px 24px
+      );
+  }
+
+  .moral-strip__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .moral-strip__title {
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .moral-strip__title-accent {
+    background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .moral-strip__subtitle {
+    margin: 0.85rem auto 0;
+    max-width: 34rem;
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* Deux colonnes sur téléphone, quatre au-delà : huit valeurs alignées sur
+     une seule ligne deviendraient illisibles, et sur une seule colonne on
+     retomberait dans la longueur qu'on vient de supprimer. */
+  .moral-strip__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 2.75rem 0 2.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .moral-strip__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  .moral-strip__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 1.1rem 0.5rem 1.2rem;
+    border: 1px solid rgba(3, 29, 56, 0.07);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.72);
+    text-align: center;
+  }
+
+  .moral-strip__kanji {
+    font-family: var(--ff-head);
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--brand-700);
+    opacity: 0.85;
+  }
+
+  .moral-strip__name {
+    margin-top: 0.45rem;
+    font-family: var(--ff-head);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .moral-strip__japanese {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  /* Contour plutôt que bouton plein : ce lien ne doit pas concurrencer
+     « Rejoindre le club » ni « Voir les horaires ». */
+  .moral-strip__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0 1.5rem;
+    border: 1.5px solid var(--brand-700);
+    border-radius: 0.75rem;
+    color: var(--brand-700);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
+
+  .moral-strip__link:hover {
+    background: var(--brand-700);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+</style>

@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
 import Stats from '../components/Stats.astro';
-import MoralCode from '../components/MoralCode.astro';
+import MoralCodeStrip from '../components/MoralCodeStrip.astro';
 import SectionDivider from '../components/SectionDivider.astro';
 import Lightbox from '../components/Lightbox.astro';
 import EventCard from '../components/EventCard.astro';
@@ -276,7 +276,7 @@ const fullSize = new Map(
 
   <SectionDivider from="var(--brand-ice)" to="var(--surface-washi)" flip />
 
-  <MoralCode />
+  <MoralCodeStrip />
 
   <section id="contact" class="py-20 contact-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

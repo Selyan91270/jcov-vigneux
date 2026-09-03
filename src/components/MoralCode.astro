@@ -1,5 +1,15 @@
 ---
+// Version complète du code moral. Elle occupe sa propre page : sur l'accueil,
+// c'est `MoralCodeStrip` qui en donne le signal en quelques lignes.
 import { moralCodeContent, moralValues } from '../data/moralCode.ts';
+
+interface Props {
+  /** 1 quand la section fait office de titre de page. */
+  headingLevel?: 1 | 2;
+}
+
+const { headingLevel = 2 } = Astro.props;
+const Heading = `h${headingLevel}` as 'h1' | 'h2';
 
 const { label, titleBefore, titleHighlight, titleAfter, subtitle, quote } = moralCodeContent;
 ---
@@ -79,9 +89,9 @@ const { label, titleBefore, titleHighlight, titleAfter, subtitle, quote } = mora
     <header class="code-moral__header">
       <p class="code-moral__label">{label}</p>
 
-      <h2 id="code-moral-title" class="code-moral__title section-title">
+      <Heading id="code-moral-title" class="code-moral__title section-title">
         {titleBefore}<span class="code-moral__title-accent">{titleHighlight}</span>{titleAfter}
-      </h2>
+      </Heading>
 
       <p class="code-moral__subtitle">{subtitle}</p>
 
