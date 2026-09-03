@@ -3,7 +3,10 @@ import { url } from '../lib/url.ts';
 import MainLayout from '../layouts/MainLayout.astro';
 import { ageGroups, complementaryCourses, pricing, federationFee, practicalNotes, minGroupAge } from '../data/schedule.ts';
 
-const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federationFee });
+// Le sélecteur ne travaille que sur les tranches d'âge : les cours
+// complémentaires ne dépendent pas de l'âge et ne changent pas la
+// cotisation, ils restent dans le planning complet plus bas.
+const scheduleData = JSON.stringify({ ageGroups, federationFee });
 ---
 
 <MainLayout
@@ -179,12 +182,10 @@ const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federatio
       sessions: Session[];
       price: number;
     };
-    type ComplementaryCourse = { id: string; name: string; note: string; sessions: Session[]; price: number };
 
     const dataEl = document.getElementById('schedule-data');
-    const { ageGroups, complementaryCourses, federationFee } = JSON.parse(dataEl?.textContent ?? '{}') as {
+    const { ageGroups, federationFee } = JSON.parse(dataEl?.textContent ?? '{}') as {
       ageGroups: AgeGroup[];
-      complementaryCourses: ComplementaryCourse[];
       federationFee: number;
     };
 
@@ -202,19 +203,24 @@ const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federatio
         .join('')}</div>`;
     }
 
-    function complementaryMarkup() {
-      return `<div class="finder-result__extra">
-        <p class="finder-result__extra-title">En complément, sur inscription séparée&nbsp;:</p>
-        ${complementaryCourses
-          .map(
-            (c) => `<div class="finder-extra-card">
-              <p class="finder-extra-card__name">${c.name}</p>
-              ${sessionsMarkup(c.sessions)}
-              <p class="finder-extra-card__price">${c.price} € / an</p>
-            </div>`
-          )
-          .join('')}
-      </div>`;
+    /* Amène l'élément dans le champ de vision en déroulant le strict
+       minimum. `scrollIntoView` colle le bas de l'élément au bas de la
+       fenêtre : sur un résultat un peu long, la question et le champ de
+       saisie disparaissent au-dessus et la page semble « tomber » trop bas.
+       Ici on descend juste assez pour tout lire, sans jamais faire passer le
+       haut du résultat sous la barre de navigation. */
+    function bringIntoView(el: Element) {
+      const navbar = document.querySelector('.navbar');
+      const safeTop = (navbar instanceof HTMLElement ? navbar.offsetHeight : 0) + 12;
+      const safeBottom = window.innerHeight - 12;
+      const rect = el.getBoundingClientRect();
+
+      if (rect.top >= safeTop && rect.bottom <= safeBottom) return;
+
+      const delta = Math.min(rect.bottom - safeBottom, rect.top - safeTop);
+      if (Math.abs(delta) < 8) return;
+
+      window.scrollBy({ top: delta, behavior: 'smooth' });
     }
 
     function showResult(group: AgeGroup) {
@@ -232,9 +238,8 @@ const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federatio
           Cotisation annuelle pour ce cours&nbsp;: <strong>${group.price} €</strong>
           <span>(dont ${federationFee} € de licence fédérale)</span>
         </div>
-        ${group.id === 'ados-adultes' ? complementaryMarkup() : ''}
       `;
-      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      bringIntoView(resultBox);
     }
 
     function handleAge(age: number) {
@@ -253,7 +258,7 @@ const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federatio
       if (matches.length > 1) {
         pendingAge = age;
         experienceBox?.classList.remove('hidden');
-        experienceBox?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (experienceBox) bringIntoView(experienceBox);
         return;
       }
 
@@ -532,39 +537,6 @@ const scheduleData = JSON.stringify({ ageGroups, complementaryCourses, federatio
     margin-top: 0.3rem;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.75);
-  }
-
-  .finder-result :global(.finder-result__extra) {
-    margin-top: 1.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px dashed rgba(3, 29, 56, 0.12);
-  }
-
-  .finder-result :global(.finder-result__extra-title) {
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
-  }
-
-  .finder-result :global(.finder-extra-card) {
-    background: #f8fafc;
-    border: 1px solid rgba(3, 29, 56, 0.06);
-    border-radius: 0.85rem;
-    padding: 1.1rem;
-    margin-bottom: 1rem;
-  }
-
-  .finder-result :global(.finder-extra-card__name) {
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 0.65rem;
-  }
-
-  .finder-result :global(.finder-extra-card__price) {
-    margin-top: 0.65rem;
-    font-weight: 700;
-    color: var(--brand-700);
   }
 
   /* ── Tous les horaires ── */
