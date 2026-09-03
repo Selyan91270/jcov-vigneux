@@ -414,6 +414,18 @@ html {
   background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
 }
 
+/* ── Titre de rubrique (page d'accueil) ──
+   Une seule échelle pour toutes les rubriques. Elles étaient jusqu'ici sur
+   deux tailles différentes sans que rien ne le justifie : ce sont toutes des
+   sections de même niveau.
+   Taille fluide plutôt que paliers : le titre grandit avec la fenêtre au
+   lieu de sauter à chaque point de rupture. */
+.section-title {
+  font-size: clamp(2.15rem, 4.6vw, 3.25rem);
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+}
+
 /* ── Bandeau bleu ──
    Section sombre posée entre deux fonds clairs : elle casse la page blanche
    et fait ressortir ce qu'elle contient. Utilisée deux fois sur l'accueil,

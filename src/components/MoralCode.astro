@@ -79,7 +79,7 @@ const { label, titleBefore, titleHighlight, titleAfter, subtitle, quote } = mora
     <header class="code-moral__header">
       <p class="code-moral__label">{label}</p>
 
-      <h2 id="code-moral-title" class="code-moral__title">
+      <h2 id="code-moral-title" class="code-moral__title section-title">
         {titleBefore}<span class="code-moral__title-accent">{titleHighlight}</span>{titleAfter}
       </h2>
 
@@ -311,13 +311,13 @@ const { label, titleBefore, titleHighlight, titleAfter, subtitle, quote } = mora
     background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
   }
 
+  /* La taille vient de `.section-title`, partagée avec les autres rubriques
+     de l'accueil. Ce titre garde sa graisse plus appuyée. */
   .code-moral__title {
     margin: 0 0 1rem;
     font-family: var(--ff-head);
-    font-size: clamp(2.1rem, 4.5vw, 3rem);
     font-weight: 800;
     color: #0f172a;
-    letter-spacing: -0.01em;
   }
 
   .code-moral__title-accent {
