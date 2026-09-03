@@ -732,6 +732,20 @@ html {
   color: #fff4f2;
 }
 
+/* Réservé aux lecteurs d'écran : visuellement absent, mais lu et indexé.
+   Sert à nommer une valeur dont seul un pictogramme dit la nature. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .surface {
   background-color: var(--surface);
 }
@@ -1007,6 +1021,74 @@ html {
   box-shadow: var(--shadow-lg);
   max-width: 28rem;
   margin: 0 auto;
+}
+
+/* ── Coordonnées ──
+   Deux colonnes : les pictogrammes d'un côté, les valeurs de l'autre. Les
+   trois valeurs partagent donc la même marge gauche, quel que soit leur
+   nombre de lignes. Le bloc entier est centré dans la carte, mais son
+   contenu reste aligné à gauche : c'est ce qui manquait. */
+.contact-details {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.1rem 0.85rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* Aligné sur la première ligne du texte, et non au milieu du bloc : sur une
+   adresse de quatre lignes, un pictogramme centré flotte au milieu de nulle
+   part. */
+.contact-details__icon {
+  display: flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2rem;
+  color: var(--brand-700);
+}
+
+.contact-details__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.contact-details__value {
+  min-width: 0;
+  margin: 0;
+  color: #334155;
+  line-height: 1.55;
+}
+
+/* L'adresse e-mail est plus large que la carte sur un petit téléphone. Le
+   gabarit lui pose un point de césure avant l'arobase ; ceci ne sert que de
+   filet pour un écran encore plus étroit. */
+.contact-details__value--email {
+  overflow-wrap: break-word;
+}
+
+.contact-details__link {
+  color: inherit;
+  text-decoration: none;
+  /* Marge de frappe sans écarter les lignes : la marge négative reprend la
+     hauteur ajoutée. */
+  padding-block: 0.35rem;
+  margin-block: -0.35rem;
+}
+
+.contact-details__link:hover {
+  color: var(--brand-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Sur les petits écrans, la carte reprend en largeur utile ce qu'elle rend
+   sur ses marges : sans cela l'adresse e-mail débordait. */
+@media (max-width: 480px) {
+  .contact-card {
+    padding: 2rem 1.25rem;
+  }
 }
 
 /* ── Actus date ── */
