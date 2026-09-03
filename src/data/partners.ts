@@ -32,7 +32,9 @@ export type Partner = {
 export const partners: Partner[] = [
   {
     name: 'Ville de Vigneux-sur-Seine',
-    url: 'https://www.vigneux-sur-seine.fr',
+    // Le site officiel est bien sur vigneux91.fr : le domaine
+    // vigneux-sur-seine.fr, plus intuitif, ne résout pas.
+    url: 'https://www.vigneux91.fr',
     logo: logoVigneux,
     logoBackdrop: 'light',
   },
