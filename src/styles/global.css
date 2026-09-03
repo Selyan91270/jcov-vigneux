@@ -32,6 +32,9 @@
   /* Fond des bandeaux photo : la teinte exacte de leurs bords, pour que les
      séparateurs diagonaux s'y raccordent sans couture. */
   --surface-deep: #0a2f4d;
+  /* Papier washi du code moral. Défini ici et non dans le composant : un
+     séparateur doit pouvoir s'y raccorder. */
+  --surface-washi: #FAFAF7;
 
   /* Accent chaud — clin d'œil à la ceinture noire, utilisé avec parcimonie */
   --gold: #D9A441;
@@ -735,6 +738,13 @@ html {
 
 .surface-alt {
   background-color: var(--surface-alt);
+}
+
+/* Bleu glacier : le seul fond clair franchement coloré de la page. Il évite
+   que la galerie et le papier washi du code moral, deux gris à un point
+   d'écart, se succèdent sans transition perceptible. */
+.surface-ice {
+  background-color: var(--brand-ice);
 }
 
 .actualites-section {

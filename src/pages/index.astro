@@ -216,13 +216,13 @@ const fullSize = new Map(
         </div>
       </section>
 
-      <SectionDivider from="var(--surface-deep)" to="var(--surface-alt)" flip />
+      <SectionDivider from="var(--surface-deep)" to="var(--brand-ice)" flip />
     </>
   )}
 
-  {prochainsEvenements.length === 0 && <SectionDivider from="var(--surface-soft)" to="var(--surface-alt)" />}
+  {prochainsEvenements.length === 0 && <SectionDivider from="var(--surface-soft)" to="var(--brand-ice)" />}
 
-  <section id="gallery" class="surface-alt py-20">
+  <section id="gallery" class="surface-ice py-20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Galerie</span>
@@ -273,6 +273,8 @@ const fullSize = new Map(
       </div>
     </div>
   </section>
+
+  <SectionDivider from="var(--brand-ice)" to="var(--surface-washi)" flip />
 
   <MoralCode />
 
