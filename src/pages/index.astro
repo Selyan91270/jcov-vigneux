@@ -113,16 +113,16 @@ const fullSize = new Map(
   {/* Bandeau bleu : la seule section sombre de la page avant le footer.
       C'est la respiration au milieu des fonds clairs, et c'est ce qui fait
       ressortir l'appel à l'action le plus important de l'accueil. */}
-  <section id="classes" class="classes-teaser py-20">
-    <div class="classes-teaser__glow" aria-hidden="true"></div>
+  <section id="classes" class="band-blue py-20">
+    <div class="band-blue__glow" aria-hidden="true"></div>
     <div class="grain-overlay" aria-hidden="true"></div>
 
-    <div class="classes-teaser__content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="band-blue__content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="section-eyebrow section-eyebrow--on-dark justify-center mb-3 fade-in-up">Planning</span>
-      <h2 class="classes-teaser__title text-3xl md:text-4xl font-bold mt-4 mb-4 tracking-tight fade-in-up">
+      <h2 class="band-blue__title text-3xl md:text-4xl font-bold mt-4 mb-4 tracking-tight fade-in-up">
         Un cours pour chaque âge, de 4 ans à adulte
       </h2>
-      <p class="text-lg mb-10 max-w-2xl mx-auto fade-in-up fade-in-up--delay-1 classes-teaser__lead">
+      <p class="band-blue__lead text-lg mb-10 max-w-2xl mx-auto fade-in-up fade-in-up--delay-1">
         Indiquez l'âge du futur judoka et trouvez en quelques secondes ses jours de cours et sa cotisation.
       </p>
       <a href={url("/horaires")} class="classes-teaser__cta fade-in-up fade-in-up--delay-2">
@@ -179,13 +179,18 @@ const fullSize = new Map(
       deux cas. */}
   {prochainsEvenements.length > 0 && (
     <>
-      <SectionDivider from="var(--surface-soft)" to="var(--surface)" />
+      <SectionDivider from="var(--surface-soft)" to="var(--surface-deep)" />
 
-      <section id="evenements" class="surface py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Second bandeau bleu : ici les cartes blanches des rendez-vous
+          ressortent nettement mieux que sur le fond clair précédent. */}
+      <section id="evenements" class="band-blue py-20">
+        <div class="band-blue__glow band-blue__glow--right" aria-hidden="true"></div>
+        <div class="grain-overlay" aria-hidden="true"></div>
+
+        <div class="band-blue__content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-12 fade-in-up">
-            <span class="section-eyebrow justify-center mb-3">Agenda</span>
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
+            <span class="section-eyebrow section-eyebrow--on-dark justify-center mb-3">Agenda</span>
+            <h2 class="band-blue__title text-3xl md:text-4xl font-bold mt-4 tracking-tight">
               Prochains rendez-vous
             </h2>
           </div>
@@ -201,7 +206,7 @@ const fullSize = new Map(
           {/* Toujours affiché : la page Événements donne aussi accès aux
               rendez-vous passés, même quand tout l'agenda tient ici. */}
           <div class="mt-10 text-center fade-in-up">
-            <a href={url('/evenements')} class="home-events__more">
+            <a href={url('/evenements')} class="home-events__more home-events__more--on-dark">
               Voir tous les événements
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
@@ -211,7 +216,7 @@ const fullSize = new Map(
         </div>
       </section>
 
-      <SectionDivider from="var(--surface)" to="var(--surface-alt)" flip />
+      <SectionDivider from="var(--surface-deep)" to="var(--surface-alt)" flip />
     </>
   )}
 
@@ -353,53 +358,6 @@ const fullSize = new Map(
 
 <style>
   /* ── Bandeau photo ── */
-  /* Dégradé vertical et non diagonal : les séparateurs sont des triangles
-     d'une seule couleur, ils ne peuvent se raccorder qu'à un bord uni. En
-     revenant à `--surface-deep` en haut ET en bas, le bandeau s'éclaircit
-     en son milieu — le contenu est posé dans la lumière — et les deux
-     coutures restent invisibles avec la même variable qu'avant. */
-  .classes-teaser {
-    position: relative;
-    overflow: hidden;
-    background-image: linear-gradient(
-      180deg,
-      var(--surface-deep) 0%,
-      #0c5480 34%,
-      #0e6b98 52%,
-      #0c5480 70%,
-      var(--surface-deep) 100%
-    );
-  }
-
-  /* Une nappe du bleu du logo, décentrée : sans elle, un dégradé strictement
-     vertical reste un peu plat sur toute la largeur. */
-  .classes-teaser__glow {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(
-      ellipse 60% 85% at 30% 40%,
-      /* 0,18 et pas davantage : au-delà, le point le plus clair de la nappe
-         fait passer le sur-titre sous le seuil AA de 4,5:1. */
-      rgba(25, 169, 245, 0.18),
-      transparent 68%
-    );
-  }
-
-  .classes-teaser__content {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* La règle globale des titres n'est pas dans une couche Tailwind : elle
-     l'emporte sur `text-white`, qui resterait sans effet ici. */
-  .classes-teaser__title {
-    color: #ffffff;
-  }
-
-  .classes-teaser__lead {
-    color: #ffffff;
-  }
-
   /* Bouton inversé : blanc plein sur le bandeau sombre. Le bleu du club,
      posé sur ce fond, se serait fondu dedans au lieu d'appeler le clic. */
   .classes-teaser__cta {
@@ -453,5 +411,18 @@ const fullSize = new Map(
     background: var(--brand-700);
     color: #fff;
     transform: translateY(-2px);
+  }
+
+  /* Sur le bandeau bleu, un contour bleu serait invisible : le lien passe en
+     blanc, et s'inverse au survol comme sur fond clair. */
+  .home-events__more--on-dark {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+  }
+
+  .home-events__more--on-dark:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: var(--brand-800);
   }
 </style>

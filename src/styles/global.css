@@ -414,6 +414,66 @@ html {
   background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
 }
 
+/* ── Bandeau bleu ──
+   Section sombre posée entre deux fonds clairs : elle casse la page blanche
+   et fait ressortir ce qu'elle contient. Utilisée deux fois sur l'accueil,
+   jamais côte à côte.
+
+   Le dégradé est vertical et revient à `--surface-deep` en haut comme en
+   bas : les séparateurs de section sont des triangles d'une seule couleur
+   et ne se raccordent proprement qu'à un bord uni. Le bandeau s'éclaircit
+   donc en son milieu, là où repose le contenu. */
+.band-blue {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+    180deg,
+    var(--surface-deep) 0%,
+    #0c5480 34%,
+    #0e6b98 52%,
+    #0c5480 70%,
+    var(--surface-deep) 100%
+  );
+}
+
+/* Une nappe du bleu du logo, décentrée : sans elle, un dégradé strictement
+   vertical reste plat sur toute la largeur. Plafonnée à 0,18 d'opacité —
+   au-delà, son point le plus clair ferait passer le sur-titre sous 4,5:1. */
+.band-blue__glow {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    ellipse 60% 85% at 30% 40%,
+    rgba(25, 169, 245, 0.18),
+    transparent 68%
+  );
+}
+
+/* Second bandeau de la page : la nappe bascule à droite, pour que les deux
+   ne se superposent pas à l'identique. */
+.band-blue__glow--right {
+  background-image: radial-gradient(
+    ellipse 60% 85% at 72% 45%,
+    rgba(25, 169, 245, 0.18),
+    transparent 68%
+  );
+}
+
+.band-blue__content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Titre et chapô désignés par une classe, jamais par le sélecteur d'élément :
+   le bandeau de l'agenda contient des cartes blanches dont les titres, eux,
+   doivent rester sombres.
+   La règle globale des titres n'est pas dans une couche Tailwind : elle
+   l'emporte sur `text-white`, qui resterait sans effet ici. */
+.band-blue__title,
+.band-blue__lead {
+  color: #ffffff;
+}
+
 /* Sur un bandeau sombre, le bleu du sur-titre se noie. Le bleu ciel ne
    suffit pas non plus : posé sur une photo de judogis blancs il retombe à
    3,7:1, sous le seuil AA pour un texte de cette taille. On garde la teinte
