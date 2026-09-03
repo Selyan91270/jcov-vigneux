@@ -78,7 +78,7 @@ const grade = (dan: number) => (dan === 1 ? '1er Dan' : `${dan}ᵉ Dan`);
           <article class={`coach-card committee-card fade-in-up fade-in-up--delay-${(i % 4) + 1}`}>
             <div class="coach-card__photo">
               {member.photo ? (
-                <Image src={member.photo} alt={`${member.firstName} ${member.lastName}`} width={208} height={208} />
+                <Image src={member.photo} alt={`${member.firstName} ${member.lastName}`} width={352} height={352} />
               ) : (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="8" r="4" />
@@ -215,6 +215,19 @@ const grade = (dan: number) => (dan === 1 ? '1er Dan' : `${dan}ᵉ Dan`);
   .committee-card {
     width: 100%;
     max-width: 17rem;
+  }
+
+  /* Le bureau n'a pas de bloc diplôme : la place gagnée sert au portrait,
+     nettement plus grand que sur les cartes professeurs. */
+  .committee-card .coach-card__photo {
+    width: 11rem;
+    height: 11rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .committee-card .coach-card__photo svg {
+    width: 5.5rem;
+    height: 5.5rem;
   }
 
   /* Pas de diplôme sous la fonction : on rattrape la marge que la bordure
