@@ -111,7 +111,11 @@ const fullSize = new Map(
   <SectionDivider from="var(--surface)" to="var(--surface-alt)" />
 
   <section id="classes" class="classes-teaser surface-alt py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    {/* Fond tatami : les panneaux en quinconce et leur tissage, avec la
+        surface de combat dessinée sous le contenu. Purement décoratif. */}
+    <div class="tatami" aria-hidden="true"><span class="tatami__area"></span></div>
+
+    <div class="classes-teaser__content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <span class="section-eyebrow justify-center mb-3 fade-in-up">Planning</span>
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight fade-in-up">
         Un cours pour chaque âge, de 4 ans à adulte
@@ -349,6 +353,75 @@ const fullSize = new Map(
 </script>
 
 <style>
+  /* ── Fond tatami ──
+     Un tatami de compétition n'est pas un quadrillage : ce sont des panneaux
+     2:1 posés en quinconce, comme un appareil de briques, tissés dans le même
+     sens, et une surface de combat teintée au centre de l'aire de sécurité.
+     Ce sont ces trois traits qui le rendent reconnaissable ; sans le décalage
+     d'une rangée sur deux, on ne lit que du papier millimétré.
+
+     Tout est en dégradés et en un motif SVG inline : aucun fichier à charger,
+     et le motif reste net à n'importe quelle densité d'écran. */
+  .classes-teaser {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .classes-teaser__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .tatami {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* 1. Le tissage : fines lignes dans le sens de la longueur des panneaux.
+       En pixels et non dans le motif, pour garder la même finesse quelle que
+       soit l'échelle des panneaux.
+       2. Les joints des panneaux, en quinconce. */
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(3, 29, 56, 0.022) 0 1px,
+        transparent 1px 4px
+      ),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cg fill='none' stroke='%23031d38' stroke-opacity='.055' shape-rendering='crispEdges'%3E%3Cpath d='M0 .5h200M0 50.5h200M0 99.5h200'/%3E%3Cpath d='M.5 0v50M100.5 0v50M50.5 50v50M150.5 50v50'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: auto, 28rem 14rem;
+    /* Les séparateurs de section sont en diagonale : sans fondu, les joints
+       viendraient buter contre la couture et la souligneraient. */
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* La surface de combat, sous le contenu : c'est elle qui fait basculer le
+     motif de « quadrillage » à « tatami ». Elle déborde le conteneur du
+     texte (56 rem) pour que le titre et le bouton soient posés dessus avec
+     de la marge, et non serrés contre son tracé. */
+  .tatami__area {
+    position: absolute;
+    inset-block: 3.5rem;
+    inset-inline: max(1.25rem, calc((100% - 64rem) / 2));
+    /* Angles quasi vifs : une surface de combat est un rectangle tracé au
+       sol. Arrondie, elle se lirait comme une carte posée sur la section. */
+    border-radius: 0.3rem;
+    background: rgba(11, 114, 173, 0.03);
+    box-shadow: inset 0 0 0 1px rgba(11, 95, 135, 0.09);
+  }
+
+  @media (max-width: 640px) {
+    /* Panneaux plus petits sur mobile : à l'échelle du bureau, un téléphone
+       n'afficherait qu'un joint ou deux et le motif ne se lirait plus. */
+    .tatami {
+      background-size: auto, 12rem 6rem;
+    }
+
+    .tatami__area {
+      inset-block: 2rem;
+      inset-inline: 0.75rem;
+    }
+  }
+
   .home-events {
     display: grid;
     gap: 1.5rem;
