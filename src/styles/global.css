@@ -44,6 +44,12 @@
   --belt-brown: #6B4A2E;
   --belt-black: #1A1A1A;
 
+  /* Grades supérieurs : le kōhaku obi (6e-8e dan) puis la ceinture rouge.
+     Servent aux barrettes de grade, pas au liseré. */
+  --belt-red: #A81F30;
+  --belt-canvas: #16181f;
+  --belt-ecru: #F4F1E8;
+
   /* Neutral / text */
   --text-default: #0f172a;
   --text-on-dark: rgba(236, 246, 255, 0.95);
@@ -544,11 +550,92 @@ html {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ── Badge doré (ceinture noire, distinctions) ── */
-.badge-gold {
-  background: linear-gradient(120deg, var(--gold-dark), var(--gold) 55%, var(--gold-light)) !important;
-  color: #241a08 !important;
-  border-color: rgba(138, 106, 34, 0.35) !important;
+/* ── Barrette de grade ──
+   Deux blocs accolés, pas une pastille : le rang à gauche sur la couleur de
+   la ceinture, la bande tissée à droite. Angles francs (une ceinture est un
+   tissu plat, pas un galet), surpiqûres du obi rendues par deux liserés
+   internes et trame verticale à peine perceptible. La couleur porte
+   l'information : noire jusqu'au 5e dan, rouge et blanche du 6e au 8e,
+   rouge ensuite. */
+.grade-badge {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  font-family: var(--ff-head);
+  line-height: 1;
+  box-shadow: 0 2px 5px rgba(2, 6, 23, 0.16);
+  /* La barrette porte une info textuelle : elle ne doit pas se dissoudre
+     dans le fond si l'utilisateur force un contraste élevé. */
+  forced-color-adjust: none;
+}
+
+.grade-badge__rank,
+.grade-badge__belt {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.42rem 0.6rem;
+  font-size: 0.78rem;
+}
+
+/* Le rang : chiffre gravé, serré, sur le panneau clair de la barrette. */
+.grade-badge__rank {
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+/* La bande tissée. L'interlettrage large ajoute de l'air APRÈS la dernière
+   lettre : on retire d'autant à droite, sinon le mot paraît décalé. */
+.grade-badge__belt {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding-right: calc(0.6rem - 0.18em);
+  text-transform: uppercase;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0 1px,
+      transparent 1px 4px
+    );
+  box-shadow:
+    inset 0 2px 0 -1px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 -1px rgba(255, 255, 255, 0.14);
+}
+
+/* 1er – 5e dan : ceinture noire, rang frappé à l'or comme une broderie.
+   Or plat plutôt que dégradé : un fil brodé ne brille pas en biseau. */
+.grade-badge--black .grade-badge__rank {
+  background: var(--gold);
+  color: #2a1d05;
+  box-shadow: inset 0 -2px 0 -1px rgba(90, 66, 12, 0.35);
+}
+.grade-badge--black .grade-badge__belt {
+  background-color: var(--belt-canvas);
+  color: #eef2f7;
+}
+
+/* 6e – 8e dan : kōhaku obi. La ceinture alterne panneaux rouges et blancs —
+   la barrette en montre un fragment : un panneau clair, puis le rouge. */
+.grade-badge--kohaku .grade-badge__rank {
+  background: var(--belt-ecru);
+  color: var(--belt-red);
+  /* Le panneau clair frôle le blanc de la carte : un liseré interne lui
+     redonne son arête. */
+  box-shadow: inset 0 0 0 1px rgba(168, 31, 48, 0.16);
+}
+.grade-badge--kohaku .grade-badge__belt {
+  background-color: var(--belt-red);
+  color: #fff4f2;
+}
+
+/* 9e – 10e dan : ceinture rouge pleine. */
+.grade-badge--red .grade-badge__rank {
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color: #2a1d05;
+}
+.grade-badge--red .grade-badge__belt {
+  background-color: var(--belt-red);
+  color: #fff4f2;
 }
 
 .surface {
@@ -614,22 +701,33 @@ html {
   object-position: center top;
 }
 
+/* ── Étiquette éditoriale ──
+   Une rubrique d'actualité n'est pas un grade : son repère reste
+   typographique. Barre de couleur à gauche comme un onglet, capitales
+   espacées, angles francs — même grammaire que les sur-titres de section,
+   pour que le site n'invente pas un troisième style de pastille. */
 .actualites-card__badge {
   position: absolute;
   top: 1rem;
   left: 1rem;
   display: inline-flex;
   align-items: center;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(11,95,135,0.12);
-  color: var(--brand-700);
+  border-radius: 0.25rem;
+  background: rgba(255, 255, 255, 0.97);
+  border-left: 3px solid var(--brand-accent);
+  color: #0f172a;
+  font-family: var(--ff-head);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.45rem 0.72rem;
+  letter-spacing: 0.14em;
+  padding: 0.42rem calc(0.7rem - 0.14em) 0.42rem 0.7rem;
   text-transform: uppercase;
-  box-shadow: 0 6px 18px rgba(3,29,56,0.06);
+  box-shadow: 0 4px 14px rgba(3,29,56,0.14);
+}
+
+/* Distinction (ceinture noire, titre) : la barre passe à l'or. */
+.actualites-card__badge--gold {
+  border-left-color: var(--gold);
 }
 
 .actualites-card__content {

@@ -107,16 +107,20 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
     flex: 1;
   }
 
+  /* Même grammaire que les étiquettes d'actualité : barre de couleur à
+     gauche et capitales espacées, plutôt qu'une pastille pleine. */
   .event-card__category {
     display: inline-block;
     background: var(--brand-ice);
-    color: var(--brand-700);
+    border-left: 3px solid var(--brand-accent);
+    color: #0f172a;
+    font-family: var(--ff-head);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
+    letter-spacing: 0.14em;
+    padding: 0.32rem calc(0.65rem - 0.14em) 0.32rem 0.65rem;
+    border-radius: 0.25rem;
     margin-bottom: 0.6rem;
   }
 

@@ -1,0 +1,30 @@
+---
+// Barrette de grade.
+//
+// Un grade de judo ne se décore pas : il se porte. La barrette reprend donc
+// la ceinture elle-même — le rang gravé sur la boucle, la bande tissée à
+// côté — et surtout la couleur codifiée du grade, qui n'est pas la même
+// selon le dan. C'est ce qui distingue visuellement un 7e dan d'un 2e dan
+// sans avoir à lire le chiffre.
+
+interface Props {
+  dan: number;
+  /** Classes de mise en page ajoutées par le parent (marges, etc.). */
+  class?: string;
+}
+
+const { dan, class: className = '' } = Astro.props;
+
+// « 1er dan », mais « 2e dan » : le premier rang fait exception en français.
+const rank = dan === 1 ? '1er' : `${dan}ᵉ`;
+
+// Ceinture noire jusqu'au 5e dan, kōhaku obi (rouge et blanc) du 6e au 8e,
+// ceinture rouge au-delà. Le club n'a personne au-dessus du 7e dan
+// aujourd'hui, mais le barème est celui de la fédération.
+const belt = dan >= 9 ? 'red' : dan >= 6 ? 'kohaku' : 'black';
+---
+
+<span class={`grade-badge grade-badge--${belt} ${className}`.trim()}>
+  <span class="grade-badge__rank">{rank}</span>
+  <span class="grade-badge__belt">Dan</span>
+</span>
