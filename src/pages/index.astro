@@ -11,6 +11,7 @@ import Lightbox from '../components/Lightbox.astro';
 import EventCard from '../components/EventCard.astro';
 import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
+import { ficheClub } from '../lib/structuredData.ts';
 
 const actualites = (await getCollection('actualites')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -47,9 +48,22 @@ const fullSize = new Map(
     })
   )
 );
+
+// Fiche schema.org du club. Le logo et l'image doivent être absolus : les
+// moteurs les consultent hors du contexte de la page.
+const logoShare = await getImage({ src: images.logo, width: 512 });
+const heroShare = await getImage({ src: images.heroJudo, width: 1200, height: 630, format: 'jpg' });
+const ficheJcov = ficheClub({
+  site: new URL('/', Astro.site),
+  logo: new URL(logoShare.src, Astro.site).href,
+  image: new URL(heroShare.src, Astro.site).href,
+});
 ---
 
-<MainLayout title="JCOV - Judo Club Olympique de Vigneux">
+<MainLayout
+  title="JCOV — Club de judo à Vigneux-sur-Seine"
+  structuredData={ficheJcov}
+>
 
   <Hero />
 

@@ -17,11 +17,18 @@ interface Props {
   title?: string;
   /** Description propre à la page — sert au référencement et à l'aperçu des liens partagés. */
   description?: string;
+  /**
+   * Fiche schema.org de la page, au format JSON-LD. Déclarée une seule fois,
+   * sur l'accueil : répétée sur chaque page, elle n'apporterait rien de plus
+   * aux moteurs et alourdirait tout le site.
+   */
+  structuredData?: Record<string, unknown>;
 }
 
 const {
   title = 'JCOV - Judo Club Olympique de Vigneux',
   description = 'Club de judo à Vigneux-sur-Seine. Cours enfants et adultes dès 4 ans, encadrés par des professeurs diplômés d\'État. Deux cours d\'essai gratuits.',
+  structuredData,
 } = Astro.props;
 
 // Image d'aperçu pour les partages (Facebook, WhatsApp...) — URL absolue obligatoire.
@@ -61,6 +68,14 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Deux judokas se saluant sur le tatami du JCOV" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    {/* Fiche du club pour les moteurs. Ce n'est pas du code exécutable mais un
+        bloc de données : la politique de sécurité du contenu ne s'y applique
+        donc pas, et il n'a pas besoin d'être sorti dans un fichier séparé —
+        les moteurs ne lisent le JSON-LD que s'il est dans la page. */}
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
+    )}
 
     <!-- Icônes générées depuis le logo du club (voir README). Pas de version
          SVG : le logo est une écriture manuscrite, qu'un tracé vectoriel

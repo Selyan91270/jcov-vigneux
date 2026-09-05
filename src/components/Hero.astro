@@ -25,14 +25,21 @@ import { images } from '../data/images.ts';
   <div class="hero__layout relative z-10">
     <div class="hero__content">
       <div class="hero__text">
-        <p class="hero__kicker hero__enter" style="--d:0">Judo Club Olympique de Vigneux</p>
+        {/* Titre de la page. Il était jusqu'ici un simple paragraphe et le
+            logo tenait lieu de titre : l'accueil n'avait donc aucun h1, alors
+            que toutes les autres pages en ont un. Aucun changement visuel —
+            la mise en forme est portée par la classe, pas par la balise. */}
+        <h1 id="hero-title" class="hero__kicker hero__enter" style="--d:0">Judo Club Olympique de Vigneux</h1>
 
+        {/* Décoratif : le titre juste au-dessus énonce déjà le nom du club, et
+            la barre de navigation porte le même logo avec sa description. Le
+            répéter ne ferait que l'entendre trois fois au lecteur d'écran. */}
         <Image
-          id="hero-title"
           class="hero__logo hero__enter"
           style="--d:1"
           src={images.logo}
-          alt="JCOV Vigneux"
+          alt=""
+          aria-hidden="true"
           width={420}
           height={280}
         />
