@@ -1,6 +1,6 @@
 import heroJudo from '../assets/images/hero-judo.jpg';
 import judophoto from '../assets/images/judophoto.png';
-import photodegroupe from '../assets/images/photodegroupe.png';
+import photodegroupe from '../assets/images/photodegroupe.jpg';
 import groupeSanguinet from '../assets/images/groupe-sanguinet.jpg';
 import logo from '../assets/images/logo-jcov.png';
 

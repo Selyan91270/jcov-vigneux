@@ -31,12 +31,16 @@ const prochainsEvenements = evenementsAVenir.slice(0, 4);
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
 // Versions haute définition servies uniquement à la visionneuse plein écran.
+// La largeur est plafonnée à celle du fichier d'origine : demander 1600 px à
+// une photo qui en fait moins ne la rend pas plus nette, elle l'agrandit et
+// la rend floue, pour un fichier plus lourd.
 const fullSize = new Map(
   await Promise.all(
     clubPhotos.map(async (photo) => {
+      const source = images[photo.key as keyof typeof images];
       const large = await getImage({
-        src: images[photo.key as keyof typeof images],
-        width: 1600,
+        src: source,
+        width: Math.min(1600, source.width),
         quality: 82,
       });
       return [photo.key, large.src] as const;
