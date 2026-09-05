@@ -62,3 +62,23 @@ jobs:
     steps:
       - uses: actions/deploy-pages@v4
         id: deployment
+
+      # Prévient Bing et Copilot que les pages ont changé, sans attendre leur
+      # prochain passage. C'est le mécanisme qu'ils réclament nommément dans
+      # leurs règles ; sans lui, un site neuf peut rester des semaines
+      # « connu mais non indexé ».
+      #
+      # Une soumission par adresse plutôt qu'un lot : Bing indique que les
+      # envois au fil de l'eau sont traités plus vite.
+      #
+      # La clé est publique par conception — elle prouve seulement qu'on
+      # contrôle le domaine, puisqu'elle est lisible sur le site lui-même.
+      - name: Signaler les pages à IndexNow
+        run: |
+          KEY=6cd932d74f99d78e2336d063aee9645d
+          for page in "" horaires/ professeurs/ evenements/ galerie/ inscription/ code-moral/; do
+            url="https://jcov.fr/${page}"
+            code=$(curl -s -o /dev/null -w '%{http_code}' \
+              "https://api.indexnow.org/indexnow?url=${url}&key=${KEY}&keyLocation=https://jcov.fr/${KEY}.txt")
+            echo "  ${code}  ${url}"
+          done

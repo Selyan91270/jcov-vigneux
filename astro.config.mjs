@@ -26,6 +26,11 @@ const BASE_PATH = process.env.BASE_PATH?.trim() || '/';
 export default defineConfig({
   site: SITE_URL,
   base: BASE_PATH,
+  // Chaque page est publiée comme `dossier/index.html` : elle n'existe qu'à
+  // l'adresse avec barre finale. On l'impose partout pour que le serveur de
+  // développement se comporte comme l'hébergeur, et qu'un lien sans barre
+  // soit repéré ici plutôt qu'en production.
+  trailingSlash: 'always',
   integrations: [sitemap()],
   build: {
     // Sort les scripts et les styles dans des fichiers externes au lieu de les
