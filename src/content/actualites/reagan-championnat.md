@@ -2,8 +2,8 @@
 title: "Championnat de France Minimes : Reagan à l'honneur"
 date: 2026-02-08
 badge: "Résultat"
-image: "./reagan-championnat.png"
-imageAlt: "Championnat de France Minimes : Reagan à l'honneur"
+image: "./reagan-podium.png"
+imageAlt: "Illustration : un jeune judoka en judogi blanc et ceinture marron, poing levé, brandit sa médaille sur le podium d'une compétition"
 ---
 
 Aujourd'hui avaient lieu les Championnats de France Minimes.
