@@ -39,16 +39,15 @@ jobs:
       # Installe exactement les versions du package-lock.
       - run: npm ci
 
-      # Renseigne l'adresse publique et le sous-dossier depuis la
-      # configuration Pages, pour que les liens, le sitemap et les aperçus de
-      # partage soient corrects quel que soit le nom du dépôt.
+      # Prépare la publication Pages. Ses sorties `origin` et `base_path`
+      # servaient à renseigner l'adresse du site : on ne s'en sert plus.
+      # Elles décrivent l'adresse *GitHub* du dépôt, pas le domaine du club,
+      # et ont continué d'annoncer le sous-dossier /jcov-vigneux après le
+      # branchement de jcov.fr — ce qui a mis le site en panne. L'adresse
+      # publique est désormais fixée dans astro.config.mjs.
       - uses: actions/configure-pages@v5
-        id: pages
 
       - run: npm run build
-        env:
-          SITE_URL: ${{ steps.pages.outputs.origin }}
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -6,15 +6,20 @@ import sitemap from '@astrojs/sitemap';
 
 // Adresse publique du site. C'est le SEUL endroit à modifier le jour où le
 // nom de domaine change : liens canoniques, sitemap et aperçus de partage
-// en découlent. L'hébergeur peut aussi la fournir via la variable SITE_URL,
-// ce qui permet aux déploiements de préversion d'utiliser leur propre URL.
-const SITE_URL = process.env.SITE_URL ?? 'https://jcov-vigneux.fr';
+// en découlent. La variable SITE_URL permet à un déploiement de préversion
+// d'utiliser sa propre adresse sans toucher au fichier.
+const SITE_URL = process.env.SITE_URL ?? 'https://jcov.fr';
 
-// Sous-dossier dans lequel le site est servi. Vaut '/' pour un domaine
-// personnalisé, mais '/nom-du-depot/' sur GitHub Pages quand le dépôt n'est
-// pas un site utilisateur. Renseigné par le workflow de déploiement.
-// GitHub Pages fournit '' pour un site à la racine et '/nom-du-depot' sinon,
-// d'où la normalisation.
+// Sous-dossier dans lequel le site est servi. Le domaine jcov.fr sert le
+// site à la racine : la valeur reste '/'.
+//
+// Elle a longtemps été déduite de la configuration GitHub Pages, qui
+// renvoyait '/jcov-vigneux' tant que le site vivait à l'adresse
+// selyan91270.github.io/jcov-vigneux. Le jour du branchement du domaine,
+// cette déduction a produit une page entièrement blanche : le HTML était
+// bien servi, mais il réclamait ses styles et ses scripts dans un
+// sous-dossier qui n'existe plus à la racine. La valeur est donc fixée ici,
+// et non plus devinée depuis un réglage distant.
 const BASE_PATH = process.env.BASE_PATH?.trim() || '/';
 
 // https://astro.build/config
