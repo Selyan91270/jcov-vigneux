@@ -10,6 +10,9 @@
 
 import type { ImageMetadata } from 'astro';
 import christopheSimeon from '../assets/images/christophe-simeon.jpg';
+// Provisoire : 239 px de côté, juste ce qu'il faut pour la vignette en haute
+// densité. À remplacer par un cliché plus grand si les portraits grandissent.
+import jeanPhilippeBonel from '../assets/images/jean-philippe-bonel.jpg';
 
 export type Coach = {
   id: string;
@@ -25,5 +28,5 @@ export const coaches: Coach[] = [
   { id: 'marc-koeberle', firstName: 'Marc', lastName: 'Koeberle', dan: 7, role: 'Directeur technique' },
   { id: 'franck-koeberle', firstName: 'Franck', lastName: 'Koeberle', dan: 3, role: 'Professeur' },
   { id: 'christophe-simeon', firstName: 'Christophe', lastName: 'Siméon', dan: 2, role: 'Professeur', photo: christopheSimeon },
-  { id: 'jean-philippe-bonel', firstName: 'Jean-Philippe', lastName: 'Bonel', dan: 2, role: 'Professeur' },
+  { id: 'jean-philippe-bonel', firstName: 'Jean-Philippe', lastName: 'Bonel', dan: 2, role: 'Professeur', photo: jeanPhilippeBonel },
 ];
