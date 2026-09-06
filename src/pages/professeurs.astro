@@ -34,7 +34,7 @@ import { committee } from '../data/committee.ts';
           <article class={`coach-card fade-in-up fade-in-up--delay-${(i % 4) + 1}`}>
             <div class="coach-card__photo">
               {coach.photo ? (
-                <img src={coach.photo} alt={`${coach.firstName} ${coach.lastName}`} />
+                <Image src={coach.photo} alt={`${coach.firstName} ${coach.lastName}`} width={208} height={208} />
               ) : (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="8" r="4" />
