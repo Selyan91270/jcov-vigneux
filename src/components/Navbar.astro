@@ -21,8 +21,12 @@ const linkClass = 'navbar__link text-sm uppercase';
             {link.label}
           </a>
         ))}
+        {/* Sept liens occupent déjà la barre : « Voir le formulaire
+            d'inscription » la ferait déborder. « Inscription » est le
+            raccourci le plus juste — c'est le nom de la page visée. Le menu
+            mobile, lui, a la place du libellé complet. */}
         <a href={url("/inscription")} class="navbar__cta">
-          Rejoindre
+          Inscription
         </a>
       </div>
 
@@ -55,7 +59,7 @@ const linkClass = 'navbar__link text-sm uppercase';
             class="navbar__cta navbar__cta--mobile navbar__mobile-link"
             style={`--i:${navLinks.length}`}
           >
-            Rejoindre le club
+            Voir le formulaire d'inscription
           </a>
         </div>
       </div>
