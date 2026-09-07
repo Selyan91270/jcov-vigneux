@@ -47,12 +47,12 @@ import { committee } from '../data/committee.ts';
             <h2 class="coach-card__name">{coach.firstName} {coach.lastName}</h2>
             <p class="coach-card__role">{coach.role}</p>
 
-            {coach.diplomaUrl ? (
+            {/* Rien quand le diplôme n'est pas fourni : une mention « à venir »
+                attirait l'œil sur ce qui manque, quatre fois de suite. */}
+            {coach.diplomaUrl && (
               <a href={coach.diplomaUrl} target="_blank" rel="noopener noreferrer" class="coach-card__diploma coach-card__diploma--active">
                 Voir le diplôme d'État
               </a>
-            ) : (
-              <span class="coach-card__diploma">Diplôme d'État — à venir</span>
             )}
           </article>
         ))}

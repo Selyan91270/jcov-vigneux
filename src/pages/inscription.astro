@@ -56,6 +56,35 @@ const etapes = [
         </p>
       </div>
 
+      {/* Avant « comment s'inscrire », la question que se pose vraiment un
+          parent : « concrètement, il se passe quoi si je viens mardi ? ».
+          Aucun club des environs n'y répond, et c'est pourtant ce qui décide
+          quelqu'un à franchir la porte du dojo. */}
+      <h2 class="inscription-title fade-in-up">Votre première séance</h2>
+
+      <ul class="inscription-premiere">
+        <li>
+          <span class="inscription-premiere__label">Ce qu'il faut apporter</span>
+          Rien de particulier&nbsp;: un survêtement ou un short et un tee-shirt suffisent pour
+          les deux cours d'essai. Le judogi ne s'achète qu'une fois l'inscription décidée.
+        </li>
+        <li>
+          <span class="inscription-premiere__label">En arrivant</span>
+          Présentez-vous au professeur avant le début du cours. On se déchausse au bord du
+          tatami&nbsp;: prévoyez des chaussettes ou des sandales pour les vestiaires.
+        </li>
+        <li>
+          <span class="inscription-premiere__label">Pendant le cours</span>
+          De 45 minutes pour les plus jeunes à 1h30 pour les adultes. Échauffement, travail
+          technique, puis mise en pratique. Personne n'est jeté dans le bain&nbsp;: on commence
+          par apprendre à tomber sans se faire mal.
+        </li>
+        <li>
+          <span class="inscription-premiere__label">Les parents</span>
+          Vous pouvez rester observer le premier cours depuis le bord du tatami.
+        </li>
+      </ul>
+
       <h2 class="inscription-title fade-in-up">Préparer sa fiche à la maison</h2>
 
       <ol class="inscription-steps">
@@ -148,6 +177,34 @@ const etapes = [
     font-weight: 700;
     color: #0f172a;
     margin-bottom: 1.75rem;
+  }
+
+  /* Quatre réponses courtes, pas une brochure : l'intitulé porte la question,
+     le texte tient en deux lignes. Une barre bleue à gauche plutôt qu'une
+     carte, pour ne pas concurrencer visuellement les étapes numérotées qui
+     suivent — elles, elles appellent une action. */
+  .inscription-premiere {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0 0 3.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .inscription-premiere li {
+    padding-left: 1.1rem;
+    border-left: 3px solid var(--brand-ice);
+    color: #475569;
+    line-height: 1.7;
+  }
+
+  .inscription-premiere__label {
+    display: block;
+    margin-bottom: 0.15rem;
+    font-family: var(--ff-head);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--brand-700);
   }
 
   .inscription-steps {

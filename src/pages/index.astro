@@ -12,6 +12,7 @@ import EventCard from '../components/EventCard.astro';
 import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 import { ficheClub } from '../lib/structuredData.ts';
+import { estAVenir } from '../lib/events.ts';
 
 const actualites = (await getCollection('actualites')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -19,9 +20,8 @@ const actualites = (await getCollection('actualites')).sort(
 
 // Les deux prochains rendez-vous seulement : l'accueil donne un aperçu,
 // la page Événements garde la liste complète.
-const now = new Date();
 const evenementsAVenir = (await getCollection('evenements'))
-  .filter((e) => e.data.date >= now)
+  .filter((e) => estAVenir(e.data.date))
   .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 
 // Quatre sont rendus mais deux seulement s'affichent : si les premiers sont
@@ -135,15 +135,15 @@ const ficheJcov = ficheClub({
     <div class="band-blue__glow" aria-hidden="true"></div>
     <div class="grain-overlay" aria-hidden="true"></div>
 
-    <div class="band-blue__content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <span class="section-eyebrow section-eyebrow--on-dark justify-center mb-3 fade-in-up">Planning</span>
-      <h2 class="band-blue__title section-title font-bold mt-4 mb-4 fade-in-up">
+    <div class="band-blue__content fade-in-up max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="section-eyebrow section-eyebrow--on-dark justify-center mb-3">Planning</span>
+      <h2 class="band-blue__title section-title font-bold mt-4 mb-4">
         Un cours pour chaque âge, de 4 ans à adulte
       </h2>
-      <p class="band-blue__lead text-lg mb-10 max-w-2xl mx-auto fade-in-up fade-in-up--delay-1">
+      <p class="band-blue__lead text-lg mb-10 max-w-2xl mx-auto">
         Indiquez l'âge du futur judoka et trouvez en quelques secondes ses jours de cours et sa cotisation.
       </p>
-      <a href={url("/horaires")} class="classes-teaser__cta fade-in-up fade-in-up--delay-2">
+      <a href={url("/horaires")} class="classes-teaser__cta">
         Voir les horaires &amp; tarifs
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-6-6 6 6-6 6" />
@@ -168,8 +168,8 @@ const ficheJcov = ficheClub({
       </div>
 
       <div class="actualites-grid">
-        {actualites.map((entry, i) => (
-          <article class={`actualites-card fade-in-up fade-in-up--delay-${i + 1}`}>
+        {actualites.map((entry) => (
+          <article class="actualites-card">
             <div class="actualites-card__image">
               <Image
                 src={entry.data.image}
@@ -215,7 +215,7 @@ const ficheJcov = ficheClub({
 
           <div class="home-events" id="home-events">
             {prochainsEvenements.map((event, i) => (
-              <div class={`fade-in-up fade-in-up--delay-${i + 1}`} hidden={i >= 2}>
+              <div hidden={i >= 2}>
                 <EventCard event={event} headingLevel={3} />
               </div>
             ))}
@@ -223,7 +223,7 @@ const ficheJcov = ficheClub({
 
           {/* Toujours affiché : la page Événements donne aussi accès aux
               rendez-vous passés, même quand tout l'agenda tient ici. */}
-          <div class="mt-10 text-center fade-in-up">
+          <div class="mt-10 text-center">
             <a href={url('/evenements')} class="home-events__more home-events__more--on-dark">
               Voir tous les événements
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -248,9 +248,9 @@ const ficheJcov = ficheClub({
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-        {clubPhotos.map((photo, i) => (
+        {clubPhotos.map((photo) => (
           <div
-            class={`card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1 fade-in-up fade-in-up--delay-${i + 1}`}
+            class="card gallery-card-wrapper overflow-hidden rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
             data-lightbox
             data-lightbox-src={fullSize.get(photo.key)}
             role="button"
@@ -268,7 +268,7 @@ const ficheJcov = ficheClub({
             </div>
           </div>
         ))}
-        <div class="gallery-more-note fade-in-up fade-in-up--delay-2">
+        <div class="gallery-more-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="5" width="18" height="14" rx="2" />
             <circle cx="8.5" cy="10" r="1.5" />
@@ -298,17 +298,17 @@ const ficheJcov = ficheClub({
 
   <section id="contact" class="py-20 contact-section">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <span class="section-eyebrow justify-center mb-3 fade-in-up">Nous rejoindre</span>
-      <h2 class="section-title font-bold text-gray-900 mb-6 mt-4 fade-in-up">
+      <span class="section-eyebrow justify-center mb-3">Nous rejoindre</span>
+      <h2 class="section-title font-bold text-gray-900 mb-6 mt-4">
         Rejoignez-nous
       </h2>
 
-      <p class="text-gray-600 text-lg mb-12 max-w-2xl mx-auto fade-in-up fade-in-up--delay-1">
+      <p class="text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
         Venez découvrir le judo au sein du JCOV.<br>
         Une séance d'essai est possible tout au long de l'année.
       </p>
 
-      <div class="contact-card fade-in-up fade-in-up--delay-2">
+      <div class="contact-card fade-in-up">
         {/* Grille à deux colonnes plutôt que trois lignes indépendantes : les
             trois valeurs partagent ainsi la même marge gauche. En centrant
             chaque ligne séparément, l'adresse sur quatre lignes et le
@@ -366,6 +366,8 @@ const ficheJcov = ficheClub({
   // Même principe que sur la page Événements : le tri est figé à la
   // construction, le navigateur le corrige avec la date du jour. Quatre
   // rendez-vous sont présents dans la page, deux sont montrés.
+  import { estAVenir } from '../lib/events.ts';
+
   const container = document.getElementById('home-events');
   const section = document.getElementById('evenements');
 
@@ -375,8 +377,7 @@ const ficheJcov = ficheClub({
 
     for (const wrapper of [...container.children] as HTMLElement[]) {
       const card = wrapper.querySelector<HTMLElement>('[data-event-date]');
-      const date = new Date(card?.dataset.eventDate ?? '').getTime();
-      const aVenir = Number.isFinite(date) && date >= now;
+      const aVenir = estAVenir(card?.dataset.eventDate ?? '', now);
 
       wrapper.hidden = !aVenir || affiches >= 2;
       if (!wrapper.hidden) affiches += 1;

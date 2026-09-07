@@ -3,16 +3,16 @@ import { url } from '../lib/url.ts';
 import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import EventCard from '../components/EventCard.astro';
+import { estAVenir } from '../lib/events.ts';
 
-const now = new Date();
 const allEvents = await getCollection('evenements');
 
 const upcoming = allEvents
-  .filter((e) => e.data.date >= now)
+  .filter((e) => estAVenir(e.data.date))
   .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 
 const past = allEvents
-  .filter((e) => e.data.date < now)
+  .filter((e) => !estAVenir(e.data.date))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -72,6 +72,8 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
   // navigateur, lui, connaît la date du jour : il rebascule ici les
   // événements dont la date vient d'être dépassée, sans attendre une
   // republication.
+  import { estAVenir } from '../lib/events.ts';
+
   const upcoming = document.getElementById('events-upcoming');
   const pastSection = document.getElementById('events-past');
   const pastList = document.getElementById('events-past-list');
@@ -81,7 +83,7 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
     const now = Date.now();
 
     for (const card of [...upcoming.querySelectorAll<HTMLElement>('[data-event-date]')]) {
-      if (new Date(card.dataset.eventDate ?? '').getTime() >= now) continue;
+      if (estAVenir(card.dataset.eventDate ?? '', now)) continue;
 
       const item = document.createElement('li');
       const date = document.createElement('span');
