@@ -746,6 +746,40 @@ html {
   border: 0;
 }
 
+/* ── En-tête des pages intérieures ──
+   Le bloc titre pesait 408 px sur un écran de 800 : la première carte
+   commençait à 60 % de la hauteur visible, et il fallait faire défiler pour
+   voir le contenu de la page. Le rembourrage est resserré, davantage en haut
+   qu'en bas — la barre de navigation fournit déjà une respiration au-dessus,
+   alors que l'espace du bas sépare le titre du contenu et doit rester lisible.
+   Défini ici plutôt qu'en classes utilitaires : les quatre pages concernées
+   partagent le même gabarit, elles ne doivent pas pouvoir diverger. */
+.page-header {
+  padding-top: 2.25rem;
+  padding-bottom: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .page-header {
+    padding-top: 2.75rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* La section qui suit apporte déjà son propre rembourrage haut, qui
+   s'additionnait au nôtre : 133 px séparaient le chapeau de la première
+   carte. Le changement de fond suffit à marquer la frontière, l'espace n'a
+   pas besoin d'être compté deux fois. */
+.page-header + section {
+  padding-top: 3rem;
+}
+
+/* Le sur-titre porte déjà sa marge basse : celle du titre s'ajoutait pour
+   28 px entre deux lignes qui forment un seul bloc. */
+.page-header h1 {
+  margin-top: 0.35rem;
+}
+
 .surface {
   background-color: var(--surface);
 }
