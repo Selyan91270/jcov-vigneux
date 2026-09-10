@@ -13,6 +13,7 @@ import { club, clubPhotos } from '../data/club.ts';
 import { images } from '../data/images.ts';
 import { ficheClub } from '../lib/structuredData.ts';
 import { estAVenir } from '../lib/events.ts';
+import { excerpt } from '../lib/excerpt.ts';
 
 const actualites = (await getCollection('actualites')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -155,7 +156,7 @@ const ficheJcov = ficheClub({
   <!-- Actualités du club -->
   <SectionDivider from="var(--surface-deep)" to="var(--surface-soft)" flip />
 
-  <section class="actualites-section">
+  <section id="actualites" class="actualites-section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Actualités du club</span>
@@ -182,8 +183,14 @@ const ficheJcov = ficheClub({
             </div>
             <div class="actualites-card__content">
               <p class="actualites-card__date">{dateFormatter.format(entry.data.date)}</p>
-              <h3 class="actualites-card__title">{entry.data.title}</h3>
-              <div class="actualites-card__text" set:html={entry.rendered?.html} />
+              <h3 class="actualites-card__title">
+                {/* Le lien porte sur le titre et couvre la carte entière via
+                    ::after : toute la carte devient cliquable sans emboîter
+                    un lien autour d'autres liens. */}
+                <a href={url(`/actualites/${entry.id}`)} class="actualites-card__link">{entry.data.title}</a>
+              </h3>
+              <p class="actualites-card__text">{excerpt(entry.body ?? '')}</p>
+              <span class="actualites-card__more" aria-hidden="true">Lire la suite</span>
             </div>
           </article>
         ))}
@@ -268,14 +275,6 @@ const ficheJcov = ficheClub({
             </div>
           </div>
         ))}
-        <div class="gallery-more-note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="14" rx="2" />
-            <circle cx="8.5" cy="10" r="1.5" />
-            <path d="M21 15l-5-5-9 9" />
-          </svg>
-          <p>D'autres photos du club et de nos judokas arrivent bientôt !</p>
-        </div>
       </div>
 
       <div class="mt-10 text-center">

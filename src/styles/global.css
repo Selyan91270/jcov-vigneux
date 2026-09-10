@@ -814,6 +814,57 @@ html {
   }
 }
 
+/* Trois colonnes sur grand écran : à deux, une troisième actualité restait
+   seule sur sa ligne avec une demi-largeur de vide à côté. */
+@media (min-width: 1024px) {
+  .actualites-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Toute la carte est cliquable, mais un seul lien existe — celui du titre.
+   Emboîter la carte dans une balise de lien aurait avalé les autres liens
+   et rendu le titre illisible pour un lecteur d'écran. */
+.actualites-card {
+  position: relative;
+}
+
+.actualites-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.actualites-card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.actualites-card:hover .actualites-card__link {
+  color: var(--brand-700);
+}
+
+.actualites-card__more {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.9rem;
+  color: var(--brand-700);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.actualites-card__more::after {
+  content: '→';
+  margin-left: 0.4rem;
+  transition: transform 0.25s ease;
+}
+
+.actualites-card:hover .actualites-card__more::after {
+  transform: translateX(3px);
+}
+
 .actualites-card {
   background: #ffffff;
   border: 1px solid rgba(3,29,56,0.11);

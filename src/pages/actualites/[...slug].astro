@@ -1,0 +1,169 @@
+---
+// Une page par actualité.
+//
+// Les cartes de l'accueil portaient l'article entier faute d'endroit où le
+// lire. Chaque actualité a maintenant son adresse : la carte peut se
+// contenter d'un extrait, le lien devient partageable sur Facebook, et le
+// site gagne autant de pages de contenu réel.
+
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import MainLayout from '../../layouts/MainLayout.astro';
+import { url } from '../../lib/url.ts';
+import { excerpt } from '../../lib/excerpt.ts';
+
+export async function getStaticPaths() {
+  const actualites = await getCollection('actualites');
+  return actualites.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+// Les autres actualités, pour ne pas laisser le lecteur en cul-de-sac.
+const autres = (await getCollection('actualites'))
+  .filter((a) => a.id !== entry.id)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+---
+
+<MainLayout
+  title={`${entry.data.title} | JCOV Vigneux-sur-Seine`}
+  description={excerpt(entry.body ?? '', 155)}
+>
+  <article class="article">
+    <header class="page-header bg-white">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <a href={url("/#actualites")} class="back-link inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-jcov hover:text-jcov-dark">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6" />
+          </svg>
+          Toutes les actualités
+        </a>
+        <span class="section-eyebrow mb-3">{entry.data.badge}</span>
+        <h1 class="article__title">{entry.data.title}</h1>
+        <p class="article__date">
+          <time datetime={entry.data.date.toISOString()}>{dateFormatter.format(entry.data.date)}</time>
+        </p>
+      </div>
+    </header>
+
+    <div class="article__body">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <Image
+          src={entry.data.image}
+          alt={entry.data.imageAlt}
+          width={960}
+          height={720}
+          class="article__photo"
+        />
+
+        <div class="article__text">
+          <Content />
+        </div>
+
+        {autres.length > 0 && (
+          <aside class="article__more">
+            <h2 class="article__more-title">À lire aussi</h2>
+            <ul>
+              {autres.map((a) => (
+                <li>
+                  <a href={url(`/actualites/${a.id}`)}>{a.data.title}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+      </div>
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .article__title {
+    margin: 0.35rem 0 0.75rem;
+    font-family: var(--ff-head);
+    font-size: clamp(2rem, 4.4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    color: #0f172a;
+  }
+
+  .article__date {
+    color: #64748b;
+    font-size: 0.95rem;
+  }
+
+  .article__body {
+    padding-bottom: 4rem;
+    background: var(--surface-soft);
+  }
+
+  /* La photo chevauche la frontière entre l'en-tête blanc et le fond de
+     l'article : elle fait la couture, plutôt que de laisser une bande vide. */
+  .article__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: -2.5rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .article__text {
+    margin-top: 2.5rem;
+    color: #334155;
+    font-size: 1.08rem;
+    line-height: 1.75;
+  }
+
+  .article__text :global(p) {
+    margin-bottom: 1.1rem;
+  }
+
+  .article__text :global(strong) {
+    color: #0f172a;
+  }
+
+  .article__more {
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgba(3, 29, 56, 0.1);
+  }
+
+  .article__more-title {
+    font-family: var(--ff-head);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--brand-700);
+    margin-bottom: 0.75rem;
+  }
+
+  .article__more ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .article__more a {
+    color: #0f172a;
+    font-weight: 600;
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+
+  .article__more a:hover {
+    color: var(--brand-700);
+    text-decoration: underline;
+  }
+</style>
