@@ -16,7 +16,11 @@ export const club = {
     street: '1 bis rue du Maréchal Leclerc',
     city: '91270 Vigneux-sur-Seine',
   },
+  // Réseaux sociaux du club. Ils servent à la fois au pied de page et au
+  // `sameAs` des données structurées : c'est ce qui permet aux moteurs de
+  // relier le site, la page Facebook et le compte Instagram à une même entité.
   facebook: 'https://www.facebook.com/JCOVigneux',
+  instagram: 'https://www.instagram.com/jcovigneux/',
 } as const;
 
 // Informations légales obligatoires (LCEN, art. 6-III). Regroupées ici pour

@@ -108,7 +108,7 @@ export function ficheClub({ site, logo, image }: { site: URL; logo: string; imag
       '@type': 'City',
       name: 'Vigneux-sur-Seine',
     },
-    sameAs: [club.facebook],
+    sameAs: [club.facebook, club.instagram],
     openingHoursSpecification: horaires(),
   };
 }
