@@ -3,7 +3,7 @@ import { url } from '../lib/url.ts';
 import MainLayout from '../layouts/MainLayout.astro';
 import { club } from '../data/club.ts';
 import { inscription } from '../data/inscription.ts';
-import { federationFee, practicalNotes } from '../data/schedule.ts';
+import { practicalNotes } from '../data/schedule.ts';
 
 const etapes = [
   {
@@ -133,7 +133,7 @@ const etapes = [
         <h2 class="inscription-alt__title">Bon à savoir</h2>
         <ul>
           {practicalNotes.map((note) => <li>{note}</li>)}
-          <li>La licence fédérale ({federationFee} €) est comprise dans la cotisation annuelle.</li>
+          <li>La licence fédérale est comprise dans la cotisation annuelle.</li>
         </ul>
         <p class="inscription-infos__contact">
           Une question ? <a href={`tel:${club.phone.replace(/\s/g, '')}`}>{club.phone}</a>

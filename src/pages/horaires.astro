@@ -1,12 +1,12 @@
 ---
 import { url } from '../lib/url.ts';
 import MainLayout from '../layouts/MainLayout.astro';
-import { ageGroups, complementaryCourses, pricing, federationFee, practicalNotes, minGroupAge } from '../data/schedule.ts';
+import { ageGroups, complementaryCourses, pricing, practicalNotes, minGroupAge } from '../data/schedule.ts';
 
 // Le sélecteur ne travaille que sur les tranches d'âge : les cours
 // complémentaires ne dépendent pas de l'âge et ne changent pas la
 // cotisation, ils restent dans le planning complet plus bas.
-const scheduleData = JSON.stringify({ ageGroups, federationFee });
+const scheduleData = JSON.stringify({ ageGroups });
 ---
 
 <MainLayout
@@ -127,7 +127,7 @@ const scheduleData = JSON.stringify({ ageGroups, federationFee });
         <span class="section-eyebrow justify-center mb-3">Tarifs</span>
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">Cotisations annuelles</h2>
         <p class="mt-4 max-w-2xl mx-auto text-gray-600">
-          La licence fédérale ({federationFee} €) est déjà comprise dans chaque tarif ci-dessous.
+          La licence fédérale est déjà comprise dans chaque tarif ci-dessous.
         </p>
       </div>
 
@@ -184,9 +184,8 @@ const scheduleData = JSON.stringify({ ageGroups, federationFee });
     };
 
     const dataEl = document.getElementById('schedule-data');
-    const { ageGroups, federationFee } = JSON.parse(dataEl?.textContent ?? '{}') as {
+    const { ageGroups } = JSON.parse(dataEl?.textContent ?? '{}') as {
       ageGroups: AgeGroup[];
-      federationFee: number;
     };
 
     const form = document.getElementById('age-form') as HTMLFormElement | null;
@@ -236,7 +235,6 @@ const scheduleData = JSON.stringify({ ageGroups, federationFee });
         ${sessionsMarkup(group.sessions)}
         <div class="finder-result__price">
           Cotisation annuelle pour ce cours&nbsp;: <strong>${group.price} €</strong>
-          <span>(dont ${federationFee} € de licence fédérale)</span>
         </div>
       `;
       bringIntoView(resultBox);
@@ -530,13 +528,6 @@ const scheduleData = JSON.stringify({ ageGroups, federationFee });
   .finder-result :global(.finder-result__price strong) {
     font-size: 1.25rem;
     color: var(--brand-sky);
-  }
-
-  .finder-result :global(.finder-result__price span) {
-    display: block;
-    margin-top: 0.3rem;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.75);
   }
 
   /* ── Tous les horaires ── */

@@ -119,8 +119,6 @@ export const complementaryCourses = [
   },
 ] as const;
 
-export const federationFee = 75;
-
 export const pricing = [
   { label: 'Éveil Judo', detail: '1 cours par semaine', price: 185 },
   { label: 'École de Judo', detail: '2 cours par semaine, de 6 à 13 ans', price: 240 },
