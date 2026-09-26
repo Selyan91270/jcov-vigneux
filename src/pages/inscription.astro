@@ -87,34 +87,41 @@ const etapes = [
 
       <h2 class="inscription-title fade-in-up">Préparer sa fiche à la maison</h2>
 
+      {/* Le bouton était sous la liste : l'étape 1 disait « Téléchargez la
+          fiche » sans rien à cliquer, et il fallait lire les trois étapes
+          avant de trouver le moyen de faire la première. L'action est
+          maintenant dans l'étape qui la demande. */}
       <ol class="inscription-steps">
         {etapes.map((etape, i) => (
-          <li class={`inscription-step fade-in-up fade-in-up--delay-${i + 1}`}>
+          <li
+            id={i === 0 ? 'telecharger' : undefined}
+            class={`inscription-step fade-in-up fade-in-up--delay-${i + 1}`}
+          >
             <span class="inscription-step__num" aria-hidden="true">{i + 1}</span>
             <div>
               <h3 class="inscription-step__title">{etape.titre}</h3>
               <p class="inscription-step__text">{etape.texte}</p>
+
+              {i === 0 && (inscription.ficheUrl ? (
+                <div class="inscription-step__action">
+                  <a href={url(inscription.ficheUrl)} download class="inscription-download__btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+                      <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                    </svg>
+                    Télécharger la fiche
+                  </a>
+                  <span class="inscription-step__hint">{inscription.ficheInfo}</span>
+                </div>
+              ) : (
+                <p class="inscription-step__hint inscription-step__hint--seule">
+                  La fiche est à retirer directement au dojo auprès du comité de direction.
+                </p>
+              ))}
             </div>
           </li>
         ))}
       </ol>
-
-      <div class="inscription-download fade-in-up">
-        {inscription.ficheUrl ? (
-          <a href={url(inscription.ficheUrl)} download class="inscription-download__btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
-              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
-            </svg>
-            Télécharger la fiche d'inscription
-          </a>
-          <p class="inscription-download__info">{inscription.ficheInfo}</p>
-        ) : (
-          <p class="inscription-download__info">
-            La fiche est à retirer directement au dojo auprès du comité de direction.
-          </p>
-        )}
-      </div>
 
       <div class="inscription-alt fade-in-up">
         <h2 class="inscription-alt__title">Ou tout faire sur place</h2>
@@ -210,7 +217,9 @@ const etapes = [
   .inscription-steps {
     list-style: none;
     padding: 0;
-    margin: 0 0 2.5rem;
+    /* La marge du bloc de téléchargement supprimé se reporte ici : c'est
+       désormais la liste qui précède « Ou tout faire sur place ». */
+    margin: 0 0 3.5rem;
     display: grid;
     gap: 1.25rem;
   }
@@ -254,9 +263,22 @@ const etapes = [
     line-height: 1.6;
   }
 
-  .inscription-download {
-    text-align: center;
-    margin-bottom: 3.5rem;
+  .inscription-step__action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.9rem;
+    margin-top: 1.1rem;
+  }
+
+  .inscription-step__hint {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .inscription-step__hint--seule {
+    margin-top: 0.9rem;
   }
 
   .inscription-download__btn {
@@ -286,12 +308,6 @@ const etapes = [
     width: 1.2rem;
     height: 1.2rem;
     flex-shrink: 0;
-  }
-
-  .inscription-download__info {
-    margin: 0.75rem 0 0;
-    color: #64748b;
-    font-size: 0.85rem;
   }
 
   .inscription-alt,
