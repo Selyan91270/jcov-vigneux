@@ -40,9 +40,26 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
 
   <section class="py-16 sm:py-20 bg-gray-50 border-t border-gray-100">
     <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <p class="events-empty fade-in-up" id="events-empty" hidden={upcoming.length > 0}>
-        Aucun événement à venir pour le moment — revenez bientôt !
-      </p>
+      {/* « Aucun événement à venir » était une phrase grise seule au milieu
+          d'une page vide. Or « Événements » est l'un des sept onglets du
+          menu : quand l'agenda est creux — ce qui est le cas la plupart de
+          l'année — un visiteur clique et tombe sur rien. L'encadré dit la
+          même chose, mais renvoie vers ce qui existe. */}
+      <div class="events-empty fade-in-up" id="events-empty" hidden={upcoming.length > 0}>
+        <svg class="events-empty__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2.5" />
+          <path d="M3 10h18M8 3v4M16 3v4" />
+        </svg>
+        <h2 class="events-empty__title">Rien d'annoncé pour l'instant</h2>
+        <p class="events-empty__text">
+          Le prochain rendez-vous n'est pas encore fixé. Les cours, eux, ont lieu toute la
+          semaine, et les résultats du club sont publiés au fil de la saison.
+        </p>
+        <div class="events-empty__links">
+          <a href={url('/horaires')} class="events-empty__btn">Voir les horaires</a>
+          <a href={url('/#actualites')} class="events-empty__btn events-empty__btn--ghost">Les actualités du club</a>
+        </div>
+      </div>
 
       <div class="events-list" id="events-upcoming">
         {upcoming.map((event, i) => (
@@ -103,10 +120,77 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', da
 
 <style>
   .events-empty {
+    background: #fff;
+    border: 1px solid rgba(3, 29, 56, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 3rem 2rem;
     text-align: center;
+  }
+
+  .events-empty__icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0 auto 1.25rem;
+    color: var(--brand-accent);
+  }
+
+  .events-empty__title {
+    font-family: var(--ff-head);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.6rem;
+  }
+
+  .events-empty__text {
+    max-width: 34rem;
+    margin: 0 auto;
     color: #64748b;
-    font-size: 1.05rem;
-    padding: 2rem 0;
+    line-height: 1.7;
+  }
+
+  .events-empty__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .events-empty__btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--btn-height);
+    padding: 0 1.5rem;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .events-empty__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .events-empty__btn--ghost {
+    background: none;
+    border: 1px solid rgba(3, 29, 56, 0.16);
+    color: var(--brand-700);
+    box-shadow: none;
+  }
+
+  .events-empty__btn--ghost:hover {
+    border-color: var(--brand-accent);
+    background: var(--brand-ice);
+    box-shadow: none;
   }
 
   .events-list {

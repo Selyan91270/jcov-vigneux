@@ -350,7 +350,7 @@ const ficheJcov = ficheClub({
 
         <a
           href={`mailto:${club.email}`}
-          class="inline-block mt-8 bg-jcov text-white font-semibold px-8 py-3 rounded-xl hover:bg-jcov-dark transition-colors tracking-wide uppercase text-sm shadow-md shadow-jcov/25 hover:shadow-lg hover:shadow-jcov/30"
+          class="inline-block mt-8 bg-jcov text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-jcov-dark transition-colors tracking-wide uppercase text-sm shadow-md shadow-jcov/25 hover:shadow-lg hover:shadow-jcov/30"
         >
           Nous contacter
         </a>
@@ -400,9 +400,9 @@ const ficheJcov = ficheClub({
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 3.25rem;
+    min-height: var(--btn-height);
     padding: 0 2rem;
-    border-radius: 0.75rem;
+    border-radius: var(--radius-sm);
     background: #ffffff;
     color: var(--brand-800, #063a5c);
     font-size: 0.875rem;
@@ -428,10 +428,10 @@ const ficheJcov = ficheClub({
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 44px;
+    min-height: var(--btn-height);
     padding: 0 1.5rem;
     border: 1.5px solid var(--brand-700);
-    border-radius: 0.75rem;
+    border-radius: var(--radius-sm);
     color: var(--brand-700);
     font-size: 0.85rem;
     font-weight: 700;

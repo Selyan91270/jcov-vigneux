@@ -133,7 +133,7 @@ const linkClass = 'navbar__link text-sm uppercase';
     right: 100%;
     bottom: -6px;
     height: 2px;
-    border-radius: 2px;
+    border-radius: var(--radius-bar);
     background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
     transition: right 250ms ease;
   }
@@ -165,7 +165,7 @@ const linkClass = 'navbar__link text-sm uppercase';
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.55rem 1.15rem;
-    border-radius: 9999px;
+    border-radius: var(--radius-pill);
     box-shadow: 0 8px 20px rgba(11, 114, 173, 0.28);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
@@ -253,7 +253,7 @@ const linkClass = 'navbar__link text-sm uppercase';
     display: block;
     height: 2px;
     width: 100%;
-    border-radius: 2px;
+    border-radius: var(--radius-bar);
     background: currentColor;
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease;
   }

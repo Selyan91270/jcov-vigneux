@@ -70,10 +70,29 @@
   --shadow-md: 0 12px 40px rgba(2,6,23,0.08);
   --shadow-lg: 0 24px 80px rgba(2,6,23,0.12);
 
-  /* Radius */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
+  /* Rayons d'arrondi.
+     ─────────────────
+     Trois rayons étaient définis ici, et le reste du site en écrivait neuf
+     autres à la main : 10, 12, 13,6, 14,4, 16, 20 et 24 px cohabitaient,
+     parfois trois sur une même page. Personne ne le remarque bouton par
+     bouton ; c'est l'accumulation qui fait qu'un site paraît assemblé plutôt
+     que dessiné.
+
+     La règle, désormais, tient en une phrase par ligne. On n'écrit plus de
+     valeur en dur : si aucune ne convient, c'est l'échelle qu'il faut
+     discuter. */
+  /* Hauteur des boutons d'appel à l'action dans le contenu. Ils mesuraient
+     44, 48 et 52 px selon la rubrique. La chrome de navigation — pastille de
+     la barre du haut, boutons du pied de page — garde sa propre échelle,
+     plus compacte, et n'est pas concernée. */
+  --btn-height: 3rem;      /* 48px */
+
+  --radius-bar: 2px;       /* barres et soulignements décoratifs */
+  --radius-xs: 0.25rem;    /* 4px  — micro-étiquettes (grade, catégorie) */
+  --radius-sm: 0.75rem;    /* 12px — boutons, champs, petits blocs */
+  --radius-md: 1rem;       /* 16px — cartes de contenu */
+  --radius-lg: 1.5rem;     /* 24px — grands panneaux */
+  --radius-pill: 999px;    /* pastilles et ronds */
 
   /* Misc */
   --max-content-width: 72rem;
@@ -107,7 +126,7 @@ h1,h2,h3,h4,h5 {
 /* Elevated card and button styles */
 .card { background: #fff; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
 .elevated { box-shadow: var(--shadow-md); }
-.btn-primary { background: linear-gradient(90deg,var(--brand-700),var(--brand-accent)); color: #fff; padding: 0.6rem 1rem; border-radius: 0.6rem; display:inline-flex; align-items:center; gap:0.5rem; border: none; cursor: pointer; }
+.btn-primary { background: linear-gradient(90deg,var(--brand-700),var(--brand-accent)); color: #fff; padding: 0.6rem 1rem; border-radius: var(--radius-sm); display:inline-flex; align-items:center; gap:0.5rem; border: none; cursor: pointer; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
 /* Subtle site-wide accent for separators */
@@ -119,7 +138,7 @@ h1,h2,h3,h4,h5 {
   border: 1px solid rgba(255,255,255,0.08);
   color: var(--text-on-dark);
   padding: 0.6rem 1rem;
-  border-radius: 0.6rem;
+  border-radius: var(--radius-sm);
 }
 .btn-secondary:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
@@ -128,7 +147,7 @@ h1,h2,h3,h4,h5 {
 .nav-link-accent:hover { color: var(--brand-accent); }
 
 /* Hero accent underline */
-.hero-accent { display:inline-block; height:4px; width:48px; border-radius:2px; background: linear-gradient(90deg,var(--brand-700),var(--brand-accent)); margin-top:0.6rem; }
+.hero-accent { display:inline-block; height:4px; width:48px; border-radius: var(--radius-bar); background: linear-gradient(90deg,var(--brand-700),var(--brand-accent)); margin-top:0.6rem; }
 
 /* Generic card utility for consistent radius/shadow */
 .card--rounded { border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
@@ -290,7 +309,7 @@ html {
 
 .hero__btn {
   align-items: center;
-  border-radius: 0.625rem;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   font-size: 0.8125rem;
   font-weight: 700;
@@ -417,7 +436,7 @@ html {
   content: '';
   width: 2rem;
   height: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-bar);
   background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
 }
 
@@ -654,7 +673,7 @@ html {
 .grade-badge {
   display: inline-flex;
   align-items: stretch;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-xs);
   overflow: hidden;
   font-family: var(--ff-head);
   line-height: 1;
@@ -868,7 +887,7 @@ html {
 .actualites-card {
   background: #ffffff;
   border: 1px solid rgba(3,29,56,0.11);
-  border-radius: 1rem;
+  border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(3, 29, 56, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -912,7 +931,7 @@ html {
   left: 1rem;
   display: inline-flex;
   align-items: center;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-xs);
   background: rgba(255, 255, 255, 0.97);
   border-left: 3px solid var(--brand-accent);
   color: #0f172a;
@@ -972,7 +991,7 @@ html {
 .about__collage-secondary {
   position: relative;
   overflow: hidden;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
 }
 
@@ -1015,38 +1034,11 @@ html {
 }
 
 /* ── Galerie ── */
-.gallery-more-note {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  text-align: center;
-  padding: 2rem 1.5rem;
-  border-radius: 1rem;
-  border: 1.5px dashed rgba(11, 114, 173, 0.28);
-  background: var(--brand-ice);
-  color: var(--brand-700);
-  min-height: 12rem;
-}
-
-.gallery-more-note svg {
-  width: 2rem;
-  height: 2rem;
-  opacity: 0.8;
-}
-
-.gallery-more-note p {
-  font-size: 0.9rem;
-  font-weight: 600;
-  max-width: 16rem;
-}
-
 /* ── Horaires ── */
 .schedule-card {
   position: relative;
   background: #fff;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-md);
   padding: 2.25rem 2rem;
   border: 1px solid rgba(3, 29, 56, 0.08);
   box-shadow: var(--shadow-sm);
@@ -1101,7 +1093,7 @@ html {
   position: relative;
   background: #fff;
   padding: 2.5rem 2rem;
-  border-radius: 1.5rem;
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(3, 29, 56, 0.08);
   box-shadow: var(--shadow-lg);
   max-width: 28rem;
