@@ -12,6 +12,14 @@ import { url } from '../lib/url.ts';
 // Importation des styles globaux (Tailwind)
 import '../styles/global.css';
 
+// Adresses finales des deux polices du texte courant, pour les précharger.
+// Le navigateur ne découvre une police qu'après avoir lu la feuille de style
+// puis trouvé du texte qui l'utilise ; la précharger lui fait commencer le
+// téléchargement dès la lecture de la page, et évite que le texte change
+// d'aspect une fois la police arrivée.
+import interLatin from '../assets/fonts/inter-latin-wght-normal.woff2?url';
+import oswaldLatin from '../assets/fonts/oswald-latin-wght-normal.woff2?url';
+
 // Props du layout
 interface Props {
   title?: string;
@@ -53,7 +61,7 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
          donc réservés aux hébergeurs qui acceptent les en-têtes. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'"
     />
 
     <!-- Aperçu des liens partagés (Facebook, WhatsApp, Messenger...) -->
@@ -83,12 +91,10 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <link rel="icon" href={url('/favicon.ico')} sizes="16x16 32x32 48x48 64x64" />
     <link rel="icon" type="image/png" href={url('/icon-512.png')} sizes="512x512" />
     <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Oswald:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <!-- `crossorigin` est obligatoire, même pour une police du même site : sans
+         lui le navigateur télécharge le fichier deux fois. -->
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={oswaldLatin} as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
   </head>
 
