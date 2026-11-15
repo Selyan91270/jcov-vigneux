@@ -75,11 +75,13 @@ jobs:
           key: instagram-${{ github.run_id }}
           restore-keys: instagram-
 
-      # Sans le secret INSTAGRAM_TOKEN, cette étape ne fait rien et ne fait
-      # jamais échouer la publication : voir scripts/sync-instagram.mjs.
+      # Sans aucun des deux secrets (INSTAGRAM_FEED_URL pour un flux Behold,
+      # INSTAGRAM_TOKEN pour l'API officielle), cette étape ne fait rien et ne
+      # fait jamais échouer la publication : voir scripts/sync-instagram.mjs.
       - name: Synchroniser les publications Instagram
         run: node scripts/sync-instagram.mjs
         env:
+          INSTAGRAM_FEED_URL: ${{ secrets.INSTAGRAM_FEED_URL }}
           INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
 
       - run: npm run build

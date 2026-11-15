@@ -93,26 +93,38 @@ Les événements passés basculent automatiquement dans « Événements passés 
 
 ### Flux Instagram
 
-La section « Allez nous suivre là-bas » de l'accueil renvoie vers [@jcovigneux](https://www.instagram.com/jcovigneux/) et, quand le flux est branché, affiche les six dernières publications du compte.
+La section « Allez nous suivre là-bas » de l'accueil renvoie vers [@jcovigneux](https://www.instagram.com/jcovigneux/) et, quand une source est branchée, affiche les six dernières publications du compte, mises à jour **automatiquement chaque nuit**.
 
 **Sans rien configurer**, la section existe déjà : elle présente le compte et le bouton. Rien ne casse, rien n'est vide.
 
-**Pour afficher les publications automatiquement**, le site interroge l'API officielle d'Instagram une fois par nuit (`scripts/sync-instagram.mjs`, lancé par le workflow de publication). Il ne fait pas de *scraping* : la collecte automatisée hors API est interdite par Instagram, bloquée sur les serveurs de GitHub, et casserait au premier changement de leur page. Il faut en revanche un jeton, que seul le titulaire du compte peut générer :
+Le site ne fait pas de *scraping* : la collecte automatisée hors API est interdite par Instagram, bloquée sur les serveurs de GitHub, et la page publique du compte est une coquille JavaScript vide. Il faut donc que le titulaire du compte **autorise un accès, une seule fois**. Deux façons, au choix (le script `scripts/sync-instagram.mjs` gère les deux) :
+
+**Option A — flux Behold (la plus simple, aucun jeton à surveiller)**
+
+1. Créer un compte sur [behold.so](https://behold.so) et y connecter le compte Instagram du club.
+2. Créer un flux **JSON** limité à 6 publications. Laisser vide la liste des domaines autorisés (« domain whitelist »), sinon la récupération depuis GitHub serait refusée.
+3. Copier l'adresse du flux (`https://feeds.behold.so/…`).
+4. Dans le dépôt GitHub : *Settings → Secrets and variables → Actions → New repository secret*, nom **`INSTAGRAM_FEED_URL`**, valeur : cette adresse.
+
+Behold renouvelle lui-même les autorisations. En contrepartie, le site dépend d'un service tiers et de son offre gratuite (à la date de rédaction : un flux, 6 publications, mise à jour quotidienne, 1 200 vues par mois — le site en consomme une trentaine). À vérifier sur leur page de tarifs.
+
+**Option B — jeton officiel d'Instagram (aucun tiers)**
 
 1. Passer le compte Instagram en **compte professionnel** (gratuit : Paramètres → Type de compte et outils).
 2. Sur [developers.facebook.com](https://developers.facebook.com), créer une application, y ajouter le produit **Instagram** (« API avec connexion Instagram »), ajouter le compte du club et **générer un jeton d'accès**.
-3. Dans le dépôt GitHub : *Settings → Secrets and variables → Actions → New repository secret*, nom **`INSTAGRAM_TOKEN`**, valeur : le jeton. Ne jamais le coller ailleurs (ni dans le code, ni dans un message).
-4. *Actions → Déploiement sur GitHub Pages → Run workflow* pour voir le résultat sans attendre la nuit.
+3. Dans le dépôt GitHub, même emplacement que ci-dessus : secret **`INSTAGRAM_TOKEN`**.
 
-Les écrans de Meta changent souvent : si un libellé diffère de ce qui est écrit ici, la documentation officielle d'Instagram fait foi.
+Le jeton dure 60 jours. Le script tente de le renouveler à chaque passage et affiche un avertissement dans l'onglet *Actions* quand il approche de son terme ; si les publications se figent un jour, c'est probablement qu'il a expiré : en générer un nouveau et remplacer le secret.
 
-Ce qu'il faut savoir ensuite :
+Les écrans de Meta et de Behold changent souvent : si un libellé diffère, leur documentation fait foi. Si les deux secrets sont renseignés, le flux Behold est prioritaire.
 
-- **Le jeton dure 60 jours.** Le script le renouvelle à chaque passage et affiche un avertissement dans l'onglet *Actions* quand il approche de son terme. Si un jour les publications se figent, c'est probablement qu'il a expiré : en générer un nouveau et remplacer le secret.
-- **Une panne ne casse jamais le site.** Jeton expiré, Instagram indisponible, réseau coupé : le script le signale et le dernier flux valide reste affiché.
+Dans tous les cas :
+
+- **Une panne ne casse jamais le site.** Adresse invalide, jeton expiré, service indisponible : le script le signale (annotation dans l'onglet *Actions*) et le dernier flux valide reste affiché.
 - **Une publication supprimée sur Instagram disparaît du site** à la synchronisation suivante, images comprises.
-- **Les images sont copiées sur le site** (recadrées en carré, converties en WebP) : le navigateur du visiteur ne contacte pas Instagram avant qu'il clique sur un lien. Le flux n'est pas versionné (`src/data/instagram.generated.json` et `public/instagram/` sont ignorés par Git).
-- **Essai en local** : `INSTAGRAM_TOKEN="…" npm run instagram`, puis `npm run dev`.
+- **Les images sont copiées sur le site** (recadrées en carré, converties en WebP) : le navigateur du visiteur ne contacte ni Instagram ni Behold, sauf s'il clique sur un lien. Le flux n'est pas versionné (`src/data/instagram.generated.json` et `public/instagram/` sont ignorés par Git).
+- **Voir le résultat sans attendre la nuit** : *Actions → Déploiement sur GitHub Pages → Run workflow*.
+- **Essai en local** : `INSTAGRAM_FEED_URL="…" npm run instagram` (ou `INSTAGRAM_TOKEN`), puis `npm run dev`.
 
 ### Icônes du navigateur
 

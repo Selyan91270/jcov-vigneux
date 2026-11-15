@@ -44,7 +44,7 @@ function valide(p: unknown): p is PublicationInstagram {
     typeof x.permalink === 'string' &&
     /^https:\/\/(www\.)?instagram\.com\//.test(x.permalink) &&
     typeof x.image === 'string' &&
-    /^\/instagram\/\d+\.(webp|jpg)$/.test(x.image) &&
+    /^\/instagram\/[\w-]+\.(webp|jpg)$/.test(x.image) &&
     typeof x.date === 'string' &&
     Number.isFinite(new Date(x.date).getTime()) &&
     typeof x.legende === 'string'

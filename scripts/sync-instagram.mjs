@@ -3,32 +3,40 @@
  * Récupère les dernières publications Instagram du club pour les afficher
  * sur l'accueil.
  *
- * Passe par l'API officielle d'Instagram (« Instagram API with Instagram
- * Login ») et non par du scraping : la collecte automatisée hors API est
- * interdite par les conditions d'Instagram, ses serveurs bloquent les
- * adresses de centres de données — dont celles de GitHub Actions — et la
- * page publique change de structure sans préavis. L'API, elle, est stable.
+ * Ni l'une ni l'autre des deux sources ne fait de scraping : la collecte
+ * automatisée hors API est interdite par les conditions d'Instagram, ses
+ * serveurs bloquent les adresses de centres de données — dont celles de
+ * GitHub Actions — et la page publique n'est qu'une coquille JavaScript vide.
+ * Les deux sources s'appuient donc sur l'accès autorisé par le titulaire du
+ * compte :
+ *
+ *   • INSTAGRAM_FEED_URL — l'adresse JSON d'un flux Behold (feeds.behold.so).
+ *     Behold se connecte au compte, renouvelle lui-même les autorisations et
+ *     publie les dernières publications ; il n'y a aucun jeton à surveiller.
+ *     Prioritaire si elle est renseignée.
+ *   • INSTAGRAM_TOKEN — un jeton de l'API officielle d'Instagram (« Instagram
+ *     API with Instagram Login »), valable 60 jours.
  *
  * Ce que fait le script :
- *   1. lit le jeton dans INSTAGRAM_TOKEN (jamais écrit dans un fichier,
- *      jamais affiché) ;
+ *   1. lit la source dans l'environnement (jamais écrite dans un fichier,
+ *      jamais affichée) ;
  *   2. demande les publications les plus récentes ;
  *   3. télécharge chaque image, la recadre en carré et la convertit en WebP
- *      dans public/instagram/ — le site ne contacte donc jamais Instagram à
- *      l'affichage, et les liens d'image d'Instagram, qui expirent, ne
- *      cassent rien ;
+ *      dans public/instagram/ — le site ne contacte donc jamais Instagram ni
+ *      Behold à l'affichage, et les liens d'image, qui expirent, ne cassent
+ *      rien ;
  *   4. écrit src/data/instagram.generated.json, que l'accueil lit ;
  *   5. supprime les images des publications qui ne sont plus au flux : si le
  *      club retire un post, il disparaît du site à la synchronisation
  *      suivante.
  *
- * Il ne fait JAMAIS échouer la publication du site : sans jeton, ou si
- * Instagram répond par une erreur, il le signale et laisse en place le flux
+ * Il ne fait JAMAIS échouer la publication du site : sans source, ou si
+ * elle répond par une erreur, il le signale et laisse en place le flux
  * précédent.
  *
  * Usage local :
- *   $env:INSTAGRAM_TOKEN = "…" ; npm run instagram        (PowerShell)
- *   INSTAGRAM_TOKEN="…" npm run instagram                  (bash)
+ *   $env:INSTAGRAM_FEED_URL = "https://feeds.behold.so/…" ; npm run instagram   (PowerShell)
+ *   INSTAGRAM_TOKEN="…" npm run instagram                                        (bash)
  */
 
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
@@ -42,16 +50,18 @@ const FICHIER_FLUX = `${RACINE}src/data/instagram.generated.json`;
 // script sur un faux serveur sans toucher au vrai compte.
 const API = (process.env.INSTAGRAM_API_BASE ?? 'https://graph.instagram.com').replace(/\/$/, '');
 const JETON = process.env.INSTAGRAM_TOKEN?.trim();
+const ADRESSE_FLUX = process.env.INSTAGRAM_FEED_URL?.trim();
 
 const PUBLICATIONS_MAX = 6;
 const TAILLE_IMAGE = 720;
 const POIDS_IMAGE_MAX = 15 * 1024 * 1024;
 const JOURS_AVANT_AVERTISSEMENT = 14;
 
-/** Efface le jeton de tout texte destiné à un journal public. */
+/** Efface jetons et adresse du flux de tout texte destiné à un journal public. */
 function masquer(texte) {
   let propre = String(texte);
   if (JETON) propre = propre.split(JETON).join('[jeton masqué]');
+  if (ADRESSE_FLUX) propre = propre.split(ADRESSE_FLUX).join('[adresse du flux]');
   return propre.replace(/(access_token=)[^&\s"']+/gi, '$1[jeton masqué]');
 }
 
@@ -71,6 +81,79 @@ async function appeler(adresse) {
   }
   return corps;
 }
+
+/** Une publication, quelle que soit la source, dans une forme unique. */
+function normaliser({ id, permalink, type, horodatage, legende, image }) {
+  return {
+    id: String(id ?? ''),
+    permalink,
+    type: ['VIDEO', 'CAROUSEL_ALBUM'].includes(type) ? type : 'IMAGE',
+    horodatage,
+    legende: typeof legende === 'string' ? legende : '',
+    image,
+  };
+}
+
+/**
+ * Une publication n'est retenue que si on sait la montrer : image présente,
+ * identifiant sans caractère spécial (il sert de nom de fichier), lien vers
+ * instagram.com, date lisible.
+ */
+function exploitable(p) {
+  return (
+    /^[\w-]{1,40}$/.test(p.id) &&
+    typeof p.image === 'string' &&
+    /^https?:\/\//.test(p.image) &&
+    typeof p.permalink === 'string' &&
+    /^https:\/\/(www\.)?instagram\.com\//.test(p.permalink) &&
+    Number.isFinite(new Date(corrigerHorodatage(p.horodatage)).getTime())
+  );
+}
+
+/** L'API officielle renvoie « +0000 » sans deux-points, que certains navigateurs refusent. */
+const corrigerHorodatage = (h) => String(h).replace(/([+-]\d{2})(\d{2})$/, '$1:$2');
+const versIso = (h) => new Date(corrigerHorodatage(h)).toISOString();
+
+// ── Source 1 : flux Behold ──────────────────────────────────────────────────
+
+/** Seules les adresses de Behold sont acceptées — et la machine locale, pour les essais. */
+function adresseFluxAutorisee(adresse) {
+  try {
+    const u = new URL(adresse);
+    return (
+      (u.protocol === 'https:' && u.hostname === 'feeds.behold.so') ||
+      (u.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(u.hostname))
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function depuisFluxBehold() {
+  if (!adresseFluxAutorisee(ADRESSE_FLUX)) {
+    throw new Error("INSTAGRAM_FEED_URL doit être une adresse https://feeds.behold.so/…");
+  }
+  const flux = await appeler(ADRESSE_FLUX);
+  if (!Array.isArray(flux.posts)) throw new Error("réponse du flux inattendue : pas de liste « posts »");
+
+  return flux.posts.map((p) =>
+    normaliser({
+      id: p.id,
+      permalink: p.permalink,
+      type: p.mediaType,
+      horodatage: p.timestamp,
+      legende: p.caption,
+      // Behold publie des versions déjà optimisées ; pour une vidéo, l'image
+      // est sa vignette, jamais le fichier vidéo.
+      image:
+        p.sizes?.large?.mediaUrl ??
+        p.sizes?.medium?.mediaUrl ??
+        (p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl),
+    }),
+  );
+}
+
+// ── Source 2 : API officielle d'Instagram ───────────────────────────────────
 
 /**
  * Prolonge la validité du jeton (60 jours à chaque renouvellement) et
@@ -94,28 +177,28 @@ async function renouvelerJeton() {
   }
 }
 
-async function listerPublications() {
+async function depuisApiOfficielle() {
+  await renouvelerJeton();
   const champs = 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp';
   const r = await appeler(
     `${API}/me/media?fields=${champs}&limit=20&access_token=${encodeURIComponent(JETON)}`,
   );
-  return Array.isArray(r.data) ? r.data : [];
-}
-
-/**
- * Une publication n'est retenue que si on sait la montrer : image présente,
- * identifiant numérique (il sert de nom de fichier), lien vers instagram.com.
- */
-function exploitable(p) {
-  const image = p.media_type === 'VIDEO' ? p.thumbnail_url : p.media_url;
-  return (
-    /^\d+$/.test(String(p.id)) &&
-    typeof image === 'string' &&
-    image.startsWith('http') &&
-    typeof p.permalink === 'string' &&
-    /^https:\/\/(www\.)?instagram\.com\//.test(p.permalink)
+  const brutes = Array.isArray(r.data) ? r.data : [];
+  return brutes.map((p) =>
+    normaliser({
+      // L'API officielle ne produit que des identifiants numériques : tout
+      // autre aspect est un signe de réponse anormale, on l'écarte.
+      id: /^\d+$/.test(String(p.id)) ? p.id : '',
+      permalink: p.permalink,
+      type: p.media_type,
+      horodatage: p.timestamp,
+      legende: p.caption,
+      image: p.media_type === 'VIDEO' ? p.thumbnail_url : p.media_url,
+    }),
   );
 }
+
+// ── Images ──────────────────────────────────────────────────────────────────
 
 async function telechargerImage(adresse) {
   const reponse = await fetch(adresse, { signal: AbortSignal.timeout(30_000) });
@@ -142,9 +225,6 @@ async function preparerImage(octets) {
   }
 }
 
-/** L'API renvoie « +0000 » sans deux-points, que certains navigateurs refusent. */
-const versIso = (horodatage) => new Date(String(horodatage).replace(/([+-]\d{2})(\d{2})$/, '$1:$2')).toISOString();
-
 async function nettoyer(identifiantsGardes) {
   let fichiers = [];
   try {
@@ -160,17 +240,27 @@ async function nettoyer(identifiantsGardes) {
   }
 }
 
+// ── Déroulement ─────────────────────────────────────────────────────────────
+
 async function principal() {
-  if (!JETON) {
-    info("INSTAGRAM_TOKEN absent : le flux Instagram n'est pas mis à jour.");
+  let source;
+  let brutes;
+  if (ADRESSE_FLUX) {
+    source = 'flux Behold';
+    brutes = await depuisFluxBehold();
+  } else if (JETON) {
+    source = 'API officielle Instagram';
+    brutes = await depuisApiOfficielle();
+  } else {
+    info('Ni INSTAGRAM_FEED_URL ni INSTAGRAM_TOKEN : le flux Instagram n\'est pas mis à jour.');
     return;
   }
 
-  await renouvelerJeton();
-
-  const brutes = await listerPublications();
-  const candidates = brutes.filter(exploitable);
-  info(`${brutes.length} publication(s) reçue(s), ${candidates.length} exploitable(s).`);
+  // Les plus récentes d'abord, quel que soit l'ordre de la source.
+  const candidates = brutes
+    .filter(exploitable)
+    .sort((a, b) => new Date(corrigerHorodatage(b.horodatage)) - new Date(corrigerHorodatage(a.horodatage)));
+  info(`Source : ${source}. ${brutes.length} publication(s) reçue(s), ${candidates.length} exploitable(s).`);
 
   await mkdir(DOSSIER_IMAGES, { recursive: true });
 
@@ -181,15 +271,14 @@ async function principal() {
   for (const p of candidates) {
     if (publications.length >= PUBLICATIONS_MAX) break;
     try {
-      const source = p.media_type === 'VIDEO' ? p.thumbnail_url : p.media_url;
-      const { octets, extension } = await preparerImage(await telechargerImage(source));
+      const { octets, extension } = await preparerImage(await telechargerImage(p.image));
       await writeFile(`${DOSSIER_IMAGES}/${p.id}.${extension}`, octets);
       publications.push({
-        id: String(p.id),
+        id: p.id,
         permalink: p.permalink,
-        type: p.media_type,
-        date: versIso(p.timestamp),
-        legende: typeof p.caption === 'string' ? p.caption : '',
+        type: p.type,
+        date: versIso(p.horodatage),
+        legende: p.legende,
         image: `/instagram/${p.id}.${extension}`,
       });
     } catch (e) {
@@ -209,7 +298,7 @@ async function principal() {
 try {
   await principal();
 } catch (e) {
-  // Jeton expiré, panne d'Instagram, réseau coupé… Le flux précédent reste en
-  // place et le site se publie normalement.
+  // Jeton expiré, panne d'Instagram ou de Behold, réseau coupé… Le flux
+  // précédent reste en place et le site se publie normalement.
   avertir(`Synchronisation Instagram impossible, flux conservé : ${e.message}`);
 }
