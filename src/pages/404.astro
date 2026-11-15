@@ -11,7 +11,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     <div class="not-found__inner">
       <p class="not-found__kanji" aria-hidden="true">道</p>
       <p class="section-eyebrow justify-center mb-3">Erreur 404</p>
-      <h1 class="not-found__title">Ippon manqué !</h1>
+      <h1 class="page-title not-found__title">Ippon manqué !</h1>
       <p class="not-found__text">
         La page que vous cherchez n'existe pas ou a été déplacée.
       </p>
@@ -50,17 +50,13 @@ import MainLayout from '../layouts/MainLayout.astro';
 
   .not-found__title {
     position: relative;
-    font-family: var(--ff-head);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
-    color: #0f172a;
     margin: 0.5rem 0 1rem;
   }
 
   .not-found__text {
     position: relative;
-    color: #64748b;
-    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-size: var(--fs-17);
     margin-bottom: 2rem;
   }
 

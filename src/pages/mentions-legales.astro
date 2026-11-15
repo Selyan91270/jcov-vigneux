@@ -18,7 +18,7 @@ import { club, legal } from '../data/club.ts';
       </a>
 
       <span class="section-eyebrow mb-3">JCOV</span>
-      <h1 class="legal-page__title">Mentions légales</h1>
+      <h1 class="page-title legal-page__title">Mentions légales</h1>
 
       <div class="legal-page__content">
         <h2>Éditeur du site</h2>
@@ -73,10 +73,10 @@ import { club, legal } from '../data/club.ts';
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     color: var(--brand-700);
-    font-size: 0.85rem;
+    font-size: var(--fs-14);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--ls-label);
     text-decoration: none;
   }
 
@@ -91,23 +91,19 @@ import { club, legal } from '../data/club.ts';
 
   .legal-page__title {
     margin: 1rem 0 2rem;
-    font-family: var(--ff-head);
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: 800;
-    color: #0f172a;
   }
 
   .legal-page__content h2 {
     margin-top: 2rem;
     margin-bottom: 0.6rem;
-    font-size: 1.1rem;
+    font-size: var(--fs-18);
     font-weight: 700;
     color: var(--brand-700);
   }
 
   .legal-page__content p {
-    color: #475569;
-    line-height: 1.8;
+    color: var(--text-soft);
+    line-height: var(--lh-reading);
   }
 
   .legal-page__content a {
@@ -116,7 +112,7 @@ import { club, legal } from '../data/club.ts';
   }
 
   .legal-page__content em {
-    color: #94a3b8;
+    color: var(--text-muted);
   }
 
   /* Les numéros d'immatriculation se consultent, ils ne se lisent pas :
@@ -138,13 +134,13 @@ import { club, legal } from '../data/club.ts';
 
   .legal-page__facts dt {
     flex: 0 0 10rem;
-    color: #0f172a;
+    color: var(--ink);
     font-weight: 600;
   }
 
   .legal-page__facts dd {
     margin: 0;
-    color: #475569;
+    color: var(--text-soft);
     /* Un numéro d'immatriculation se relève chiffre par chiffre. */
     font-variant-numeric: tabular-nums;
   }

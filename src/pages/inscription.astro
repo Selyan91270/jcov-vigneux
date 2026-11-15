@@ -36,7 +36,7 @@ const etapes = [
         Retour à l'accueil
       </a>
       <span class="section-eyebrow mb-3">Rejoindre le club</span>
-      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mt-4">Inscription</h1>
+      <h1 class="page-title mt-4">Inscription</h1>
       <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
         L'inscription se fait sur papier, au dojo. Deux façons de s'y prendre : préparer la fiche
         chez vous, ou tout régler sur place avec le comité de direction.
@@ -60,7 +60,7 @@ const etapes = [
           parent : « concrètement, il se passe quoi si je viens mardi ? ».
           Aucun club des environs n'y répond, et c'est pourtant ce qui décide
           quelqu'un à franchir la porte du dojo. */}
-      <h2 class="inscription-title fade-in-up">Votre première séance</h2>
+      <h2 class="heading-2 inscription-title fade-in-up">Votre première séance</h2>
 
       <ul class="inscription-premiere">
         <li>
@@ -85,7 +85,7 @@ const etapes = [
         </li>
       </ul>
 
-      <h2 class="inscription-title fade-in-up">Préparer sa fiche à la maison</h2>
+      <h2 class="heading-2 inscription-title fade-in-up">Préparer sa fiche à la maison</h2>
 
       {/* Le bouton était sous la liste : l'étape 1 disait « Téléchargez la
           fiche » sans rien à cliquer, et il fallait lire les trois étapes
@@ -124,7 +124,7 @@ const etapes = [
       </ol>
 
       <div class="inscription-alt fade-in-up">
-        <h2 class="inscription-alt__title">Ou tout faire sur place</h2>
+        <h2 class="heading-panel inscription-alt__title">Ou tout faire sur place</h2>
         <p>
           Pas d'imprimante, ou une question sur le dossier ? Rien n'est obligatoire à préparer
           à l'avance. Présentez-vous au dojo aux horaires des cours : un membre du comité de
@@ -137,7 +137,7 @@ const etapes = [
       </div>
 
       <div class="inscription-infos fade-in-up">
-        <h2 class="inscription-alt__title">Bon à savoir</h2>
+        <h2 class="heading-panel inscription-alt__title">Bon à savoir</h2>
         <ul>
           {practicalNotes.map((note) => <li>{note}</li>)}
           <li>La licence fédérale est comprise dans la cotisation annuelle.</li>
@@ -161,7 +161,7 @@ const etapes = [
     border-radius: var(--radius-md);
     padding: 1.25rem 1.5rem;
     margin-bottom: 3rem;
-    color: #0f172a;
+    color: var(--ink);
   }
 
   .inscription-essai svg {
@@ -174,15 +174,13 @@ const etapes = [
 
   .inscription-essai p {
     margin: 0;
-    line-height: 1.6;
+    line-height: var(--lh-ui);
   }
 
+  /* La typographie vient de .heading-2 et .heading-panel (global.css) ; il ne
+     reste ici que l'espacement propre à cette page. */
   .inscription-title,
   .inscription-alt__title {
-    font-family: var(--ff-head);
-    font-size: 1.65rem;
-    font-weight: 700;
-    color: #0f172a;
     margin-bottom: 1.75rem;
   }
 
@@ -201,15 +199,15 @@ const etapes = [
   .inscription-premiere li {
     padding-left: 1.1rem;
     border-left: 3px solid var(--brand-ice);
-    color: #475569;
-    line-height: 1.7;
+    color: var(--text-soft);
+    line-height: var(--lh-reading);
   }
 
   .inscription-premiere__label {
     display: block;
     margin-bottom: 0.15rem;
     font-family: var(--ff-head);
-    font-size: 0.95rem;
+    font-size: var(--fs-15);
     font-weight: 700;
     color: var(--brand-700);
   }
@@ -245,22 +243,22 @@ const etapes = [
     background: linear-gradient(150deg, var(--brand-900), var(--brand-700));
     color: #fff;
     font-family: var(--ff-head);
-    font-size: 1.2rem;
+    font-size: var(--fs-20);
     font-weight: 700;
   }
 
   .inscription-step__title {
     font-family: var(--ff-head);
-    font-size: 1.15rem;
+    font-size: var(--fs-18);
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ink);
     margin-bottom: 0.35rem;
   }
 
   .inscription-step__text {
     margin: 0;
-    color: #475569;
-    line-height: 1.6;
+    color: var(--text-soft);
+    line-height: var(--lh-ui);
   }
 
   .inscription-step__action {
@@ -273,8 +271,8 @@ const etapes = [
 
   .inscription-step__hint {
     margin: 0;
-    color: #64748b;
-    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-size: var(--fs-14);
   }
 
   .inscription-step__hint--seule {
@@ -290,9 +288,9 @@ const etapes = [
     border-radius: var(--radius-sm);
     background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
     color: #fff;
-    font-size: 0.9rem;
+    font-size: var(--fs-14);
     font-weight: 700;
-    letter-spacing: 0.03em;
+    letter-spacing: var(--ls-button);
     text-transform: uppercase;
     text-decoration: none;
     box-shadow: var(--shadow-sm);
@@ -321,8 +319,8 @@ const etapes = [
 
   .inscription-alt p {
     margin: 0;
-    color: #475569;
-    line-height: 1.7;
+    color: var(--text-soft);
+    line-height: var(--lh-reading);
   }
 
   .inscription-alt__links {
@@ -338,8 +336,8 @@ const etapes = [
     min-height: 44px;
     color: var(--brand-700);
     font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.03em;
+    font-size: var(--fs-14);
+    letter-spacing: var(--ls-button);
     text-transform: uppercase;
     text-decoration: none;
     border-bottom: 2px solid transparent;
@@ -356,15 +354,15 @@ const etapes = [
     padding-left: 1.2rem;
     display: grid;
     gap: 0.6rem;
-    color: #475569;
-    line-height: 1.6;
+    color: var(--text-soft);
+    line-height: var(--lh-ui);
   }
 
   .inscription-infos__contact {
     margin: 1.5rem 0 0;
     padding-top: 1.25rem;
     border-top: 1px solid rgba(3, 29, 56, 0.08);
-    color: #475569;
+    color: var(--text-soft);
   }
 
   .inscription-infos__contact a {

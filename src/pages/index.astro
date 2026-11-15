@@ -15,6 +15,7 @@ import { images } from '../data/images.ts';
 import { ficheClub } from '../lib/structuredData.ts';
 import { estAVenir } from '../lib/events.ts';
 import { excerpt } from '../lib/excerpt.ts';
+import { itineraires } from '../lib/directions.ts';
 
 const actualites = (await getCollection('actualites')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -331,6 +332,17 @@ const ficheJcov = ficheClub({
           <dd class="contact-details__value">
             <span class="sr-only">Adresse : </span>
             {club.address.venue}<br>{club.address.building}<br>{club.address.street}<br>{club.address.city}
+
+            {/* Un lien par application de cartes : sur un téléphone, chacun
+                ouvre directement celle que le visiteur utilise. */}
+            <span class="contact-details__route">
+              <span class="contact-details__route-label">Itinéraire</span>
+              {itineraires.map((i) => (
+                <a href={i.adresse} target="_blank" rel="noopener noreferrer" class="contact-details__route-link">
+                  {i.nom}<span class="sr-only"> (s'ouvre dans un nouvel onglet)</span>
+                </a>
+              ))}
+            </span>
           </dd>
 
           <dt class="contact-details__icon" aria-hidden="true">
@@ -414,10 +426,10 @@ const ficheJcov = ficheClub({
     border-radius: var(--radius-sm);
     background: #ffffff;
     color: var(--brand-800, #063a5c);
-    font-size: 0.875rem;
+    font-size: var(--fs-14);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--ls-button);
     box-shadow: 0 10px 30px rgba(2, 12, 24, 0.35);
     transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
   }
@@ -442,9 +454,9 @@ const ficheJcov = ficheClub({
     border: 1.5px solid var(--brand-700);
     border-radius: var(--radius-sm);
     color: var(--brand-700);
-    font-size: 0.85rem;
+    font-size: var(--fs-14);
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--ls-button);
     text-transform: uppercase;
     text-decoration: none;
     transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;

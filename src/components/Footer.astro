@@ -6,6 +6,7 @@ import { Image } from 'astro:assets';
 import { images } from '../data/images.ts';
 import { club } from '../data/club.ts';
 import { partners } from '../data/partners.ts';
+import { itineraire } from '../lib/directions.ts';
 ---
 
 <footer class="jcov-footer">
@@ -62,7 +63,10 @@ import { partners } from '../data/partners.ts';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
-            {club.address.venue}<br>{club.address.building}<br>{club.address.street}<br>{club.address.city}
+            <span>
+              {club.address.venue}<br>{club.address.building}<br>{club.address.street}<br>{club.address.city}<br>
+              <a href={itineraire} target="_blank" rel="noopener noreferrer" class="jcov-footer__link jcov-footer__route">Itinéraire<span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a>
+            </span>
           </li>
           <li class="flex items-center">
             <svg class="jcov-footer__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,9 +163,9 @@ import { partners } from '../data/partners.ts';
   .jcov-footer__title {
     margin-bottom: 0.5rem;
     color: #ffffff;
-    font-size: 1.1rem;
+    font-size: var(--fs-18);
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--ls-label);
     text-transform: uppercase;
   }
 
@@ -173,16 +177,16 @@ import { partners } from '../data/partners.ts';
 
   .jcov-footer__subtitle {
     margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.7;
+    font-size: var(--fs-14);
+    line-height: var(--lh-reading);
   }
 
   .jcov-footer__heading {
     margin-bottom: 1rem;
     color: #eaf9ff;
-    font-size: 0.82rem;
+    font-size: var(--fs-13);
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: var(--ls-eyebrow-wide);
     text-transform: uppercase;
   }
 
@@ -190,8 +194,8 @@ import { partners } from '../data/partners.ts';
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 0.88rem;
-    line-height: 1.9;
+    font-size: var(--fs-14);
+    line-height: var(--lh-reading);
     display: grid;
     gap: 0.45rem;
   }
@@ -222,14 +226,21 @@ import { partners } from '../data/partners.ts';
     text-decoration: underline;
   }
 
+  /* Le lien d'itinéraire se distingue de l'adresse qui le précède : même
+     teinte que les pictogrammes du bloc, graisse un cran au-dessus. */
+  .jcov-footer__route {
+    color: var(--brand-sky);
+    font-weight: 600;
+  }
+
   /* Même graisse et même interlettrage que « Contact » au-dessus, en plus
      discret : c'est une étiquette, pas une deuxième rubrique du pied de page. */
   .jcov-footer__social-label {
     margin: 1.5rem 0 0.75rem;
     color: rgba(234, 249, 255, 0.75);
-    font-size: 0.74rem;
+    font-size: var(--fs-12);
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: var(--ls-eyebrow-wide);
     text-transform: uppercase;
   }
 
@@ -251,9 +262,9 @@ import { partners } from '../data/partners.ts';
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: var(--radius-pill);
     color: #ffffff;
-    font-size: 0.82rem;
+    font-size: var(--fs-13);
     font-weight: 600;
-    letter-spacing: 0.03em;
+    letter-spacing: var(--ls-button);
     text-decoration: none;
     transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
   }
@@ -282,9 +293,9 @@ import { partners } from '../data/partners.ts';
   .jcov-footer__partners-label {
     margin: 0 0 1.25rem;
     color: rgba(236, 246, 255, 0.6);
-    font-size: 0.72rem;
+    font-size: var(--fs-12);
     font-weight: 600;
-    letter-spacing: 0.18em;
+    letter-spacing: var(--ls-eyebrow-wide);
     text-transform: uppercase;
   }
 
@@ -365,7 +376,7 @@ import { partners } from '../data/partners.ts';
     border: 1px dashed rgba(255, 255, 255, 0.28);
     border-radius: var(--radius-sm);
     color: rgba(236, 246, 255, 0.82);
-    font-size: 0.82rem;
+    font-size: var(--fs-13);
     font-weight: 600;
     text-align: center;
   }
@@ -388,8 +399,8 @@ import { partners } from '../data/partners.ts';
   .jcov-footer__bottom p {
     margin: 0;
     text-align: center;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
+    font-size: var(--fs-12);
+    letter-spacing: var(--ls-label);
     color: rgba(239, 247, 255, 0.9);
   }
 
@@ -397,7 +408,7 @@ import { partners } from '../data/partners.ts';
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.72rem;
+    font-size: var(--fs-12);
     color: rgba(239, 247, 255, 0.75);
   }
 
@@ -417,7 +428,7 @@ import { partners } from '../data/partners.ts';
 
   @media (max-width: 640px) {
     .jcov-footer__title {
-      font-size: 1rem;
+      font-size: var(--fs-16);
     }
 
     .jcov-footer::after {

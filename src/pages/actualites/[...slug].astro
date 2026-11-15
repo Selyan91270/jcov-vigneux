@@ -76,7 +76,7 @@ const autres = (await getCollection('actualites'))
           Toutes les actualités
         </a>
         <span class="section-eyebrow mb-3">{entry.data.badge}</span>
-        <h1 class="article__title">{entry.data.title}</h1>
+        <h1 class="page-title article__title">{entry.data.title}</h1>
         <p class="article__date">
           <time datetime={entry.data.date.toISOString()}>{dateFormatter.format(entry.data.date)}</time>
         </p>
@@ -117,17 +117,11 @@ const autres = (await getCollection('actualites'))
 <style>
   .article__title {
     margin: 0.35rem 0 0.75rem;
-    font-family: var(--ff-head);
-    font-size: clamp(2rem, 4.4vw, 3rem);
-    font-weight: 800;
-    line-height: 1.14;
-    letter-spacing: -0.015em;
-    color: #0f172a;
   }
 
   .article__date {
-    color: #64748b;
-    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-size: var(--fs-15);
   }
 
   .article__body {
@@ -148,9 +142,9 @@ const autres = (await getCollection('actualites'))
 
   .article__text {
     margin-top: 2.5rem;
-    color: #334155;
-    font-size: 1.08rem;
-    line-height: 1.75;
+    color: var(--text-body);
+    font-size: var(--fs-17);
+    line-height: var(--lh-reading);
   }
 
   .article__text :global(p) {
@@ -158,7 +152,7 @@ const autres = (await getCollection('actualites'))
   }
 
   .article__text :global(strong) {
-    color: #0f172a;
+    color: var(--ink);
   }
 
   .article__more {
@@ -169,7 +163,7 @@ const autres = (await getCollection('actualites'))
 
   .article__more-title {
     font-family: var(--ff-head);
-    font-size: 1.1rem;
+    font-size: var(--fs-18);
     font-weight: 700;
     color: var(--brand-700);
     margin-bottom: 0.75rem;
@@ -184,7 +178,7 @@ const autres = (await getCollection('actualites'))
   }
 
   .article__more a {
-    color: #0f172a;
+    color: var(--ink);
     font-weight: 600;
     text-decoration: none;
     text-underline-offset: 3px;

@@ -94,10 +94,10 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
   }
 
   .event-card__month {
-    font-size: 0.75rem;
+    font-size: var(--fs-12);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--ls-label);
     color: var(--brand-sky);
     margin-top: 0.25rem;
   }
@@ -113,12 +113,12 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
     display: inline-block;
     background: var(--brand-ice);
     border-left: 3px solid var(--brand-accent);
-    color: #0f172a;
+    color: var(--ink);
     font-family: var(--ff-head);
-    font-size: 0.72rem;
+    font-size: var(--fs-12);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: var(--ls-eyebrow);
     padding: 0.32rem calc(0.65rem - 0.14em) 0.32rem 0.65rem;
     border-radius: var(--radius-xs);
     margin-bottom: 0.6rem;
@@ -126,9 +126,9 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
 
   .event-card__title {
     font-family: var(--ff-head);
-    font-size: 1.4rem;
+    font-size: var(--fs-22);
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ink);
     margin-bottom: 0.65rem;
   }
 
@@ -136,8 +136,8 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #475569;
-    font-size: 0.92rem;
+    color: var(--text-soft);
+    font-size: var(--fs-15);
     margin-bottom: 0.4rem;
   }
 
@@ -154,8 +154,8 @@ const fullDateFormatter = new Intl.DateTimeFormat('fr-FR', {
 
   .event-card__summary {
     margin-top: 0.9rem;
-    color: #334155;
-    line-height: 1.6;
+    color: var(--text-body);
+    line-height: var(--lh-ui);
   }
 
   /* Sur mobile, le bloc date passe au-dessus : côte à côte, il ne laissait

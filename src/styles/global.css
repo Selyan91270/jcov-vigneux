@@ -58,12 +58,78 @@
   --color-jcov: #0B72AD;
   --color-jcov-dark: #085580;
   --color-jcov-light: #19A9F5;
+
+  /* Une seule famille de gris.
+     Le site en mélangeait deux : les gris neutres de Tailwind (`text-gray-900`,
+     `bg-gray-50`…) et des gris bleutés écrits à la main (`#0f172a`, `#475569`,
+     `#64748b`…) — un titre et le paragraphe qui le suit n'étaient pas de la
+     même teinte. Les gris de Tailwind prennent ici les valeurs de la famille
+     « slate », plus proche du bleu nuit du club : tout le balisage existant
+     suit sans être modifié. */
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #5f6f85;   /* aligné sur --text-muted : le slate-500 d'origine passait sous 4,5:1 sur les fonds clairs */
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  --color-gray-950: #020617;
 }
 
 :root {
   /* Typography */
   --ff-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --ff-head: 'Oswald', 'Inter', var(--ff-sans);
+
+  /* ── Échelle typographique ──────────────────────────────────────────────
+     Le site écrivait 33 tailles de texte différentes (0,72 ; 0,74 ; 0,75 ;
+     0,78 rem… quatre valeurs pour un même « petit »), 15 interlettrages et
+     16 interlignes. Chacune avait sa raison au moment de l'écrire ; ensemble
+     elles faisaient un texte sans rythme. Elles sont ramenées à une échelle
+     nommée en pixels, lisible d'un coup d'œil : `--fs-14` est du 14 px.
+     On n'écrit plus de taille en dur : si aucune ne convient, c'est l'échelle
+     qu'il faut discuter. */
+  --fs-12: 0.75rem;     /* étiquettes en capitales */
+  --fs-13: 0.8125rem;
+  --fs-14: 0.875rem;    /* texte secondaire, boutons */
+  --fs-15: 0.9375rem;
+  --fs-16: 1rem;        /* texte courant */
+  --fs-17: 1.0625rem;
+  --fs-18: 1.125rem;    /* chapô, petits titres de carte */
+  --fs-20: 1.25rem;     /* titres de carte */
+  --fs-22: 1.375rem;
+  --fs-24: 1.5rem;
+  --fs-26: 1.625rem;    /* titres de panneau */
+
+  /* Interlettrage : cinq paliers. Les capitales s'aèrent en proportion de
+     leur rôle — un bouton à peine, un sur-titre largement. */
+  --ls-display: -0.015em;   /* grands titres : légèrement resserrés */
+  --ls-button: 0.04em;      /* boutons, petites capitales */
+  --ls-label: 0.08em;       /* étiquettes */
+  --ls-eyebrow: 0.14em;     /* dates, rubriques */
+  --ls-eyebrow-wide: 0.18em;/* sur-titres de section */
+
+  /* Interligne : deux paliers pour le texte. Les titres gardent le leur,
+     qui dépend de leur corps. */
+  --lh-ui: 1.6;             /* cartes, listes, texte d'interface */
+  --lh-reading: 1.75;       /* texte à lire : articles, pages légales */
+
+  /* Textes : cinq niveaux, du titre au texte d'appoint. Le plus clair
+     (`--text-faint`) n'est PAS pour du texte : à 2,56:1 sur blanc il est
+     illisible pour beaucoup de visiteurs. Réservé aux filets et aux
+     pictogrammes. */
+  --ink: #0f172a;
+  --text-body: #334155;
+  --text-soft: #475569;
+  --text-muted: #5f6f85;    /* le plus clair lisible : 5,1:1 sur blanc, 4,7:1 sur le fond glacier */
+  --text-faint: #94a3b8;
+
+  /* Anneau de focus au clavier : bleu foncé sur fond clair, glacier sur les
+     fonds sombres (voir plus bas). */
+  --focus-ring: var(--brand-600);
 
   /* Brand palette — dérivée du bleu réel du logo JCOV (#19A9F5) */
   --brand-900: #031D38; /* profond, fonds sombres */
@@ -109,7 +175,7 @@
   --belt-ecru: #F4F1E8;
 
   /* Neutral / text */
-  --text-default: #0f172a;
+  --text-default: var(--ink);
   --text-on-dark: rgba(236, 246, 255, 0.95);
   --muted: rgba(236, 246, 255, 0.72);
 
@@ -169,6 +235,84 @@ body {
 h1,h2,h3,h4,h5 {
   font-family: var(--ff-head);
   color: var(--text-default);
+}
+
+/* ── Finitions typographiques ──
+   `balance` répartit un titre sur ses lignes au lieu de laisser un mot seul
+   à la dernière (« Les dernières performances du / JCOV » devient deux lignes
+   équilibrées). `pretty` évite qu'un paragraphe se termine par un mot isolé.
+   Ce sont des améliorations progressives : un navigateur qui ne les connaît
+   pas affiche simplement le texte comme avant. */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+p, li, dd, figcaption, blockquote {
+  text-wrap: pretty;
+}
+
+/* Chiffres de même largeur dans les prix, les horaires et les dates : les
+   colonnes s'alignent, et un « 1 » ne laisse plus de vide devant lui. */
+.pricing-row__price,
+.schedule-card__sessions,
+.schedule-card__price,
+.finder-result__price,
+.finder-chip,
+.actualites-card__date,
+.events-past__list li span {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Titres de page et de section ──
+   Le titre principal d'une page intérieure était défini cinq fois, chacune un
+   peu différemment (de 36 à 48 px d'un côté, de 32 à 44 de l'autre, en
+   graisse 700 ou 800 — alors que la police s'arrête à 700). Un titre, une
+   définition. Les tailles sont fluides : elles grandissent avec la fenêtre
+   au lieu de sauter à un point de rupture. */
+.page-title {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1.2rem + 3.2vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* Titre de section d'une page intérieure — un cran sous le titre de la page. */
+.heading-2 {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 1.1rem + 1.9vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: var(--ls-display);
+  color: var(--ink);
+}
+
+/* Titre à l'intérieur d'un panneau ou d'une carte large. */
+.heading-panel {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: var(--fs-26);
+  line-height: 1.2;
+  letter-spacing: var(--ls-display);
+  color: var(--ink);
+}
+
+/* ── Focus au clavier ──
+   Chaque composant gérait le sien, et la plupart n'en avaient aucun : un
+   visiteur qui navigue à la touche Tab ne voyait pas où il se trouvait.
+   `:where()` donne à cette règle une spécificité nulle : tout style de focus
+   propre à un composant la remplace sans bataille. */
+:where(a, button, summary, input, select, textarea, [role='button'], [tabindex]:not([tabindex='-1'])):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* Sur les fonds sombres, le bleu foncé disparaîtrait. */
+.band-blue,
+.jcov-footer,
+.hero {
+  --focus-ring: var(--brand-ice);
 }
 
 /* Accent link style to be used across the site */
@@ -286,7 +430,7 @@ html {
   font-family: var(--ff-head);
   font-size: clamp(2.5rem, 5vw, 5.25rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--ls-display);
   line-height: 1.02;
   margin-bottom: 0.9rem;
   max-width: 12ch;
@@ -318,32 +462,32 @@ html {
 
 .hero__subtitle {
   color: rgba(255, 255, 255, 0.92);
-  font-size: 1.05rem;
+  font-size: var(--fs-17);
   font-weight: 500;
   letter-spacing: 0.01em;
-  line-height: 1.6;
+  line-height: var(--lh-ui);
   margin-bottom: 1.3rem;
   max-width: 35rem;
 }
 
 @media (min-width: 640px) {
   .hero__subtitle {
-    font-size: 1.15rem;
+    font-size: var(--fs-18);
     margin-bottom: 1.4rem;
   }
 }
 
 .hero__description {
   color: rgba(255, 255, 255, 0.78);
-  font-size: 1rem;
-  line-height: 1.85;
+  font-size: var(--fs-16);
+  line-height: var(--lh-reading);
   margin-bottom: 2rem;
   max-width: 45rem;
 }
 
 @media (min-width: 640px) {
   .hero__description {
-    font-size: 1.05rem;
+    font-size: var(--fs-17);
   }
 }
 
@@ -363,11 +507,11 @@ html {
   align-items: center;
   border-radius: var(--radius-sm);
   display: inline-flex;
-  font-size: 0.8125rem;
+  font-size: var(--fs-13);
   font-weight: 700;
   height: 3rem;
   justify-content: center;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   min-width: 11rem;
   padding: 0 1.75rem;
   text-transform: uppercase;
@@ -478,8 +622,8 @@ html {
   color: var(--brand-700);
   font-family: var(--ff-head);
   font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.18em;
+  font-size: var(--fs-17);
+  letter-spacing: var(--ls-eyebrow-wide);
   text-transform: uppercase;
 }
 
@@ -501,7 +645,7 @@ html {
 .section-title {
   font-size: clamp(2.15rem, 4.6vw, 3.25rem);
   line-height: 1.14;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--ls-display);
 }
 
 /* ── Bandeau bleu ──
@@ -740,7 +884,7 @@ html {
   display: inline-flex;
   align-items: center;
   padding: 0.42rem 0.6rem;
-  font-size: 0.78rem;
+  font-size: var(--fs-12);
 }
 
 /* Le rang : chiffre gravé, serré, sur le panneau clair de la barrette. */
@@ -753,7 +897,7 @@ html {
    lettre : on retire d'autant à droite, sinon le mot paraît décalé. */
 .grade-badge__belt {
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--ls-eyebrow-wide);
   padding-right: calc(0.6rem - 0.18em);
   text-transform: uppercase;
   background-image:
@@ -815,7 +959,7 @@ html {
   border-radius: var(--radius-sm);
   background: var(--brand-900);
   color: #ffffff;
-  font-size: 0.9rem;
+  font-size: var(--fs-14);
   font-weight: 700;
   text-decoration: none;
   box-shadow: var(--shadow-md);
@@ -949,9 +1093,9 @@ main:focus {
   align-items: center;
   margin-top: 0.9rem;
   color: var(--brand-700);
-  font-size: 0.82rem;
+  font-size: var(--fs-13);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
 }
 
@@ -1015,11 +1159,11 @@ main:focus {
   border-radius: var(--radius-xs);
   background: rgba(255, 255, 255, 0.97);
   border-left: 3px solid var(--brand-accent);
-  color: #0f172a;
+  color: var(--ink);
   font-family: var(--ff-head);
-  font-size: 0.72rem;
+  font-size: var(--fs-12);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--ls-eyebrow);
   padding: 0.42rem calc(0.7rem - 0.14em) 0.42rem 0.7rem;
   text-transform: uppercase;
   box-shadow: 0 4px 14px rgba(3,29,56,0.14);
@@ -1037,7 +1181,7 @@ main:focus {
 .actualites-card__title {
   margin: 0 0 0.9rem;
   color: var(--text-default);
-  font-size: 1.25rem;
+  font-size: var(--fs-20);
   font-weight: 700;
   line-height: 1.3;
 }
@@ -1045,8 +1189,8 @@ main:focus {
 .actualites-card__text {
   margin: 0;
   color: rgba(20,34,48,0.8);
-  line-height: 1.75;
-  font-size: 0.98rem;
+  line-height: var(--lh-reading);
+  font-size: var(--fs-16);
 }
 
 .gallery-card {
@@ -1108,9 +1252,9 @@ main:focus {
   bottom: 1.25rem;
   color: #fff;
   font-family: var(--ff-head);
-  font-size: 0.78rem;
+  font-size: var(--fs-12);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
 }
 
@@ -1146,22 +1290,22 @@ main:focus {
   color: var(--brand-700);
   font-family: var(--ff-head);
   font-weight: 800;
-  font-size: 1.1rem;
-  letter-spacing: 0.05em;
+  font-size: var(--fs-18);
+  letter-spacing: var(--ls-button);
   text-transform: uppercase;
   margin-bottom: 1rem;
 }
 
 .schedule-card__time {
-  color: #0f172a;
-  font-size: 1.6rem;
+  color: var(--ink);
+  font-size: var(--fs-26);
   font-weight: 700;
   margin-bottom: 0.4rem;
 }
 
 .schedule-card__group {
-  color: #64748b;
-  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-size: var(--fs-14);
 }
 
 /* ── Contact ── */
@@ -1215,8 +1359,8 @@ main:focus {
 .contact-details__value {
   min-width: 0;
   margin: 0;
-  color: #334155;
-  line-height: 1.55;
+  color: var(--text-body);
+  line-height: var(--lh-ui);
 }
 
 /* L'adresse e-mail est plus large que la carte sur un petit téléphone. Le
@@ -1241,6 +1385,51 @@ main:focus {
   text-underline-offset: 3px;
 }
 
+/* ── Itinéraire ──
+   Sous l'adresse : un lien par application de cartes. Trois liens plutôt qu'un
+   seul, parce que chaque visiteur a la sienne et que « ouvrir dans Google
+   Maps » sur l'iPhone de quelqu'un qui n'utilise que Plans le renvoie vers un
+   site web au lieu de son application. */
+.contact-details__route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 1rem;
+  margin-top: 0.7rem;
+}
+
+.contact-details__route-label {
+  color: var(--text-muted);
+  font-family: var(--ff-head);
+  font-size: var(--fs-13);
+  font-weight: 700;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+}
+
+.contact-details__route-link {
+  color: var(--brand-700);
+  font-size: var(--fs-15);
+  font-weight: 600;
+  text-decoration: none;
+  /* Marge de frappe sans écarter les lignes, comme pour les autres liens de la carte. */
+  padding-block: 0.5rem;
+  margin-block: -0.5rem;
+}
+
+.contact-details__route-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Sur un petit écran l'étiquette prend sa propre ligne : sans cela le dernier
+   lien (« Plans ») retombait seul en dessous des deux autres. */
+@media (max-width: 480px) {
+  .contact-details__route-label {
+    flex-basis: 100%;
+  }
+}
+
 /* Sur les petits écrans, la carte reprend en largeur utile ce qu'elle rend
    sur ses marges : sans cela l'adresse e-mail débordait. */
 @media (max-width: 480px) {
@@ -1252,9 +1441,9 @@ main:focus {
 /* ── Actus date ── */
 .actualites-card__date {
   color: var(--brand-700);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   margin-bottom: 0.6rem;
 }
@@ -1273,9 +1462,9 @@ main:focus {
 
 .events-past__title {
     font-family: var(--ff-head);
-    font-size: 1.15rem;
+    font-size: var(--fs-18);
     font-weight: 700;
-    color: #64748b;
+    color: var(--text-muted);
     margin-bottom: 1.25rem;
   }
 
@@ -1290,12 +1479,12 @@ main:focus {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    color: #64748b;
-    font-size: 0.92rem;
+    color: var(--text-muted);
+    font-size: var(--fs-15);
   }
 
 .events-past__list li span {
     font-weight: 600;
-    color: #94a3b8;
+    color: var(--text-muted);
     text-transform: capitalize;
   }

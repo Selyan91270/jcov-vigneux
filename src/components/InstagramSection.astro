@@ -236,15 +236,15 @@ const descriptionDe = (p: { legende: string; date: string }) => {
   }
 
   .insta-post__date {
-    font-size: 0.72rem;
+    font-size: var(--fs-12);
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--ls-label);
     text-transform: uppercase;
     color: var(--brand-ice);
   }
 
   .insta-post__legende {
-    font-size: 0.85rem;
+    font-size: var(--fs-14);
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -286,7 +286,7 @@ const descriptionDe = (p: { legende: string; date: string }) => {
   .insta-profil__nom {
     margin: 0 0 0.3rem;
     font-family: var(--ff-head);
-    font-size: 1.35rem;
+    font-size: var(--fs-22);
     font-weight: 700;
     letter-spacing: 0.01em;
     color: #fff;
@@ -295,7 +295,7 @@ const descriptionDe = (p: { legende: string; date: string }) => {
   .insta-profil__desc {
     margin: 0;
     color: rgba(255, 255, 255, 0.88);
-    line-height: 1.6;
+    line-height: var(--lh-ui);
   }
 
   @media (max-width: 520px) {
@@ -321,9 +321,9 @@ const descriptionDe = (p: { legende: string; date: string }) => {
     border-radius: var(--radius-sm);
     background: #ffffff;
     color: var(--brand-800, #063a5c);
-    font-size: 0.875rem;
+    font-size: var(--fs-14);
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--ls-button);
     text-transform: uppercase;
     text-decoration: none;
     box-shadow: 0 10px 30px rgba(2, 12, 24, 0.35);

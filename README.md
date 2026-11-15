@@ -126,6 +126,26 @@ Dans tous les cas :
 - **Voir le résultat sans attendre la nuit** : *Actions → Déploiement sur GitHub Pages → Run workflow*.
 - **Essai en local** : `INSTAGRAM_FEED_URL="…" npm run instagram` (ou `INSTAGRAM_TOKEN`), puis `npm run dev`.
 
+### Typographie et couleurs
+
+Tout est piloté par des **tokens** en tête de `src/styles/global.css` : on n'écrit plus de taille, d'interlettrage, d'interligne ni de gris à la main.
+
+| Besoin | À utiliser |
+| --- | --- |
+| Taille de texte | `var(--fs-12)` … `var(--fs-26)` (le nombre est la taille en pixels : `--fs-14` = 14 px) |
+| Interlettrage des capitales | `--ls-button` (0,04 em), `--ls-label` (0,08), `--ls-eyebrow` (0,14), `--ls-eyebrow-wide` (0,18) ; `--ls-display` pour les grands titres |
+| Interligne | `--lh-ui` (1,6) pour l'interface, `--lh-reading` (1,75) pour le texte à lire |
+| Couleur de texte | `--ink` (titres), `--text-body`, `--text-soft`, `--text-muted` (le plus clair lisible) |
+| Titre principal d'une page | classe `page-title` |
+| Titre de section d'une page intérieure | classe `heading-2` ; dans un panneau : `heading-panel` |
+
+Deux règles qui évitent les régressions :
+
+- **`--text-faint` n'est pas pour du texte** : à 2,56:1 de contraste sur blanc, il est illisible pour beaucoup de visiteurs (seuil : 4,5:1). Il sert aux filets et aux pictogrammes.
+- Les gris de Tailwind (`text-gray-900`, `bg-gray-50`…) sont redéfinis dans `@theme` sur la même famille que les tokens : les deux s'accordent.
+
+Les polices (Inter, Oswald) sont dans `src/assets/fonts/` ; voir « Sécurité » pour la raison de ce choix.
+
 ### Icônes du navigateur
 
 `public/favicon.ico` (16/32/48/64), `public/apple-touch-icon.png` et `public/icon-512.png` sont **générés à partir de `src/assets/images/logo-jcov.png`** : le logo est détouré puis posé sur un carré bleu nuit, pour rester lisible dans un onglet.

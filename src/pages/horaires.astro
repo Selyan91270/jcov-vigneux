@@ -22,7 +22,7 @@ const scheduleData = JSON.stringify({ ageGroups });
         Retour à l'accueil
       </a>
       <span class="section-eyebrow mb-3">Pratiquer au JCOV</span>
-      <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mt-4">Horaires &amp; tarifs</h1>
+      <h1 class="page-title mt-4">Horaires &amp; tarifs</h1>
       <p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
         Indiquez l'âge du futur judoka pour trouver son cours en quelques secondes — ou parcourez directement le planning complet et les tarifs plus bas.
       </p>
@@ -40,7 +40,7 @@ const scheduleData = JSON.stringify({ ageGroups });
             <path d="M8 12h8" />
           </svg>
         </div>
-        <h2 class="finder-card__title">Quel âge a le futur judoka&nbsp;?</h2>
+        <h2 class="heading-panel finder-card__title">Quel âge a le futur judoka&nbsp;?</h2>
         <p class="finder-card__subtitle">On vous indique tout de suite les jours, les horaires et la cotisation qui correspondent.</p>
 
         <form id="age-form" class="finder-input-row" novalidate>
@@ -80,7 +80,7 @@ const scheduleData = JSON.stringify({ ageGroups });
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Planning complet</span>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">Tous les cours de la saison</h2>
+        <h2 class="heading-2 mt-4">Tous les cours de la saison</h2>
         <p class="mt-4 max-w-2xl mx-auto text-gray-600">Pour comparer d'un coup d'œil, ou si plusieurs enfants de la famille pratiquent.</p>
       </div>
 
@@ -125,7 +125,7 @@ const scheduleData = JSON.stringify({ ageGroups });
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 fade-in-up">
         <span class="section-eyebrow justify-center mb-3">Tarifs</span>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4 tracking-tight">Cotisations annuelles</h2>
+        <h2 class="heading-2 mt-4">Cotisations annuelles</h2>
         <p class="mt-4 max-w-2xl mx-auto text-gray-600">
           La licence fédérale est déjà comprise dans chaque tarif ci-dessous.
         </p>
@@ -342,17 +342,13 @@ const scheduleData = JSON.stringify({ ageGroups });
   }
 
   .finder-card__title {
-    font-family: var(--ff-head);
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: #0f172a;
     margin-bottom: 0.6rem;
   }
 
   .finder-card__subtitle {
-    color: #64748b;
-    font-size: 1rem;
-    line-height: 1.6;
+    color: var(--text-muted);
+    font-size: var(--fs-16);
+    line-height: var(--lh-ui);
     max-width: 32rem;
     margin-inline: auto;
     margin-bottom: 2rem;
@@ -378,9 +374,9 @@ const scheduleData = JSON.stringify({ ageGroups });
     border: 1.5px solid rgba(3, 29, 56, 0.15);
     border-radius: var(--radius-sm);
     padding: 0.85rem 1.1rem;
-    font-size: 1.05rem;
+    font-size: var(--fs-17);
     font-weight: 600;
-    color: #0f172a;
+    color: var(--ink);
     text-align: center;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
@@ -395,9 +391,9 @@ const scheduleData = JSON.stringify({ ageGroups });
     background: linear-gradient(90deg, var(--brand-700), var(--brand-accent));
     color: #fff;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: var(--fs-14);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--ls-button);
     border: none;
     border-radius: var(--radius-sm);
     padding: 0.85rem 1.5rem;
@@ -420,7 +416,7 @@ const scheduleData = JSON.stringify({ ageGroups });
 
   .finder-experience__label {
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ink);
     margin-bottom: 1rem;
   }
 
@@ -437,7 +433,7 @@ const scheduleData = JSON.stringify({ ageGroups });
     border: 1px solid rgba(11, 95, 135, 0.15);
     border-radius: var(--radius-pill);
     padding: 0.65rem 1.25rem;
-    font-size: 0.9rem;
+    font-size: var(--fs-14);
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
@@ -453,7 +449,7 @@ const scheduleData = JSON.stringify({ ageGroups });
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid rgba(3, 29, 56, 0.08);
-    color: #64748b;
+    color: var(--text-muted);
   }
 
   .finder-note a {
@@ -483,10 +479,10 @@ const scheduleData = JSON.stringify({ ageGroups });
   }
 
   .finder-result :global(.finder-result__official) {
-    color: #94a3b8;
-    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-size: var(--fs-14);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--ls-label);
     margin-top: 0.25rem;
   }
 
@@ -507,12 +503,12 @@ const scheduleData = JSON.stringify({ ageGroups });
   }
 
   .finder-result :global(.finder-chip span) {
-    color: #475569;
+    color: var(--text-soft);
     font-weight: 600;
   }
 
   .finder-result :global(.finder-chip strong) {
-    color: #0f172a;
+    color: var(--ink);
     font-weight: 700;
   }
 
@@ -522,20 +518,20 @@ const scheduleData = JSON.stringify({ ageGroups });
     border-radius: var(--radius-sm);
     padding: 1.1rem 1.3rem;
     text-align: center;
-    font-size: 1.05rem;
+    font-size: var(--fs-17);
   }
 
   .finder-result :global(.finder-result__price strong) {
-    font-size: 1.25rem;
+    font-size: var(--fs-20);
     color: var(--brand-sky);
   }
 
   /* ── Tous les horaires ── */
   .schedule-card__official {
-    color: #94a3b8;
-    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-size: var(--fs-12);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: var(--ls-button);
     margin-bottom: 1.1rem;
   }
 
@@ -550,46 +546,46 @@ const scheduleData = JSON.stringify({ ageGroups });
   .schedule-card__sessions li {
     display: flex;
     justify-content: space-between;
-    font-size: 0.92rem;
+    font-size: var(--fs-15);
   }
 
   .schedule-card__sessions li span {
-    color: #64748b;
+    color: var(--text-muted);
     font-weight: 600;
   }
 
   .schedule-card__sessions li strong {
-    color: #0f172a;
+    color: var(--ink);
   }
 
   .schedule-card__price {
     font-family: var(--ff-head);
-    font-size: 1.3rem;
+    font-size: var(--fs-20);
     font-weight: 700;
     color: var(--brand-700);
   }
 
   .schedule-card__price span {
     font-family: var(--ff-sans);
-    font-size: 0.85rem;
+    font-size: var(--fs-14);
     font-weight: 500;
-    color: #94a3b8;
+    color: var(--text-muted);
   }
 
   .all-schedules__note {
     margin: 2rem 0 3.5rem;
     text-align: center;
-    color: #64748b;
-    font-size: 0.92rem;
+    color: var(--text-muted);
+    font-size: var(--fs-15);
     max-width: 42rem;
     margin-inline: auto;
   }
 
   .complementary-title {
     font-family: var(--ff-head);
-    font-size: 1.35rem;
+    font-size: var(--fs-22);
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ink);
     margin-bottom: 1.5rem;
   }
 
@@ -617,18 +613,18 @@ const scheduleData = JSON.stringify({ ageGroups });
 
   .pricing-row__label p {
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ink);
     margin-bottom: 0.15rem;
   }
 
   .pricing-row__label span {
-    color: #64748b;
-    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-size: var(--fs-14);
   }
 
   .pricing-row__price {
     font-family: var(--ff-head);
-    font-size: 1.4rem;
+    font-size: var(--fs-22);
     font-weight: 700;
     color: var(--brand-700);
     white-space: nowrap;
@@ -647,9 +643,9 @@ const scheduleData = JSON.stringify({ ageGroups });
     display: flex;
     align-items: flex-start;
     gap: 0.65rem;
-    color: #334155;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    color: var(--text-body);
+    font-size: var(--fs-15);
+    line-height: var(--lh-ui);
   }
 
   .practical-notes li svg {

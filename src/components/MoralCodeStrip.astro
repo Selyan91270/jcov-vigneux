@@ -81,7 +81,7 @@ const { label, titleBefore, titleHighlight, titleAfter } = moralCodeContent;
 
   .moral-strip__title {
     font-weight: 800;
-    color: #0f172a;
+    color: var(--ink);
   }
 
   .moral-strip__title-accent {
@@ -94,9 +94,9 @@ const { label, titleBefore, titleHighlight, titleAfter } = moralCodeContent;
   .moral-strip__subtitle {
     margin: 0.85rem auto 0;
     max-width: 34rem;
-    color: #475569;
-    font-size: 1.05rem;
-    line-height: 1.6;
+    color: var(--text-soft);
+    font-size: var(--fs-17);
+    line-height: var(--lh-ui);
   }
 
   /* Deux colonnes sur téléphone, quatre au-delà : huit valeurs alignées sur
@@ -132,7 +132,7 @@ const { label, titleBefore, titleHighlight, titleAfter } = moralCodeContent;
 
   .moral-strip__kanji {
     font-family: var(--ff-head);
-    font-size: 1.6rem;
+    font-size: var(--fs-26);
     line-height: 1;
     color: var(--brand-700);
     opacity: 0.85;
@@ -141,17 +141,17 @@ const { label, titleBefore, titleHighlight, titleAfter } = moralCodeContent;
   .moral-strip__name {
     margin-top: 0.45rem;
     font-family: var(--ff-head);
-    font-size: 1rem;
+    font-size: var(--fs-16);
     font-weight: 700;
-    color: #0f172a;
+    color: var(--ink);
   }
 
   .moral-strip__japanese {
-    font-size: 0.72rem;
+    font-size: var(--fs-12);
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: var(--ls-eyebrow);
     text-transform: uppercase;
-    color: #94a3b8;
+    color: var(--text-muted);
   }
 
   /* Contour plutôt que bouton plein : ce lien ne doit pas concurrencer
@@ -165,9 +165,9 @@ const { label, titleBefore, titleHighlight, titleAfter } = moralCodeContent;
     border: 1.5px solid var(--brand-700);
     border-radius: var(--radius-sm);
     color: var(--brand-700);
-    font-size: 0.85rem;
+    font-size: var(--fs-14);
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--ls-button);
     text-transform: uppercase;
     text-decoration: none;
     transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
