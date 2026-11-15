@@ -39,6 +39,13 @@ jobs:
       # Installe exactement les versions du package-lock.
       - run: npm ci
 
+      # Contrôle des types et du contenu avant de construire. Sans lui, la
+      # publication ne vérifiait que « le build passe » : mettre `astro` à
+      # jour sans relever `zod` en même temps produisait 43 erreurs de types
+      # que le build laissait passer en silence. Une erreur ici arrête la
+      # publication, et le site en ligne reste celui de la veille.
+      - run: npx astro check
+
       # Prépare la publication Pages. Ses sorties `origin` et `base_path`
       # servaient à renseigner l'adresse du site : on ne s'en sert plus.
       # Elles décrivent l'adresse *GitHub* du dépôt, pas le domaine du club,
@@ -95,7 +102,13 @@ jobs:
       #
       # La clé est publique par conception — elle prouve seulement qu'on
       # contrôle le domaine, puisqu'elle est lisible sur le site lui-même.
+      #
+      # Uniquement lors d'un vrai envoi de code. La reconstruction de chaque
+      # nuit republie un contenu inchangé : signaler sept pages « modifiées »
+      # tous les jours, c'est exactement ce qu'IndexNow demande de ne pas
+      # faire, et cela peut faire ignorer les vraies mises à jour.
       - name: Signaler les pages à IndexNow
+        if: github.event_name == 'push'
         run: |
           KEY=6cd932d74f99d78e2336d063aee9645d
           for page in "" horaires/ professeurs/ evenements/ galerie/ inscription/ code-moral/; do
@@ -104,3 +117,25 @@ jobs:
               "https://api.indexnow.org/indexnow?url=${url}&key=${KEY}&keyLocation=https://jcov.fr/${KEY}.txt")
             echo "  ${code}  ${url}"
           done
+
+  # GitHub désactive les workflows planifiés d'un dépôt public après 60 jours
+  # sans activité. La reconstruction de chaque nuit — qui archive les
+  # événements passés et synchronise Instagram — s'arrêterait alors sans
+  # bruit, dès que plus personne ne publie rien pendant deux mois.
+  #
+  # Appeler l'API d'activation d'un workflow remet ce délai à zéro, sans
+  # créer le moindre commit (technique reprise de liskin/gh-workflow-keepalive).
+  # Un échec ici n'empêche pas la publication : il est signalé, pas bloquant.
+  keepalive:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Renouveler le délai d'inactivité
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/actions/workflows/deploy.yml/enable" \
+            && echo "Délai d'inactivité renouvelé." \
+            || echo "::warning title=Keepalive::Impossible de renouveler le délai de 60 jours : les exécutions planifiées pourraient s'arrêter sans activité."
