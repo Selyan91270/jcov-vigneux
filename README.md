@@ -20,11 +20,15 @@ Aucune base de données, aucun serveur applicatif : le site est un ensemble de f
 | `npm run build` | Génère le site de production dans `./dist/` |
 | `npm run preview` | Prévisualise le build de production en local |
 | `npm run instagram` | Récupère les dernières publications Instagram (voir « Flux Instagram ») |
+| `npx astro check` | Vérifie les types et le contenu — lancé aussi à chaque publication |
+
+**Mettre à jour les dépendances.** `astro` et `zod` doivent évoluer **ensemble** : chaque version d'Astro exige une version précise de `zod`, que `package.json` fixe donc exactement. Lancer `npm audit fix` seul laisserait `zod` en retard et produirait des dizaines d'erreurs de types. Après toute mise à jour, vérifier avec `npx astro check` puis `npm run build` avant de publier.
 
 ## Structure du projet
 
 ```
 src/
+├── assets/fonts/      # Polices Inter et Oswald, hébergées avec le site
 ├── assets/images/     # Images sources, optimisées automatiquement par Astro
 ├── components/        # Navbar, Hero, Stats, MoralCode, Lightbox, Footer...
 ├── content/
@@ -35,7 +39,6 @@ src/
 ├── pages/             # Routes du site
 └── styles/global.css  # Palette, styles globaux, animations
 public/
-├── _headers           # En-têtes de sécurité et de cache (lus par l'hébergeur)
 └── favicon.*
 ```
 
@@ -156,28 +159,28 @@ Le certificat HTTPS est fourni et renouvelé gratuitement par GitHub.
 
 ### Changer d'hébergeur plus tard
 
-`netlify.toml` et `public/_headers` sont conservés : basculer vers Netlify ou Cloudflare Pages ne demande que de connecter le dépôt, sans toucher au code. Ces deux hébergeurs appliqueront en plus les en-têtes de sécurité (voir ci-dessous).
-
-## 4. À compléter avant la mise en ligne
-
-- [ ] **Lien d'inscription** — les boutons « Rejoindre le club » pointent vers `aspttnancy.monclub.app`, qui est le club **ASPTT Nancy**. À remplacer par l'adresse réelle du JCOV (6 occurrences, `git grep monclub`).
-- [ ] **Coordonnées** — vérifier le téléphone et l'e-mail dans `src/data/club.ts` (l'affiche du club mentionne d'autres coordonnées que celles affichées).
-- [ ] **Mentions légales** — compléter les trois champs `[à compléter]` dans `src/pages/mentions-legales.astro` : numéro RNA/SIRET, directeur de publication, et l'hébergeur, soit :
-      `GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis`.
-      Ces mentions sont une obligation légale.
+Le site est du HTML statique : il se déploie tel quel sur Netlify ou Cloudflare Pages en connectant le dépôt, avec `npm run build` pour commande et `dist` pour dossier de publication. Ces hébergeurs acceptent des en-têtes HTTP personnalisés, ce que GitHub Pages ne permet pas : ce serait l'occasion d'obtenir HSTS et la protection contre l'affichage en iframe (voir « Sécurité »).
 
 ## Sécurité
 
 Le site est statique : pas de base de données, pas de formulaire, pas d'authentification, aucun secret. La surface d'attaque est donc très réduite.
 
-La politique de sécurité du contenu (CSP) est déclarée à deux endroits :
+La politique de sécurité du contenu (CSP) est déclarée dans une balise `<meta>` de `MainLayout.astro`. Elle n'autorise que le site lui-même : ni scripts, ni polices, ni images venus d'ailleurs. Les polices sont hébergées avec le site (`src/assets/fonts/`) pour cette raison, et pour ne pas transmettre l'adresse IP des visiteurs à un tiers.
 
-- **en balise `<meta>`** dans `MainLayout.astro` — la seule qui s'applique sur GitHub Pages ;
-- **dans `public/_headers`** — utilisé par Netlify et Cloudflare Pages, avec en plus HSTS, `X-Frame-Options` et la mise en cache longue des fichiers versionnés.
+⚠️ **GitHub Pages n'accepte aucun en-tête HTTP personnalisé.** Deux protections manquent donc, car une balise `<meta>` ne sait pas les porter : **HSTS** (forcer le HTTPS aux visites suivantes) et **`frame-ancestors`** (empêcher l'affichage du site dans la page d'un autre). Pour un site vitrine sans formulaire ni compte utilisateur, l'écart est faible. Sur un hébergeur qui accepte les en-têtes — ou derrière Cloudflare — on les obtiendrait avec :
 
-⚠️ **GitHub Pages n'accepte aucun en-tête HTTP personnalisé.** `public/_headers` y est donc ignoré : le site n'y bénéficie que de la CSP en balise meta. Il manque alors la protection contre l'affichage en iframe (`frame-ancestors`) et HSTS, que les balises meta ne savent pas porter. Pour un site vitrine sans formulaire ni compte utilisateur, l'écart est faible — mais il existe, et Cloudflare Pages le comblerait.
+```
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+```
 
-Toute modification de la CSP doit être répercutée **aux deux endroits**.
+(Format du fichier `public/_headers` de Netlify et Cloudflare Pages ; l'option `preload` de HSTS est à n'ajouter qu'en connaissance de cause, elle est difficile à retirer.)
 
 ⚠️ **Cette CSP interdit les scripts écrits directement dans le HTML.** C'est pourquoi `astro.config.mjs` force les scripts en fichiers externes (`assetsInlineLimit: 0`). Si vous modifiez cette option, les scripts seraient de nouveau intégrés au HTML et **bloqués en production** — menu mobile, visionneuse et animations cesseraient de fonctionner, sans que cela se voie en développement.
 
