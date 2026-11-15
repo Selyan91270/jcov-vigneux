@@ -53,12 +53,11 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
 
-    <!-- Politique de sécurité du contenu, doublée ici en balise meta.
-         public/_headers la fournit sur Netlify et Cloudflare Pages, mais
-         GitHub Pages n'autorise aucun en-tête HTTP personnalisé : sans cette
-         balise, le site y serait publié sans aucune protection.
-         `frame-ancestors` et HSTS ne sont pas gérés en meta — ils restent
-         donc réservés aux hébergeurs qui acceptent les en-têtes. -->
+    <!-- Politique de sécurité du contenu. GitHub Pages n'autorise aucun
+         en-tête HTTP personnalisé : une balise meta est donc le seul moyen de
+         la faire appliquer. `frame-ancestors` et HSTS ne sont pas gérés en
+         meta — ils restent réservés aux hébergeurs qui acceptent les
+         en-têtes (voir « Sécurité » dans le README). -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'"
@@ -99,6 +98,12 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
   </head>
 
   <body class="bg-white text-gray-900 antialiased">
+    <!-- Lien d'évitement : au clavier, sans lui, il faut traverser les huit
+         liens du menu sur chaque page avant d'atteindre le contenu. Invisible
+         jusqu'à ce qu'il reçoive le focus — c'est donc la première chose
+         qu'atteint la touche Tab. -->
+    <a href="#contenu" class="skip-link">Aller au contenu</a>
+
     <!-- Progression de lecture, aux couleurs de la ceinture blanche à noire -->
     <div class="read-progress" aria-hidden="true"><span id="read-progress-bar"></span></div>
 
@@ -106,7 +111,7 @@ const shareImageUrl = new URL(shareImage.src, Astro.site);
     <Navbar />
 
     <!-- Contenu principal de la page -->
-    <main class="min-h-screen">
+    <main id="contenu" tabindex="-1" class="min-h-screen">
       <slot />
     </main>
 

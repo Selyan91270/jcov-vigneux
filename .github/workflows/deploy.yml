@@ -29,7 +29,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # L'historique complet est nécessaire : la date de modification de chaque
+      # page, dans le plan du site, est tirée de `git log` (src/lib/lastmod.mjs).
+      # Avec la copie superficielle par défaut, toutes les pages auraient la
+      # même date ; le script préfère alors n'en donner aucune.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:

@@ -112,3 +112,46 @@ export function ficheClub({ site, logo, image }: { site: URL; logo: string; imag
     openingHoursSpecification: horaires(),
   };
 }
+
+/**
+ * Fiche schema.org d'une actualité. Elle permet aux moteurs de présenter
+ * l'article avec sa date et son image, et de le rattacher au club qui le
+ * publie. Comme pour la fiche du club, tout vient des données de l'article :
+ * rien n'est saisi une seconde fois.
+ *
+ * `dateModified` est volontairement omis : le contenu des actualités n'a pas
+ * de date de révision, et la remplacer par celle de publication la ferait
+ * passer pour une mise à jour qui n'a jamais eu lieu.
+ */
+export function ficheActualite({
+  adresse,
+  site,
+  titre,
+  description,
+  date,
+  image,
+  logo,
+}: {
+  adresse: URL;
+  site: URL;
+  titre: string;
+  description: string;
+  date: Date;
+  image: string;
+  logo: string;
+}) {
+  const editeur = { '@type': 'Organization', name: club.name, url: site.href };
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    // Au-delà de 110 caractères, les moteurs tronquent ou ignorent le titre.
+    headline: titre.length > 110 ? `${titre.slice(0, 109).trimEnd()}…` : titre,
+    description,
+    datePublished: date.toISOString(),
+    image: [image],
+    inLanguage: 'fr-FR',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': adresse.href },
+    author: editeur,
+    publisher: { ...editeur, logo: { '@type': 'ImageObject', url: logo } },
+  };
+}

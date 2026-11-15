@@ -7,10 +7,12 @@
 // site gagne autant de pages de contenu réel.
 
 import { getCollection, render } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import MainLayout from '../../layouts/MainLayout.astro';
 import { url } from '../../lib/url.ts';
-import { excerpt } from '../../lib/excerpt.ts';
+import { resume } from '../../lib/excerpt.ts';
+import { ficheActualite } from '../../lib/structuredData.ts';
+import { images } from '../../data/images.ts';
 
 export async function getStaticPaths() {
   const actualites = await getCollection('actualites');
@@ -27,6 +29,35 @@ const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
   year: 'numeric',
 });
 
+// Titre de l'onglet et des résultats de recherche. Google coupe autour de 60
+// caractères : avec le nom complet du club, « Championnat de France Minimes :
+// Reagan à l'honneur » en faisait 75, et la fin était perdue. Le nom court
+// prend le relais quand le complet ne tient pas, et disparaît lorsque le titre
+// nomme déjà le club : « … au JCOV | JCOV » se répéterait.
+const titreComplet = `${entry.data.title} | JCOV Vigneux-sur-Seine`;
+const titrePage =
+  titreComplet.length <= 60
+    ? titreComplet
+    : entry.data.title.includes('JCOV')
+      ? entry.data.title
+      : `${entry.data.title} | JCOV`;
+
+const description = resume(entry.body ?? '');
+
+// Fiche schema.org : image et logo en adresses absolues, les moteurs les
+// consultent hors du contexte de la page.
+const imageArticle = await getImage({ src: entry.data.image, width: 1200 });
+const logoClub = await getImage({ src: images.logo, width: 512 });
+const fiche = ficheActualite({
+  adresse: new URL(Astro.url.pathname, Astro.site),
+  site: new URL('/', Astro.site),
+  titre: entry.data.title,
+  description,
+  date: entry.data.date,
+  image: new URL(imageArticle.src, Astro.site).href,
+  logo: new URL(logoClub.src, Astro.site).href,
+});
+
 // Les autres actualités, pour ne pas laisser le lecteur en cul-de-sac.
 const autres = (await getCollection('actualites'))
   .filter((a) => a.id !== entry.id)
@@ -34,10 +65,7 @@ const autres = (await getCollection('actualites'))
   .slice(0, 2);
 ---
 
-<MainLayout
-  title={`${entry.data.title} | JCOV Vigneux-sur-Seine`}
-  description={excerpt(entry.body ?? '', 155)}
->
+<MainLayout title={titrePage} description={description} structuredData={fiche}>
   <article class="article">
     <header class="page-header bg-white">
       <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">

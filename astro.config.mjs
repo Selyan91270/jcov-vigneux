@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import { dateModification } from './src/lib/lastmod.mjs';
 
 // Adresse publique du site. C'est le SEUL endroit à modifier le jour où le
 // nom de domaine change : liens canoniques, sitemap et aperçus de partage
@@ -31,12 +32,23 @@ export default defineConfig({
   // développement se comporte comme l'hébergeur, et qu'un lien sans barre
   // soit repéré ici plutôt qu'en production.
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // Date de dernière modification de chaque page, tirée de l'historique
+      // git (voir src/lib/lastmod.mjs). Absente plutôt qu'approximative si
+      // l'historique n'est pas disponible.
+      serialize(item) {
+        const lastmod = dateModification(new URL(item.url).pathname);
+        if (lastmod) item.lastmod = lastmod;
+        return item;
+      },
+    }),
+  ],
   build: {
     // Sort les scripts et les styles dans des fichiers externes au lieu de les
     // écrire dans le HTML. Sans cela, la politique de sécurité du contenu
-    // (public/_headers) devrait autoriser 'unsafe-inline', ce qui la viderait
-    // de son intérêt.
+    // (balise meta de MainLayout.astro) devrait autoriser 'unsafe-inline'
+    // pour les scripts, ce qui la viderait de son intérêt.
     inlineStylesheets: 'never',
   },
   vite: {
