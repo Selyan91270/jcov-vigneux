@@ -6,6 +6,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
 import Stats from '../components/Stats.astro';
 import MoralCodeStrip from '../components/MoralCodeStrip.astro';
+import InstagramSection from '../components/InstagramSection.astro';
 import SectionDivider from '../components/SectionDivider.astro';
 import Lightbox from '../components/Lightbox.astro';
 import EventCard from '../components/EventCard.astro';
@@ -291,7 +292,15 @@ const ficheJcov = ficheClub({
     </div>
   </section>
 
-  <SectionDivider from="var(--brand-ice)" to="var(--surface-washi)" flip />
+  {/* Bandeau bleu après la galerie : les photos du club appellent
+      naturellement « et il y en a d'autres là-bas ». Il rompt aussi la suite
+      de fonds clairs — actualités, galerie, code moral — qui rendait le bas
+      de page uniforme. */}
+  <SectionDivider from="var(--brand-ice)" to="var(--surface-deep)" />
+
+  <InstagramSection />
+
+  <SectionDivider from="var(--surface-deep)" to="var(--surface-washi)" flip />
 
   <MoralCodeStrip />
 

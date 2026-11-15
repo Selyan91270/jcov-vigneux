@@ -1,0 +1,367 @@
+---
+// « Allez nous suivre là-bas » : renvoie vers le compte Instagram du club et,
+// quand le flux est disponible, montre ses dernières publications.
+//
+// Les images sont copiées sur le site à la construction (voir
+// scripts/sync-instagram.mjs) : le navigateur du visiteur ne contacte pas
+// Instagram avant qu'il clique sur un lien.
+//
+// Sans flux — jeton absent, compte vide, panne — la section tient seule :
+// une carte qui présente le compte et le bouton. Elle ne montre jamais une
+// grille vide ni un message d'erreur.
+
+import { club } from '../data/club.ts';
+import { chargerFlux, identifiantCompte, legendeCourte } from '../lib/instagram.ts';
+import { url } from '../lib/url.ts';
+
+const compte = identifiantCompte(club.instagram);
+const publications = chargerFlux().publications.slice(0, 6);
+
+const formatDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+const dateDe = (p: { date: string }) => formatDate.format(new Date(p.date));
+
+/** Texte alternatif : la légende si elle existe, sinon la date. */
+const descriptionDe = (p: { legende: string; date: string }) => {
+  const legende = legendeCourte(p.legende, 140);
+  return legende
+    ? `Publication Instagram du ${dateDe(p)} : ${legende}`
+    : `Publication Instagram du JCOV du ${dateDe(p)}`;
+};
+---
+
+<section id="instagram" class="band-blue py-20" aria-labelledby="instagram-title">
+  <div class="band-blue__glow band-blue__glow--right" aria-hidden="true"></div>
+
+  <div class="band-blue__content max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 fade-in-up">
+      <span class="section-eyebrow section-eyebrow--on-dark justify-center mb-3">Sur Instagram</span>
+      <h2 id="instagram-title" class="band-blue__title section-title font-bold mt-4 mb-4">
+        Allez nous suivre là-bas&nbsp;!
+      </h2>
+      <p class="band-blue__lead text-lg max-w-2xl mx-auto">
+        Coulisses des cours, résultats, bons moments au dojo&nbsp;: l'actualité du club
+        au jour le jour, sur <strong>@{compte}</strong>.
+      </p>
+    </div>
+
+    {publications.length > 0 ? (
+      <ul class={`insta-grid insta-grid--${Math.min(publications.length, 3)} fade-in-up`}>
+        {publications.map((p) => (
+          <li>
+            <a
+              class="insta-post"
+              href={p.permalink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={url(p.image)}
+                alt={descriptionDe(p)}
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+              />
+
+              {p.type !== 'IMAGE' && (
+                <span class="insta-post__type" aria-hidden="true">
+                  {p.type === 'VIDEO' ? (
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="13" height="13" rx="2.5" /><path d="M4 16V6.5A2.5 2.5 0 0 1 6.5 4H16" /></svg>
+                  )}
+                </span>
+              )}
+
+              <span class="insta-post__veil" aria-hidden="true">
+                <span class="insta-post__date">{dateDe(p)}</span>
+                {legendeCourte(p.legende) && <span class="insta-post__legende">{legendeCourte(p.legende)}</span>}
+              </span>
+              <span class="sr-only"> (s'ouvre dans un nouvel onglet)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="insta-profil fade-in-up">
+        <span class="insta-profil__logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.25" />
+            <circle cx="12" cy="12" r="4.25" />
+            <circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none" />
+          </svg>
+        </span>
+        <div class="insta-profil__texte">
+          <p class="insta-profil__nom">@{compte}</p>
+          <p class="insta-profil__desc">
+            Photos des cours, résultats des compétitions et coulisses du club&nbsp;: tout
+            est publié là-bas, au fil de la saison.
+          </p>
+        </div>
+      </div>
+    )}
+
+    <div class="insta-cta fade-in-up">
+      <a href={club.instagram} target="_blank" rel="noopener noreferrer" class="insta-cta__btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.25" />
+          <circle cx="12" cy="12" r="4.25" />
+          <circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" stroke="none" />
+        </svg>
+        Voir @{compte} sur Instagram
+        <span class="sr-only"> (s'ouvre dans un nouvel onglet)</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Grille des publications ── */
+  .insta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .insta-grid {
+      gap: 1rem;
+    }
+
+    .insta-grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* Une ou deux publications seulement : on les garde à taille normale et
+       on les centre, plutôt que de les étirer sur toute la largeur. */
+    .insta-grid--1,
+    .insta-grid--2 {
+      max-width: 38rem;
+    }
+
+    .insta-grid--1 {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 19rem;
+    }
+  }
+
+  .insta-post {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 40px rgba(2, 12, 24, 0.35);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+
+  .insta-post img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .insta-post:hover,
+  .insta-post:focus-visible {
+    transform: translateY(-4px);
+  }
+
+  .insta-post:hover img,
+  .insta-post:focus-visible img {
+    transform: scale(1.05);
+  }
+
+  .insta-post:focus-visible {
+    outline: 3px solid var(--brand-ice);
+    outline-offset: 3px;
+  }
+
+  /* Vidéo ou album : une pastille dans l'angle, comme sur Instagram. */
+  .insta-post__type {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: var(--radius-pill);
+    background: rgba(3, 29, 56, 0.62);
+    color: #fff;
+  }
+
+  .insta-post__type svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* La légende n'apparaît qu'au survol ou au focus : au repos, la photo seule
+     reste lisible. Elle est déjà dans le texte alternatif de l'image. */
+  .insta-post__veil {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    gap: 0.25rem;
+    padding: 2.5rem 1rem 0.9rem;
+    background: linear-gradient(180deg, transparent, rgba(3, 29, 56, 0.88));
+    color: #fff;
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .insta-post:hover .insta-post__veil,
+  .insta-post:focus-visible .insta-post__veil {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Sur écran tactile il n'y a pas de survol : la date reste affichée. */
+  @media (hover: none) {
+    .insta-post__veil {
+      opacity: 1;
+      transform: none;
+      padding-top: 1.75rem;
+    }
+
+    .insta-post__legende {
+      display: none;
+    }
+  }
+
+  .insta-post__date {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-ice);
+  }
+
+  .insta-post__legende {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ── Carte du compte, quand il n'y a pas de flux ── */
+  .insta-profil {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 1.75rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(6px);
+  }
+
+  .insta-profil__logo {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(150deg, #f9a34a 0%, #e8426f 48%, #7a4fd6 100%);
+    color: #fff;
+  }
+
+  .insta-profil__logo svg {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .insta-profil__nom {
+    margin: 0 0 0.3rem;
+    font-family: var(--ff-head);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #fff;
+  }
+
+  .insta-profil__desc {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 520px) {
+    .insta-profil {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.75rem 1.5rem;
+    }
+  }
+
+  /* ── Bouton ── */
+  .insta-cta {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+
+  .insta-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: var(--btn-height, 3rem);
+    padding: 0 1.9rem;
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    color: var(--brand-800, #063a5c);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(2, 12, 24, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+
+  .insta-cta__btn svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    flex-shrink: 0;
+    color: #e8426f;
+  }
+
+  .insta-cta__btn:hover {
+    transform: translateY(-2px);
+    background: var(--brand-ice);
+    box-shadow: 0 14px 34px rgba(2, 12, 24, 0.42);
+  }
+
+  .insta-cta__btn:focus-visible {
+    outline: 3px solid var(--brand-ice);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insta-post,
+    .insta-post img,
+    .insta-post__veil,
+    .insta-cta__btn {
+      transition: none;
+    }
+
+    .insta-post:hover,
+    .insta-post:focus-visible,
+    .insta-post:hover img,
+    .insta-post:focus-visible img,
+    .insta-cta__btn:hover {
+      transform: none;
+    }
+  }
+</style>

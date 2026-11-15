@@ -47,6 +47,28 @@ jobs:
       # publique est désormais fixée dans astro.config.mjs.
       - uses: actions/configure-pages@v5
 
+      # Dernier flux Instagram valide. Le flux est régénéré à chaque passage
+      # mais n'est pas versionné : sans cette restauration, une synchronisation
+      # qui échoue (jeton expiré, panne d'Instagram) ferait disparaître d'un
+      # coup toutes les publications du site au lieu de laisser les dernières.
+      # La clé change à chaque exécution pour que le cache soit toujours
+      # réenregistré ; `restore-keys` reprend le plus récent.
+      - name: Restaurer le dernier flux Instagram
+        uses: actions/cache@v4
+        with:
+          path: |
+            src/data/instagram.generated.json
+            public/instagram
+          key: instagram-${{ github.run_id }}
+          restore-keys: instagram-
+
+      # Sans le secret INSTAGRAM_TOKEN, cette étape ne fait rien et ne fait
+      # jamais échouer la publication : voir scripts/sync-instagram.mjs.
+      - name: Synchroniser les publications Instagram
+        run: node scripts/sync-instagram.mjs
+        env:
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+
       - run: npm run build
 
       - uses: actions/upload-pages-artifact@v3

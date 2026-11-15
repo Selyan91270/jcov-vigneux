@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "instagram": "node scripts/sync-instagram.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

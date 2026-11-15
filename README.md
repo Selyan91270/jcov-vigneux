@@ -19,6 +19,7 @@ Aucune base de données, aucun serveur applicatif : le site est un ensemble de f
 | `npm run dev` | Lance le serveur de développement sur `localhost:4321` |
 | `npm run build` | Génère le site de production dans `./dist/` |
 | `npm run preview` | Prévisualise le build de production en local |
+| `npm run instagram` | Récupère les dernières publications Instagram (voir « Flux Instagram ») |
 
 ## Structure du projet
 
@@ -86,6 +87,29 @@ Les événements passés basculent automatiquement dans « Événements passés 
 | Professeurs (nom, grade, photo, diplôme) | `src/data/coaches.ts` |
 | Logos partenaires | `src/data/partners.ts` |
 | Photos de la galerie | `src/data/club.ts` + `src/data/images.ts` |
+
+### Flux Instagram
+
+La section « Allez nous suivre là-bas » de l'accueil renvoie vers [@jcovigneux](https://www.instagram.com/jcovigneux/) et, quand le flux est branché, affiche les six dernières publications du compte.
+
+**Sans rien configurer**, la section existe déjà : elle présente le compte et le bouton. Rien ne casse, rien n'est vide.
+
+**Pour afficher les publications automatiquement**, le site interroge l'API officielle d'Instagram une fois par nuit (`scripts/sync-instagram.mjs`, lancé par le workflow de publication). Il ne fait pas de *scraping* : la collecte automatisée hors API est interdite par Instagram, bloquée sur les serveurs de GitHub, et casserait au premier changement de leur page. Il faut en revanche un jeton, que seul le titulaire du compte peut générer :
+
+1. Passer le compte Instagram en **compte professionnel** (gratuit : Paramètres → Type de compte et outils).
+2. Sur [developers.facebook.com](https://developers.facebook.com), créer une application, y ajouter le produit **Instagram** (« API avec connexion Instagram »), ajouter le compte du club et **générer un jeton d'accès**.
+3. Dans le dépôt GitHub : *Settings → Secrets and variables → Actions → New repository secret*, nom **`INSTAGRAM_TOKEN`**, valeur : le jeton. Ne jamais le coller ailleurs (ni dans le code, ni dans un message).
+4. *Actions → Déploiement sur GitHub Pages → Run workflow* pour voir le résultat sans attendre la nuit.
+
+Les écrans de Meta changent souvent : si un libellé diffère de ce qui est écrit ici, la documentation officielle d'Instagram fait foi.
+
+Ce qu'il faut savoir ensuite :
+
+- **Le jeton dure 60 jours.** Le script le renouvelle à chaque passage et affiche un avertissement dans l'onglet *Actions* quand il approche de son terme. Si un jour les publications se figent, c'est probablement qu'il a expiré : en générer un nouveau et remplacer le secret.
+- **Une panne ne casse jamais le site.** Jeton expiré, Instagram indisponible, réseau coupé : le script le signale et le dernier flux valide reste affiché.
+- **Une publication supprimée sur Instagram disparaît du site** à la synchronisation suivante, images comprises.
+- **Les images sont copiées sur le site** (recadrées en carré, converties en WebP) : le navigateur du visiteur ne contacte pas Instagram avant qu'il clique sur un lien. Le flux n'est pas versionné (`src/data/instagram.generated.json` et `public/instagram/` sont ignorés par Git).
+- **Essai en local** : `INSTAGRAM_TOKEN="…" npm run instagram`, puis `npm run dev`.
 
 ### Icônes du navigateur
 
